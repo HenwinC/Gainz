@@ -10,7 +10,7 @@ public class Gym {
     ParseJSON jsonParser = new ParseJSON();
 
     public Gym() {
-        String gymRoomFilePath = "JSON/gym_rooms.json";
+        String gymRoomFilePath = "/resources/JSON/gym_rooms.json";
         ParseJSON jsonParser = new ParseJSON();
         rooms = jsonParser.getJSONObjectFromFile(gymRoomFilePath);
         starterRoom = new Room(jsonParser.getObjectFromJSONObject(getRooms(), getStarterRoomName()));
