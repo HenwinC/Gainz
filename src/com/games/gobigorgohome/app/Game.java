@@ -2,20 +2,25 @@ package com.games.gobigorgohome.app;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import com.games.gobigorgohome.Exercise;
-import com.games.gobigorgohome.Gym;
-import com.games.gobigorgohome.Room;
+import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
 import org.json.simple.parser.ParseException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class Game {
 
+    public static ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
+    private GUI gui = GUI.getInstance();
+    private InputOutput prompter = new InputOutput(gui);
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
     private final Player player = new Player();
@@ -25,13 +30,13 @@ public class Game {
     private String currentRoomName = gym.getStarterRoomName();
     private Room currentRoom = gym.getStarterRoom();
     private final Object rooms = gym.getRooms();
-    private final Prompter prompter;
+
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
 
-    public Game(Prompter prompter) throws IOException, ParseException {
-        this.prompter = prompter;
-    }
+//    public Game(InputOutput prompter) throws IOException, ParseException {
+//        this.prompter = prompter;
+//    }
 
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
@@ -95,7 +100,7 @@ public class Game {
 
     //    updates player with current game status e.g. player inventory, current room etc.
     private void gameStatus() {
-        System.out.println("------------------------------");
+        prompter.info("------------------------------");
         System.out.println("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
         System.out.println("You are in the " + currentRoomName + " room.");
         System.out.println(player.toString());
@@ -200,6 +205,10 @@ public class Game {
         }
     }
 
+    public static void setInputStream(ByteArrayInputStream inputStream) {
+        Game.inputStream = inputStream;
+    }
+
     public static boolean isItemRequired(List items) {
         return !"none".equals(items.get(0));
     }
@@ -219,11 +228,11 @@ public class Game {
     }
 
     private void inspectRoom() {
-        System.out.println(currentRoom.toString());
+        prompter.info(currentRoom.toString());
     }
 
     private void playerUseMachine(String playerExcerciseInput) {
-        System.out.println("you're using the: " + playerExcerciseInput);
+        prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
 
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
@@ -251,21 +260,32 @@ public class Game {
                 System.out.println("When you are ready to workout, come back with the wrench and get to it.");
             }
         } else {
-            System.out.println("This machine is broken, please come back with a wrench to fix it.");
+            prompter.info("This machine is broken, please come back with a wrench to fix it.");
         }
     }
 
     private void grabItem(String playerAction) {
-        System.out.println("you got the :" + playerAction);
+        prompter.info("you got the :" + playerAction);
         player.getInventory().add(playerAction);
     }
 
     //    gives player ability to quit
     private void quit() {
-        System.out.println("--------------------------------------\n"
-                + " YOU ARE A QUITTER!! GAME OVER" + "" +
-                "------------------------------------");
-        System.exit(0);
+        try {
+            gui.clear();
+            String banner = Files.readString(Path.of("resources/thankyou.txt"));
+            //PROMPTER.asciiArt(banner);
+            Thread.sleep(3000);
+            System.exit(0);
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static ByteArrayInputStream getInputStream() {
+        return inputStream;
     }
 
     private void setCurrentRoom(Object currentRoom) {
