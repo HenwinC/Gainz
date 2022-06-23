@@ -29,6 +29,7 @@ public class Game {
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
 
+
     public Game(Prompter prompter) throws IOException, ParseException {
         this.prompter = prompter;
     }
@@ -75,16 +76,24 @@ public class Game {
 
     // validates age taking only an integer
     private int validInt(String msg, String measureName, String unit) {
+        System.out.println("I am running recursively");
         String measurement = prompter.prompt(msg);
         int measureNum = 0;
         try {
             measureNum = Integer.parseInt(measurement);
             //validInt(measure, "you need to type your "+ measureName+" in " + unit + " or you aren't an adult: ", measureName, unit);
         } catch (NumberFormatException e) {
+            System.out.println("I am an error");
             validInt("You need to type your " + measureName + " using numbers integers (" + unit + "): ", measureName, unit);
         }
+
+
+        System.out.println("returning " + measureNum);
         return measureNum;
+
     }
+
+
 
     private void createPlayer(String playerName, int playerAge, double playerHeight, double playerWeight) {
         player.setName(playerName);
@@ -173,6 +182,9 @@ public class Game {
                     break;
                 case "workout":
                     playerUseMachine(playerAction);
+                    break;
+                case "help":
+                    page.instructions();
                     break;
                 case "consume":
                     if (player.consumeItem(playerAction)) {
