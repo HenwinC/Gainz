@@ -1,17 +1,17 @@
 package com.games.gobigorgohome.app;
 
-import com.apps.util.Console;
-import com.apps.util.Prompter;
+
 import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
-import org.json.simple.parser.ParseException;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -127,7 +127,7 @@ public class Game {
     }
 
     private void gameResult() {
-        Console.clear();
+
         String result = "";
         if (player.isSteroidsUsed()) {
             result = "YOU ARE A LOSER AND A CHEATER!";
@@ -171,7 +171,7 @@ public class Game {
                     grabItem(playerAction);
                     break;
                 case "go":
-                    Console.clear();
+
                     System.out.println("you're going here: " + playerAction);
                     currentRoomName = playerAction;
                     setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
