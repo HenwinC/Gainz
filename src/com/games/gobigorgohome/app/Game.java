@@ -37,8 +37,8 @@ public class Game {
     private void getNewPlayerInfo() {
 //        TODO: validate user input
         String playerName = validName();
-        double playerHeight = validDouble("What is your height in? ", "height", "inches");
-        double playerWeight = validDouble("What is your weight in? ", "weight", "lbs");
+        double playerHeight = validDouble("What is your height? ", "height", "inches");
+        double playerWeight = validDouble("What is your weight? ", "weight", "lbs");
         int playerAge = validInt("What is your age", "age", "years");
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
@@ -226,7 +226,6 @@ public class Game {
     private void playerUseMachine(String playerExcerciseInput) {
         System.out.println("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
-
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
         Object targetMuscle = exercise.getTargetMuscles();
         String exerciseStatus = exercise.getExerciseStatus();
