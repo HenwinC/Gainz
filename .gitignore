@@ -3,6 +3,7 @@
 
 # IntelliJ metadata files
 .idea/
+.out/
 *.iml
 
 # Log file
