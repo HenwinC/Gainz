@@ -18,7 +18,7 @@ public class Game {
 
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
-    private final Player player = new Player();
+    private  Player player = new Player();
     private final int energy = player.getEnergy();
     private final int currentEnergy = player.getEnergy();
     private final String playerName = player.getName();
@@ -37,8 +37,8 @@ public class Game {
     private void getNewPlayerInfo() {
 //        TODO: validate user input
         String playerName = validName();
-        double playerHeight = validDouble("What is your height? ", "height", "inches");
-        double playerWeight = validDouble("What is your weight? ", "weight", "lbs");
+        double playerHeight = validDouble("What is your height in? ", "height", "inches");
+        double playerWeight = validDouble("What is your weight in? ", "weight", "lbs");
         int playerAge = validInt("What is your age", "age", "years");
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
@@ -91,6 +91,7 @@ public class Game {
         player.setAge(playerAge);
         player.setHeight(playerHeight);
         player.setWeight(playerWeight);
+        player.getWeight(playerWeight);
     }
 
     //    updates player with current game status e.g. player inventory, current room etc.
@@ -230,16 +231,28 @@ public class Game {
         Object targetMuscle = exercise.getTargetMuscles();
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
-
+        Long MET = exercise.getMET();
+        totalCalories(MET);
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
+
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 
         }
     }
-
+//MET (metabolic equivalent for task) calculation above.
+    public void totalCalories(Long MET){
+        double totalBurned = 0;
+        // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
+        int minutes = 15;
+        Double playerWeight = player.weight;
+        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
+        totalBurned = minutes * (MET * 3.5 * playerWeight)/200;
+        totalBurned = (int)totalBurned;
+        System.out.println("You burned " + totalBurned + " calories! From this workout");
+    }
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
         if (player.getInventory().contains("wrench")) {
             String playerResponse = prompter.prompt("This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");

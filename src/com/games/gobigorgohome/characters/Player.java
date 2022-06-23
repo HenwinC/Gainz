@@ -15,7 +15,7 @@ public class Player {
     private int age;
     private String name;
     private int energy = 100;
-    private double weight;
+    public double weight;
     private double height;
     private final List<String> inventory = new ArrayList<>();
     //    just realize that the boolean values are named the same for the getters, idk why but they did it when I did it with the intellij autgenerated ones
@@ -196,13 +196,14 @@ public class Player {
         this.energy = energy;
     }
 
-    public double getWeight() {
+    public double getWeight(double playerWeight) {
         return weight;
     }
 
     public void setWeight(double weight) {
         this.weight = weight;
     }
+
 
     public List<String> getInventory() {
         return inventory;
