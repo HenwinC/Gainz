@@ -274,7 +274,7 @@ public class Game {
         try {
             gui.clear();
             String banner = Files.readString(Path.of("resources/thankyou.txt"));
-            //PROMPTER.asciiArt(banner);
+            prompter.asciiArt(banner);
             Thread.sleep(3000);
             System.exit(0);
         } catch (InterruptedException | IOException e) {

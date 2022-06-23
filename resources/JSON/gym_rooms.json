@@ -128,10 +128,10 @@
           "energy cost" : 5
         }
       },
-      "items": ["No Items"],
+      "items": [],
       "required items": ["key"],
       "directions" : ["front desk", "machines", "free weights"],
-      "NPCS" : ["none"]
+      "NPCS" : []
     }
   }
 }
