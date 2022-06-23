@@ -21,8 +21,6 @@ public class Room {
 
     public Room(Object room) {
         this.roomName = jsonParser.getObjectStringFromJSONObject(room, "name");
-
-
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
 

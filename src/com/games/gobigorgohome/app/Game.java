@@ -5,8 +5,10 @@ import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
+import org.w3c.dom.ls.LSOutput;
 
 
+import javax.crypto.spec.PSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,14 +55,14 @@ public class Game {
         String playerName = prompter.prompt("What is your name? ");
         if (playerName.isBlank() || playerName.isEmpty() || playerName.length() > 16) {
             try {
-                System.out.println("You need to type your name or it exceeds 16 characters: ");
+                prompter.info("You need to type your name or it exceeds 16 characters: ");
                 validName();
             } catch (NullPointerException e) {
-                System.out.println("You need to type your name: ");
+                prompter.info("You need to type your name: ");
                 validName();
             }
         } else {
-            System.out.println("Hello " + playerName + " let's get more about you...");
+            prompter.info("Hello " + playerName + " let's get more about you...");
         }
         return playerName;
     }
@@ -101,14 +103,15 @@ public class Game {
     //    updates player with current game status e.g. player inventory, current room etc.
     private void gameStatus() {
         prompter.info("------------------------------");
-        System.out.println("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
-        System.out.println("You are in the " + currentRoomName + " room.");
-        System.out.println(player.toString());
-        System.out.println("------------------------------");
+        prompter.info("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
+        prompter.info("You are in the " + currentRoomName + " room.");
+        prompter.info(player.toString());
+        prompter.info("------------------------------");
     }
 
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
+
         page.instructions();
         getNewPlayerInfo();
         // runs a while loop
@@ -136,7 +139,7 @@ public class Game {
         } else if (player.isWorkoutComplete()) {
             result = "CONGRATULATIONS! YOU WORKED OUT!";
         }
-        System.out.println(result);
+        prompter.info(result);
     }
 
     public void promptForPlayerInput() throws IOException, ParseException {
@@ -172,7 +175,7 @@ public class Game {
                     break;
                 case "go":
 
-                    System.out.println("you're going here: " + playerAction);
+                    prompter.info("you're going here: " + playerAction);
                     currentRoomName = playerAction;
                     setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
                     break;
@@ -199,7 +202,7 @@ public class Game {
             }
         } catch (Exception exception) {
 //            TODO: add array with possible values for commands
-            System.out.println(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+            prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
 //            TODO: fix bug caused by pressing enter where prompt for player does not work and calls inspect
             promptForPlayerInput();
         }
@@ -219,12 +222,12 @@ public class Game {
 
     private void talkToNPC() {
         String dialog = currentRoom.getNpc().generateDialog();
-        System.out.println(dialog);
+        prompter.info(dialog);
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
         player.getInventory().add(npcItem);
-        System.out.println("You addded " + npcItem + " to your gym bag.");
+        prompter.info("You addded " + npcItem + " to your gym bag.");
     }
 
     private void inspectRoom() {
@@ -257,7 +260,7 @@ public class Game {
                 player.workout(targetMuscle, energyCost);
                 player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
             } else {
-                System.out.println("When you are ready to workout, come back with the wrench and get to it.");
+                prompter.info("When you are ready to workout, come back with the wrench and get to it.");
             }
         } else {
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
@@ -274,7 +277,7 @@ public class Game {
         try {
             gui.clear();
             String banner = Files.readString(Path.of("resources/thankyou.txt"));
-            //PROMPTER.asciiArt(banner);
+            prompter.asciiArt(banner);
             Thread.sleep(3000);
             System.exit(0);
         } catch (InterruptedException | IOException e) {

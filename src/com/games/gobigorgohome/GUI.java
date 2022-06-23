@@ -123,8 +123,8 @@ public class GUI {
         pane.add(clockText, clockTextConstraints);
 
         frame.setVisible(true);
-        Image imageIcon = getImageFile("a1.png");
-        frame.setIconImage(imageIcon);
+//        Image imageIcon = getImageFile("a1.png");
+//        frame.setIconImage(imageIcon);
         commandInput.requestFocus();
 
 

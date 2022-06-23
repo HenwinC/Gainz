@@ -32,15 +32,15 @@ public class SoundPlayer extends Thread {
     public void SoundPlayer() {
     }
 
-    public void run() {
-        while (powerOn) {
-            while (playList.isEmpty() || playing == true) ;
-            synchronized (playList) {
-                playSound(playList.get(0));
-                removeSoundFile(playList.get(0));
-            }
-        }
-    }
+//    public void run() {
+//        while (powerOn) {
+//            while (playList.isEmpty() || playing == true) ;
+//            synchronized (playList) {
+//                playSound(playList.get(0));
+//                removeSoundFile(playList.get(0));
+//            }
+//        }
+//    }
 
     public void playSound(String fileName) {
         try {
