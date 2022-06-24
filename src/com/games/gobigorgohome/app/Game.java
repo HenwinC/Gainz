@@ -205,15 +205,17 @@ public class Game {
         }
     }
     private void boxingLocation() {
-        if (currentRoomName.equals("machines room")) {
-            List<String> list = Arrays.asList("A", "B", "C", "D");
+
+        if (currentRoomName.equals("machines")) {
+            //List<String> list = Arrays.asList("A", "B", "C", "D");
+
             int partnerHealth = 100;
         while (player.getHealth() > 0 && partnerHealth > 0) {
             prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
             String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-            if (playerAttack.isBlank() || !playerAttack.toLowerCase().contains((CharSequence) list)) {
-                prompter.info("Enter a valid command");
-            }
+//            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+//                prompter.info("Enter a valid command");
+//            }
             if (playerAttack.equals("a")) {
                 prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                 partnerHealth = partnerHealth - 25;
@@ -250,7 +252,7 @@ public class Game {
             prompter.info(GREEN + "You fought like a pro !" + RESET);
             prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
         } else {
-            prompter.info(RED + "Your sparring partner  won :( " + RESET);
+            prompter.info(RED + "Your sparring partner won :( " + RESET);
             prompter.info(RED + "You live to fight another day" + RESET);
             gui.clear();
 //                String banner = Files.readString(Path.of("resources/loser"));
@@ -259,6 +261,11 @@ public class Game {
         }
     }
         fightOver = true;
+    }
+    public void runAway () {
+        if(currentRoomName.equals("machine room")) {
+
+        }
     }
 
     public static void setInputStream(ByteArrayInputStream inputStream) {
