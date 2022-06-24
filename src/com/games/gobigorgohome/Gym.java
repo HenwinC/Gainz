@@ -6,6 +6,7 @@ import com.games.gobigorgohome.parsers.ParseJSON;
 public class Gym {
     private final Object rooms;
     private final String starterRoomName = "front desk";
+    private final String boxingRoomName = "machine";
     private final Room starterRoom;
     ParseJSON jsonParser = new ParseJSON();
 
@@ -14,6 +15,7 @@ public class Gym {
         ParseJSON jsonParser = new ParseJSON();
         rooms = jsonParser.getJSONObjectFromFile(gymRoomFilePath);
         starterRoom = new Room(jsonParser.getObjectFromJSONObject(getRooms(), getStarterRoomName()));
+        //boxingRoom = new Room(jsonParser.getObjectFromJSONObject(getRooms(), getBoxingRoomName()));
 
     }
 
@@ -31,6 +33,9 @@ public class Gym {
 
     public String getStarterRoomName() {
         return starterRoomName;
+    }
+    public String getBoxingRoomName() {
+        return boxingRoomName;
     }
 }
 
