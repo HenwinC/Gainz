@@ -18,6 +18,7 @@ public class SoundPlayer extends Thread {
     private float volume = 1.0f;
     private float mutedVolume = 1.0f;
     private String volumeLevelString = "";
+    private String sound_files_dir = "resources/sound_files/";
 
     /*
 
@@ -32,20 +33,22 @@ public class SoundPlayer extends Thread {
     public void SoundPlayer() {
     }
 
-//    public void run() {
-//        while (powerOn) {
-//            while (playList.isEmpty() || playing == true) ;
-//            synchronized (playList) {
-//                playSound(playList.get(0));
-//                removeSoundFile(playList.get(0));
-//            }
-//        }
-//    }
+    public void run() {
+        while (powerOn) {
+            while (playList.isEmpty() || playing == true) ;
+            synchronized (playList) {
+                playSound(playList.get(0));
+                removeSoundFile(playList.get(0));
+            }
+        }
+    }
 
     public void playSound(String fileName) {
         try {
             playing = true;
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/" + fileName).getAbsoluteFile());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File(fileName)
+                            .getAbsoluteFile());
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             if (repeatSound == fileName) {
@@ -68,7 +71,7 @@ public class SoundPlayer extends Thread {
     }
 
     public synchronized void addSoundFile(String fileName, boolean loop) {
-        playList.add(fileName);
+        playList.add(sound_files_dir + fileName);
         if (loop) {
             repeatSound = fileName;
         }
@@ -119,5 +122,34 @@ public class SoundPlayer extends Thread {
 
     public void unMute() {
         setVolume(mutedVolume);
+    }
+
+    public void playIntro() {
+        start();
+        addSoundFile("intro.wav");
+    }
+
+    public void playName() {
+        addSoundFile("name.wav");
+    }
+
+    public void playHeight() {
+        addSoundFile("height.wav");
+    }
+
+    public void playWeight() {
+        addSoundFile("weight.wav");
+    }
+
+    public void playAge() {
+        addSoundFile("age.wav");
+    }
+
+    public void playGetBig() {
+        addSoundFile("getbig.wav");
+    }
+
+    public void playCommand() {
+        addSoundFile("command.wav");
     }
 }

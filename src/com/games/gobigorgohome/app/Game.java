@@ -23,6 +23,8 @@ public class Game {
     public static ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
+    private SoundPlayer soundPlayer = new SoundPlayer();
+    private VoiceRecognition voiceRecognition;
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
     private final Player player = new Player();
@@ -40,57 +42,40 @@ public class Game {
 //        this.prompter = prompter;
 //    }
 
+    public Game() {
+        voiceRecognition = new VoiceRecognition();
+        //voiceRecognition.start();
+    }
+
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
-//        TODO: validate user input
-        String playerName = validName();
-        double playerHeight = validDouble("What is your height? ", "height", "inches");
-        double playerWeight = validDouble("What is your weight? ", "weight", "lbs");
-        int playerAge = validInt("What is your age", "age", "years");
+        soundPlayer.playName();
+        String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
+        prompter.info("Hello " + playerName + " let's get more information about you...");
+        soundPlayer.playHeight();
+        double playerHeight = validDouble("What is your height in inches? ",
+                "height", "inches","^[0-9]{1,2}$");
+        soundPlayer.playWeight();
+        double playerWeight = validDouble("What is your weight in lbs? ",
+                "weight", "lbs", "^[0-9]{2,3}$");
+        soundPlayer.playAge();
+        int playerAge = validInt("What is your age", "age", "years", "^[0-9]{1,2}$");
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
 
-    // validates name requesting one and rejecting empty space(s).
-    private String validName() {
-        String playerName = prompter.prompt("What is your name? ");
-        if (playerName.isBlank() || playerName.isEmpty() || playerName.length() > 16) {
-            try {
-                prompter.info("You need to type your name or it exceeds 16 characters: ");
-                validName();
-            } catch (NullPointerException e) {
-                prompter.info("You need to type your name: ");
-                validName();
-            }
-        } else {
-            prompter.info("Hello " + playerName + " let's get more about you...");
-        }
-        return playerName;
+    // validates String using regex
+    private String validString(String msg, String criteria) {
+        return prompter.prompt("What is your name? ",criteria,"TRY AGAIN: " + msg);
     }
 
-    // validates height and weight taking integers or doubles only
-    private double validDouble(String msg, String measureName, String unit) {
-        String measurementString = prompter.prompt(msg);
-        double measurement = 0;
-        try {
-            measurement = Double.parseDouble(measurementString);
-            //validDouble(measure, "you need to type your " + measureName + " in " + unit + ": ", measureName, unit);
-        } catch (NumberFormatException | NullPointerException e) {
-            validDouble("You need to type your " + measureName + " using numbers (" + unit + "): ", measureName, unit);
-        }
-        return measurement;
+    // validates a double using regex
+    private double validDouble(String msg, String measureName, String unit, String criteria) {
+        return Double.parseDouble(prompter.prompt(msg,criteria,"TRY AGAIN: " + msg));
     }
 
-    // validates age taking only an integer
-    private int validInt(String msg, String measureName, String unit) {
-        String measurement = prompter.prompt(msg);
-        int measureNum = 0;
-        try {
-            measureNum = Integer.parseInt(measurement);
-            //validInt(measure, "you need to type your "+ measureName+" in " + unit + " or you aren't an adult: ", measureName, unit);
-        } catch (NumberFormatException e) {
-            validInt("You need to type your " + measureName + " using numbers integers (" + unit + "): ", measureName, unit);
-        }
-        return measureNum;
+    // validates int using regex
+    private int validInt(String msg, String measureName, String unit, String criteria) {
+        return Integer.parseInt(prompter.prompt(msg,criteria,"TRY AGAIN: " + msg));
     }
 
     private void createPlayer(String playerName, int playerAge, double playerHeight, double playerWeight) {
@@ -102,6 +87,8 @@ public class Game {
 
     //    updates player with current game status e.g. player inventory, current room etc.
     private void gameStatus() {
+        soundPlayer.playCommand();
+        String command = voiceRecognition.getUtterance();
         prompter.info("------------------------------");
         prompter.info("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
         prompter.info("You are in the " + currentRoomName + " room.");
@@ -111,7 +98,7 @@ public class Game {
 
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
-
+        soundPlayer.playIntro();
         page.instructions();
         getNewPlayerInfo();
         // runs a while loop
@@ -133,10 +120,13 @@ public class Game {
 
         String result = "";
         if (player.isSteroidsUsed()) {
+            // TODO play LOSER AND A CHEATER
             result = "YOU ARE A LOSER AND A CHEATER!";
         } else if (player.isExhausted()) {
+            // TODO play TIRED
             result = "You're too tired, go home dude";
         } else if (player.isWorkoutComplete()) {
+            // TODO play CONGRATULATIONS
             result = "CONGRATULATIONS! YOU WORKED OUT!";
         }
         prompter.info(result);
@@ -174,7 +164,6 @@ public class Game {
                     grabItem(playerAction);
                     break;
                 case "go":
-
                     prompter.info("you're going here: " + playerAction);
                     currentRoomName = playerAction;
                     setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
@@ -200,10 +189,11 @@ public class Game {
                     quit();
                     break;
             }
-        } catch (Exception exception) {
+        } catch
+        (Exception exception) {
 //            TODO: add array with possible values for commands
             prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-//            TODO: fix bug caused by pressing enter where prompt for player does not work and calls inspect
+//            DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
             promptForPlayerInput();
         }
     }
@@ -317,7 +307,4 @@ public class Game {
     public String getPlayerName() {
         return playerName;
     }
-
 }
-
-
