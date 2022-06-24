@@ -295,7 +295,8 @@ public class Game {
         Object targetMuscle = exercise.getTargetMuscles();
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
-
+        Long MET = exercise.getMET();
+        totalCalories(MET);
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
@@ -319,6 +320,19 @@ public class Game {
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
         }
     }
+
+    //MET (metabolic equivalent for task) calculation above.
+    public void totalCalories(Long MET){
+        double totalBurned = 0;
+        // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
+        int minutes = 15;
+        Double playerWeight = player.weight;
+        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
+        totalBurned = minutes * (MET * 3.5 * playerWeight)/200;
+        totalBurned = (int)totalBurned;
+        prompter.info("You burned " + totalBurned + " calories! From this workout");
+    }
+
 
     private void grabItem(String playerAction) {
         prompter.info("you got the :" + playerAction);

@@ -59,6 +59,8 @@ public class VoiceRecognition extends Thread{
 //        String result = recognizer.getResult().getHypothesis();
 //        recognizer.stopRecognition();
 //        micro.stopRecording();
-        return "result";
+
+        return "";
+
     }
 }
