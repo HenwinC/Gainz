@@ -29,35 +29,40 @@
             "chest"
           ],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 6
         },
         "skull crushers": {
           "target muscles": [
             "triceps"
           ],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.5
         },
         "overhead press": {
           "target muscles": [
             "shoulders"
           ],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 5
         },
         "squat": {
           "target muscles": [
             "legs"
           ],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 6
         },
         "deadlift": {
           "target muscles": [
             "back"
           ],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 6
         }
       },
       "items": ["No Items"],
@@ -71,27 +76,32 @@
         "leg press": {
           "target muscles": ["legs"],
           "status": "broken",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 4
         },
         "chest fly": {
           "target muscles": ["chest"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.5
         },
         "cable curl": {
           "target muscles": ["biceps"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.5
         },
         "crunch machine": {
           "target muscles": ["core"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.5
         },
         "tricep extension": {
           "target muscles": ["triceps"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.5
         }
       },
       "items": ["steroids"],
@@ -105,27 +115,32 @@
         "row": {
           "target muscles": ["back"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 4
         },
         "bike": {
           "target muscles": ["leg"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 4.8
         },
         "push ups": {
           "target muscles": ["chest"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 3.8
         },
         "ab wheel": {
           "target muscles": ["core"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 4
         },
         "dips": {
           "target muscles": ["triceps"],
           "status": "fixed",
-          "energy cost" : 5
+          "energy cost" : 5,
+          "MET": 5
         }
       },
       "items": [],
