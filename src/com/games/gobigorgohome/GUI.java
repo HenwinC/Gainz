@@ -126,12 +126,6 @@ public class GUI {
 //        Image imageIcon = getImageFile("a1.png");
 //        frame.setIconImage(imageIcon);
         commandInput.requestFocus();
-
-
-        playGameMusic();
-
-        // startClock();
-
     }
 
     public JTextPane getTextPane() {
@@ -148,12 +142,6 @@ public class GUI {
 
     public void setCommandInput(TextFieldPlaceholder commandInput) {
         this.commandInput = commandInput;
-    }
-
-    public void playGameMusic() {
-        soundPlayer.addSoundFile("theme.wav");
-        soundPlayer.addSoundFile("game.wav", true);
-        soundPlayer.start();
     }
 
     public void playSoundEffect(String name) {
