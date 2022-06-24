@@ -205,7 +205,7 @@ public class Game {
         }
     }
     private void boxingLocation() {
-        if (currentRoomName.equals("machine room")) {
+        if (currentRoomName.equals("machines room")) {
             List<String> list = Arrays.asList("A", "B", "C", "D");
             int partnerHealth = 100;
         while (player.getHealth() > 0 && partnerHealth > 0) {
