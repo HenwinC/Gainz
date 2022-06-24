@@ -12,6 +12,8 @@ import java.util.StringJoiner;
 
 class Map {
     // read .txt files in resource folder
+//    map is displaying well but in the console re factor
+    //TO DO: make map to show in the GUI
     public void dataFromFile(String filePath) throws IOException {
 
         InputStream stream = ParseTxt.class.getClassLoader().getResourceAsStream(filePath);
