@@ -24,7 +24,6 @@ public class Room {
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
 
-//        this.directions = jsonParser.getJSONArrayFromJSONObject(room,"directions");
 
         Object npcTypeObject = jsonParser.getObjectFromJSONObject(room, "NPCS");
         this.npc_type = jsonParser.getStringValueFromIndexInJSONArray(npcTypeObject, 0);
@@ -84,3 +83,4 @@ public class Room {
 //        TODO: if adding direction limitations, call getDirections
     }
 }
+
