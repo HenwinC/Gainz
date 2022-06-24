@@ -55,10 +55,10 @@ public class VoiceRecognition extends Thread{
     }
 
     public String getUtterance() {
-        recognizer.startRecognition(micro.getStream());
-        String result = recognizer.getResult().getHypothesis();
-        recognizer.stopRecognition();
-        micro.stopRecording();
-        return result;
+//        recognizer.startRecognition(micro.getStream());
+//        String result = recognizer.getResult().getHypothesis();
+//        recognizer.stopRecognition();
+//        micro.stopRecording();
+        return "result";
     }
 }
