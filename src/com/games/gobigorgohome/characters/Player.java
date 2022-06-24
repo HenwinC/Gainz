@@ -27,6 +27,7 @@ public class Player {
     private boolean isShoulderWorked = false;
     private boolean isBicepsWorked = false;
     private boolean isSteroidsUsed = false;
+    private int health = 100;
 
 
     private boolean isExhausted = false;
@@ -44,6 +45,13 @@ public class Player {
         this.height = height;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
     //    business methods
 
     //    we need to think about what values are being played around with or manipulated that can be tested?
