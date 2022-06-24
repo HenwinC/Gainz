@@ -1,0 +1,27 @@
+<speak>
+    Hello, I'm Alexa <break time=".5s"/>
+    and  
+    welcome to
+    <prosody volume="x-loud">go big or go home</prosody>
+    
+    <break time="5s"/>
+    What is your name
+    <break time="5s"/>
+    What is your height in inches
+    <break time="5s"/>
+    What is your weight in pounds
+    <break time="5s"/>
+    and lastly what is your age
+    
+    <break time="5s"/>
+    
+    	<amazon:emotion name="excited" intensity="high">
+	great! so now lets get big
+	</amazon:emotion>
+
+	<break time="5s"/>
+
+	what would you like to do
+
+</speak>
+

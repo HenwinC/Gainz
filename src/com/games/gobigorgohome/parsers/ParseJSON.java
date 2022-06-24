@@ -14,7 +14,7 @@ public class ParseJSON {
 
     //    takes a file path string and returns a JSONObject
     public Object getJSONObjectFromFile(String filePath) {
-//        return (JSONObject) parser.parse(new FileReader(filePath));
+//      return (JSONObject) parser.parse(new FileReader(filePath));
         InputStream inputTestJSON = getFileFromResourceAsStream(filePath);
         JSONParser jsonParser = new JSONParser();
         //JSONObject jsonObject = null;
