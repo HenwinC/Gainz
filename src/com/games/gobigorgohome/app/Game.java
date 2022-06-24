@@ -216,11 +216,12 @@ public class Game {
     }
     private void boxingLocation() {
         if (currentRoomName.equals("machine room")) {
+            List<String> list = Arrays.asList("A", "B", "C", "D");
             int partnerHealth = 100;
         while (player.getHealth() > 0 && partnerHealth > 0) {
             prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
             String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-            if (playerAttack.isBlank() || playerAttack.isEmpty()) {
+            if (playerAttack.isBlank() || playerAttack.isEmpty() || !playerAttack.toLowerCase().contains((CharSequence) list)) {
                 prompter.info("Enter a valid command");
             }
             if (playerAttack.equals("a")) {
