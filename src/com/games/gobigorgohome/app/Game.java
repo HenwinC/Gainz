@@ -16,6 +16,9 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
+import static com.games.gobigorgohome.Colors.*;
 
 
 public class Game {
@@ -34,6 +37,7 @@ public class Game {
     private String currentRoomName = gym.getStarterRoomName();
     private Room currentRoom = gym.getStarterRoom();
     private final Object rooms = gym.getRooms();
+    private boolean fightOver = false;
 
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
@@ -188,6 +192,9 @@ public class Game {
                 case "q":
                     quit();
                     break;
+                case "fight":
+                    boxingLocation();
+                    break;
             }
         } catch
         (Exception exception) {
@@ -196,6 +203,62 @@ public class Game {
 //            DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
             promptForPlayerInput();
         }
+    }
+    private void boxingLocation() {
+        if (currentRoomName.equals("machine room")) {
+            List<String> list = Arrays.asList("A", "B", "C", "D");
+            int partnerHealth = 100;
+        while (player.getHealth() > 0 && partnerHealth > 0) {
+            prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
+            String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
+            if (playerAttack.isBlank() || !playerAttack.toLowerCase().contains((CharSequence) list)) {
+                prompter.info("Enter a valid command");
+            }
+            if (playerAttack.equals("a")) {
+                prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
+                partnerHealth = partnerHealth - 25;
+            }
+            if (playerAttack.equals("b")) {
+                prompter.info(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
+                partnerHealth = partnerHealth - 30;
+            }
+            if (playerAttack.equals("c")) {
+                prompter.info(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
+                partnerHealth = partnerHealth - 40;
+            }
+            if (playerAttack.equals("d")) {
+                prompter.info(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
+                partnerHealth = partnerHealth - 10;
+            }
+            Random rand = new Random();
+            int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+            if (randomNum == 1) {
+                prompter.info(RED + "Your partner backhanded you.....Disrespectful" + RESET);
+                player.setHealth(player.getHealth() - 10);
+            }
+            if (randomNum == 2) {
+                prompter.info(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
+                player.setHealth(player.getHealth() - 30);
+            }
+            if (randomNum == 3) {
+                prompter.info(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
+                player.setHealth(player.getHealth() - 40);
+            }
+        }
+        String badge = "Medallion";
+        if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
+            prompter.info(GREEN + "You fought like a pro !" + RESET);
+            prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
+        } else {
+            prompter.info(RED + "Your sparring partner  won :( " + RESET);
+            prompter.info(RED + "You live to fight another day" + RESET);
+            gui.clear();
+//                String banner = Files.readString(Path.of("resources/loser"));
+//                prompter.asciiArt(banner);
+            quit();
+        }
+    }
+        fightOver = true;
     }
 
     public static void setInputStream(ByteArrayInputStream inputStream) {
@@ -217,7 +280,7 @@ public class Game {
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
         player.getInventory().add(npcItem);
-        prompter.info("You addded " + npcItem + " to your gym bag.");
+        prompter.info("You added " + npcItem + " to your gym bag.");
     }
 
     private void inspectRoom() {
