@@ -30,7 +30,7 @@ public class Room {
 
         Object requiredItemsObject = jsonParser.getObjectFromJSONObject(room, "required items");
         this.requiredItems = jsonParser.getKeySetFromJSONArray(requiredItemsObject);
-        System.out.println(this.requiredItems);
+//        System.out.println(this.requiredItems);
 
         if (!"none".equals(npc_type)) {
             this.npc = new NPC(npc_type);
