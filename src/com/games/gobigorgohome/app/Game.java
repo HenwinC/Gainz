@@ -205,8 +205,10 @@ public class Game {
         }
     }
     private void boxingLocation() {
+
         if (currentRoomName.equals("machines")) {
             //List<String> list = Arrays.asList("A", "B", "C", "D");
+
             int partnerHealth = 100;
         while (player.getHealth() > 0 && partnerHealth > 0) {
             prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
