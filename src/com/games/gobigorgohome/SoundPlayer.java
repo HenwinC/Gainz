@@ -99,9 +99,9 @@ public class SoundPlayer extends Thread {
     }
 
     public String getVolumeString() {
-        int volumeInt = BigDecimal.valueOf(volume*10).intValue()/2;
+        int volumeInt = BigDecimal.valueOf(volume * 10).intValue() / 2;
         String volumeString = "volume ";
-        for(int i=0;i<volumeInt;i++) {
+        for (int i = 0; i < volumeInt; i++) {
             volumeString += ")";
         }
         return volumeString;

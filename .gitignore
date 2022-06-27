@@ -3,7 +3,6 @@
 
 # IntelliJ metadata files
 .idea/
-.out/
 *.iml
 
 # Log file
@@ -26,3 +25,15 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

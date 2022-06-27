@@ -24,14 +24,13 @@ public class Room {
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
 
-//        this.directions = jsonParser.getJSONArrayFromJSONObject(room,"directions");
 
         Object npcTypeObject = jsonParser.getObjectFromJSONObject(room, "NPCS");
         this.npc_type = jsonParser.getStringValueFromIndexInJSONArray(npcTypeObject, 0);
 
         Object requiredItemsObject = jsonParser.getObjectFromJSONObject(room, "required items");
         this.requiredItems = jsonParser.getKeySetFromJSONArray(requiredItemsObject);
-        System.out.println(this.requiredItems);
+//        System.out.println(this.requiredItems);
 
         if (!"none".equals(npc_type)) {
             this.npc = new NPC(npc_type);
