@@ -170,9 +170,7 @@ public class Game {
                         currentRoomName = playerAction;
                         setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
                     } else {
-                        System.out.println("hey");
-                        prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-                        promptForPlayerInput();
+                        invalidCommand(actionPrefix + " " + playerAction);
                     }
                     break;
                 case "workout":
@@ -202,72 +200,8 @@ public class Game {
         } catch
         (Exception exception) {
 //            TODO: add array with possible values for commands
-            prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-//            DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
-            promptForPlayerInput();
-        }
-    }
-    private void boxingLocation() {
-
-        if (currentRoomName.equals("machines")) {
-            //List<String> list = Arrays.asList("A", "B", "C", "D");
-
-            int partnerHealth = 100;
-        while (player.getHealth() > 0 && partnerHealth > 0) {
-            prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
-            String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-//            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-//                prompter.info("Enter a valid command");
-//            }
-            if (playerAttack.equals("a")) {
-                prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
-                partnerHealth = partnerHealth - 25;
-            }
-            if (playerAttack.equals("b")) {
-                prompter.info(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
-                partnerHealth = partnerHealth - 30;
-            }
-            if (playerAttack.equals("c")) {
-                prompter.info(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
-                partnerHealth = partnerHealth - 40;
-            }
-            if (playerAttack.equals("d")) {
-                prompter.info(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
-                partnerHealth = partnerHealth - 10;
-            }
-            Random rand = new Random();
-            int randomNum = rand.nextInt((3 - 1) + 1) + 1;
-            if (randomNum == 1) {
-                prompter.info(RED + "Your partner backhanded you.....Disrespectful" + RESET);
-                player.setHealth(player.getHealth() - 10);
-            }
-            if (randomNum == 2) {
-                prompter.info(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
-                player.setHealth(player.getHealth() - 30);
-            }
-            if (randomNum == 3) {
-                prompter.info(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
-                player.setHealth(player.getHealth() - 40);
-            }
-        }
-        String badge = "Medallion";
-        if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
-            prompter.info(GREEN + "You fought like a pro !" + RESET);
-            prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
-        } else {
-            prompter.info(RED + "Your sparring partner won :( " + RESET);
-            prompter.info(RED + "You live to fight another day" + RESET);
-            gui.clear();
-//                String banner = Files.readString(Path.of("resources/loser"));
-//                prompter.asciiArt(banner);
-            quit();
-        }
-    }
-        fightOver = true;
-    }
-    public void runAway () {
-        if(currentRoomName.equals("machine room")) {
-
+            invalidCommand(actionPrefix + " " + playerAction);
+            // DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
         }
     }
 
@@ -330,11 +264,6 @@ public class Game {
         fightOver = true;
     }
 
-    public void runAway() {
-        if (currentRoomName.equals("machine room")) {
-
-        }
-    }
 
     public static void setInputStream(ByteArrayInputStream inputStream) {
         Game.inputStream = inputStream;
@@ -398,21 +327,20 @@ public class Game {
 
     //MET (metabolic equivalent for task) calculation above.
 
-    public void totalCalories(Long MET){
+    public void totalCalories(Long MET) {
         double totalBurned = 0;
         // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
         int minutes = 15;
         Double playerWeight = player.weight;
         playerWeight = playerWeight * 0.45359237; //converet lbs to KG
- 
-        totalBurned = minutes * (MET * 3.5 * playerWeight)/200;
-        totalBurned = (int)totalBurned;
- 
+
+        totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
+        totalBurned = (int) totalBurned;
+
         prompter.info("You burned " + totalBurned + " calories! From this workout");
     }
 
 
- 
     //This function does not validate if item exist at the location. Refactored
 //    private void grabItem(String playerAction) {
 //        prompter.info("you got the :" + playerAction);
@@ -420,7 +348,6 @@ public class Game {
 //    }
 
 
- 
     private void grabItem(String playerAction) {
 
         // makes a list to be able to manipulate data
@@ -439,6 +366,15 @@ public class Game {
             }
         }
 
+    }
+
+    private void invalidCommand(String command) {
+        prompter.info(command + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+        try {
+            promptForPlayerInput();
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     //    gives player ability to quit
