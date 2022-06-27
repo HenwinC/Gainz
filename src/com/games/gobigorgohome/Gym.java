@@ -34,6 +34,7 @@ public class Gym {
     public String getStarterRoomName() {
         return starterRoomName;
     }
+
     public String getBoxingRoomName() {
         return boxingRoomName;
     }

@@ -19,7 +19,8 @@ public class NPC {
         Object npc = jsonParser.getObjectFromJSONObject(npcs, npc_type);
         this.npcName = jsonParser.getObjectStringFromJSONObject(npc, "name");
         this.inventory = (List) jsonParser.getObjectFromJSONObject(npc, "inventory");
-        this.phrases = (List) jsonParser.getObjectFromJSONObject(npc, "dialog");;
+        this.phrases = (List) jsonParser.getObjectFromJSONObject(npc, "dialog");
+        ;
     }
 
     public String generateDialog() {

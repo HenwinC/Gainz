@@ -4,13 +4,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-//add coment to merge
+
+import java.io.IOException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+
 //commet
 public class ParseJSON {
 
@@ -22,7 +25,9 @@ public class ParseJSON {
 
             text = Files.readString(Path.of("resources/" + filePath));
             JSONParser parser = new JSONParser();
-              json = (JSONObject) parser.parse(text);
+
+            json = (JSONObject) parser.parse(text);
+
 //            System.out.println(json);
 
         } catch (IOException | ParseException e) {
@@ -30,7 +35,6 @@ public class ParseJSON {
         }
         return json;
     }
-
 
 
     //    takes a file path string and returns a JSONObject

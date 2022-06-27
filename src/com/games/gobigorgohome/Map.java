@@ -23,7 +23,7 @@ class Map {
         List<String> lines = new ArrayList<String>();
         BufferedReader streamReader = new BufferedReader(new InputStreamReader(stream));
         String line = null;
-        while((line=streamReader.readLine())!=null) {
+        while ((line = streamReader.readLine()) != null) {
             lines.add(line);
             System.out.println(line);
         }

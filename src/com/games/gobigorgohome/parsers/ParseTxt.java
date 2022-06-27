@@ -3,17 +3,17 @@ package com.games.gobigorgohome.parsers;
 import com.games.gobigorgohome.GUI;
 import com.games.gobigorgohome.InputOutput;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ParseTxt {
     public static ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
+
 
 //    public void dataFromFile(String filePath) throws IOException {
 //
@@ -29,12 +29,14 @@ public class ParseTxt {
 //            prompter.info(line);
 //        }
 //    }
+
     public void dataFromFile(String filePath) throws IOException {
 
-       String text = Files.readString(Path.of("resources/" + filePath));
-       prompter.info(text);
+        String text = Files.readString(Path.of("resources/" + filePath));
+        prompter.info(text);
 
     }
+
     public void instructions() throws IOException {
         //String bannerPath = "banner.txt";
         String banner = Files.readString(Path.of("resources/banner.txt"));
