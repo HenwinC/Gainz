@@ -164,14 +164,7 @@ public class Game {
                     break;
                 case "go":
                     //condition in case room does not exist.
-                    HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
-                    if (allRooms.containsKey(playerAction)) {
-                        prompter.info("you're going here: " + playerAction);
-                        currentRoomName = playerAction;
-                        setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
-                    } else {
-                        invalidCommand(actionPrefix + " " + playerAction);
-                    }
+                    changeLocation(playerAction);
                     break;
                 case "workout":
                     playerUseMachine(playerAction);
@@ -202,6 +195,17 @@ public class Game {
 //            TODO: add array with possible values for commands
             invalidCommand(actionPrefix + " " + playerAction);
             // DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
+        }
+    }
+
+    private void changeLocation(String location) {
+        HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
+        if (allRooms.containsKey(location)) {
+            prompter.info("you're going here: " + location);
+            currentRoomName = location;
+            setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
+        } else {
+            invalidCommand("This location does not exist!");
         }
     }
 
@@ -274,7 +278,9 @@ public class Game {
     }
 
     private void getRoomMap() throws IOException {
-        currentRoom.getRoomMap(currentRoomName);
+
+        currentRoom.getRoomMap(prompter);
+
     }
 
     private void talkToNPC() {
