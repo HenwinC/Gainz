@@ -13,6 +13,7 @@ public class Room {
     private final String roomName;
     private final Object items;
     private final Object exercises;
+    private final String map;
 
     private final String npc_type;
     private final List requiredItems;
@@ -21,7 +22,9 @@ public class Room {
 
     public Room(Object room) {
         this.roomName = jsonParser.getObjectStringFromJSONObject(room, "name");
+        this.map = jsonParser.getObjectStringFromJSONObject(room, "map");
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
+
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
 
 
@@ -37,8 +40,9 @@ public class Room {
         }
     }
 
-    public void getRoomMap(String roomName) throws IOException {
-        roomMap.stringEditor(roomName);
+    public void getRoomMap(InputOutput prompter) throws IOException {
+
+        roomMap.stringEditor(prompter, map);
     }
 
     public Object getItems() {
