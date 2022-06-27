@@ -1,7 +1,7 @@
 package com.games.gobigorgohome.characters;
 
 import com.games.gobigorgohome.parsers.ParseJSON;
-
+import com.games.gobigorgohome.InputOutput;
 import java.util.*;
 
 public class Player {
@@ -94,6 +94,16 @@ public class Player {
 
     private boolean isItemInInventory(String item) {
         return getInventory().contains(item);
+    }
+    public int playerScore() {
+        int score = 0;
+        if(isWorkoutComplete()) {
+            score ++;
+        }
+        else {
+            System.out.println("No score recorded");
+        }
+        return score;
     }
 
 //    public Boolean useItem(String item, boolean isItemRequired) {

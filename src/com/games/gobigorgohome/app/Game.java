@@ -5,11 +5,12 @@ import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
-import org.w3c.dom.ls.LSOutput;
+import com.games.gobigorgohome.characters.Player;
 
-
-import javax.crypto.spec.PSource;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +39,7 @@ public class Game {
     private Room currentRoom = gym.getStarterRoom();
     private final Object rooms = gym.getRooms();
     private boolean fightOver = false;
+    private String filename = "/Images/logo.png";
 
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
@@ -51,6 +53,18 @@ public class Game {
         //voiceRecognition.start();
     }
 
+    public Image welcome(String filename) {
+        Image img = null;
+        try {
+            img = ImageIO.read(new File(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
+
+    }
+
+
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
         soundPlayer.playName();
@@ -58,7 +72,7 @@ public class Game {
         prompter.info("Hello " + playerName + " let's get more information about you...");
         soundPlayer.playHeight();
         double playerHeight = validDouble("What is your height in inches? ",
-                "height", "inches","^[0-9]{1,2}$");
+                "height", "inches", "^[0-9]{1,2}$");
         soundPlayer.playWeight();
         double playerWeight = validDouble("What is your weight in lbs? ",
                 "weight", "lbs", "^[0-9]{2,3}$");
@@ -69,17 +83,17 @@ public class Game {
 
     // validates String using regex
     private String validString(String msg, String criteria) {
-        return prompter.prompt("What is your name? ",criteria,"TRY AGAIN: " + msg);
+        return prompter.prompt("What is your name? ", criteria, "TRY AGAIN: " + msg);
     }
 
     // validates a double using regex
     private double validDouble(String msg, String measureName, String unit, String criteria) {
-        return Double.parseDouble(prompter.prompt(msg,criteria,"TRY AGAIN: " + msg));
+        return Double.parseDouble(prompter.prompt(msg, criteria, "TRY AGAIN: " + msg));
     }
 
     // validates int using regex
     private int validInt(String msg, String measureName, String unit, String criteria) {
-        return Integer.parseInt(prompter.prompt(msg,criteria,"TRY AGAIN: " + msg));
+        return Integer.parseInt(prompter.prompt(msg, criteria, "TRY AGAIN: " + msg));
     }
 
     private void createPlayer(String playerName, int playerAge, double playerHeight, double playerWeight) {
@@ -103,8 +117,25 @@ public class Game {
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
         soundPlayer.playIntro();
-        page.instructions();
+        welcome(filename);
+        //page.instructions();
         getNewPlayerInfo();
+        // runs a while loop
+        while (!isGameOver()) {
+            gameStatus();
+            promptForPlayerInput();
+            if (checkGameStatus()) {
+                break;
+            }
+        }
+        gameResult();
+    }
+
+    public void getCommands() throws IOException, ParseException {
+//        soundPlayer.playIntro();
+//        page.instructions();
+//        getNewPlayerInfo();
+        //welcome();
         // runs a while loop
         while (!isGameOver()) {
             gameStatus();
@@ -190,10 +221,13 @@ public class Game {
                     getRoomMap();
                     break;
                 case "q":
-                    quit();
+                    playAgain();
                     break;
                 case "fight":
                     boxingLocation();
+                    break;
+                case "run":
+                    runAway();
                     break;
             }
         } catch
@@ -204,65 +238,78 @@ public class Game {
             promptForPlayerInput();
         }
     }
+
     private void boxingLocation() {
         if (currentRoomName.equals("machines")) {
             //List<String> list = Arrays.asList("A", "B", "C", "D");
             int partnerHealth = 100;
-        while (player.getHealth() > 0 && partnerHealth > 0) {
-            prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
-            String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
+            while (player.getHealth() > 0 && partnerHealth > 0) {
+                prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
+                String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
 //            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
 //                prompter.info("Enter a valid command");
 //            }
-            if (playerAttack.equals("a")) {
-                prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
-                partnerHealth = partnerHealth - 25;
+                if (playerAttack.equals("a")) {
+                    prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
+                    partnerHealth = partnerHealth - 25;
+                }
+                if (playerAttack.equals("b")) {
+                    prompter.info(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
+                    partnerHealth = partnerHealth - 30;
+                }
+                if (playerAttack.equals("c")) {
+                    prompter.info(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
+                    partnerHealth = partnerHealth - 40;
+                }
+                if (playerAttack.equals("d")) {
+                    prompter.info(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
+                    partnerHealth = partnerHealth - 10;
+                }
+                Random rand = new Random();
+                int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+                if (randomNum == 1) {
+                    prompter.info(RED + "Your partner backhanded you.....Disrespectful" + RESET);
+                    player.setHealth(player.getHealth() - 10);
+                }
+                if (randomNum == 2) {
+                    prompter.info(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
+                    player.setHealth(player.getHealth() - 30);
+                }
+                if (randomNum == 3) {
+                    prompter.info(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
+                    player.setHealth(player.getHealth() - 40);
+                }
             }
-            if (playerAttack.equals("b")) {
-                prompter.info(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
-                partnerHealth = partnerHealth - 30;
-            }
-            if (playerAttack.equals("c")) {
-                prompter.info(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
-                partnerHealth = partnerHealth - 40;
-            }
-            if (playerAttack.equals("d")) {
-                prompter.info(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
-                partnerHealth = partnerHealth - 10;
-            }
-            Random rand = new Random();
-            int randomNum = rand.nextInt((3 - 1) + 1) + 1;
-            if (randomNum == 1) {
-                prompter.info(RED + "Your partner backhanded you.....Disrespectful" + RESET);
-                player.setHealth(player.getHealth() - 10);
-            }
-            if (randomNum == 2) {
-                prompter.info(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
-                player.setHealth(player.getHealth() - 30);
-            }
-            if (randomNum == 3) {
-                prompter.info(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
-                player.setHealth(player.getHealth() - 40);
-            }
-        }
-        String badge = "Medallion";
-        if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
-            prompter.info(GREEN + "You fought like a pro !" + RESET);
-            prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
-        } else {
-            prompter.info(RED + "Your sparring partner won :( " + RESET);
-            prompter.info(RED + "You live to fight another day" + RESET);
-            gui.clear();
+            String badge = "Medallion";
+            if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
+                prompter.info(GREEN + "You fought like a pro !" + RESET);
+                prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
+            } else {
+                prompter.info(RED + "Your sparring partner won :( " + RESET);
+                prompter.info(RED + "You live to fight another day" + RESET);
+                gui.clear();
 //                String banner = Files.readString(Path.of("resources/loser"));
 //                prompter.asciiArt(banner);
-            quit();
+
+            }
         }
-    }
         fightOver = true;
     }
-    public void runAway () {
-        if(currentRoomName.equals("machine room")) {
 
+    public void runAway() throws IOException, ParseException {
+        if (currentRoomName.equals("machines")) {
+            String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " +
+                    "Type 'Yes' to save face or 'No' to face your fears");
+            if (fighter.equalsIgnoreCase("Yes")) {
+                prompter.info(ORANGE + "Whelp, better to be safe than sorry" + RESET);
+                promptForPlayerInput();
+            }
+            if (fighter.equalsIgnoreCase("No")) {
+                prompter.info("Let's see what you've got!");
+                boxingLocation();
+            } else {
+                prompter.info("Too legit to quit!");
+            }
         }
     }
 
@@ -327,14 +374,14 @@ public class Game {
     }
 
     //MET (metabolic equivalent for task) calculation above.
-    public void totalCalories(Long MET){
+    public void totalCalories(Long MET) {
         double totalBurned = 0;
         // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
         int minutes = 15;
         Double playerWeight = player.weight;
         playerWeight = playerWeight * 0.45359237; //converet lbs to KG
-        totalBurned = minutes * (MET * 3.5 * playerWeight)/200;
-        totalBurned = (int)totalBurned;
+        totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
+        totalBurned = (int) totalBurned;
         prompter.info("You burned " + totalBurned + " calories! From this workout");
     }
 
@@ -342,6 +389,43 @@ public class Game {
     private void grabItem(String playerAction) {
         prompter.info("you got the :" + playerAction);
         player.getInventory().add(playerAction);
+    }
+
+    public void playAgain() throws IOException, ParseException {
+        String playAgain = prompter.prompt("Would you like to play again? " +
+                        GREEN + " [N]ew Game " + RESET + YELLOW +
+                        "[R]ematch" + RESET + RED + " [E]xit" + RESET + CYAN + " [S]ave " + RESET,
+                "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
+
+        if ("N".equalsIgnoreCase(playAgain)) {
+            isGameOver = false;
+            gui.clear();
+            //currentRoom = gym.getStarterRoom();
+            playGame();
+        } else if ("R".equalsIgnoreCase(playAgain)) {
+            gui.clear();
+            currentRoom = gym.getStarterRoom();
+            prompter.info("Hello " + player.getName() + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+            getCommands();
+
+        } else if ("S".equalsIgnoreCase(playAgain)) {
+            player.playerScore();
+            gui.clear();
+            welcome(filename);
+            prompter.info("Saved!");
+            prompter.info("Hello " + player.getName() + " you can resume the game you saved");
+            String keepPlaying = prompter.prompt("Would you like to load your saved game?").toLowerCase();
+            prompter.info(GREEN + "enter Y " + RESET +" to continue, " + RED + " N to quit the game" + RESET);
+            if (keepPlaying.equalsIgnoreCase("y")) {
+                getCommands();
+            }else {
+                playAgain();
+            }
+
+        } else {
+            quit();
+        }
+
     }
 
     //    gives player ability to quit
