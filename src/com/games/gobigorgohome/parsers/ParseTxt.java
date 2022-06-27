@@ -14,7 +14,8 @@ public class ParseTxt {
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
 
-    //    public void dataFromFile(String filePath) throws IOException {
+
+//    public void dataFromFile(String filePath) throws IOException {
 //
 //        InputStream stream = ParseTxt.class.getClassLoader().getResourceAsStream(filePath);
 //        if (stream == null) {
@@ -28,6 +29,7 @@ public class ParseTxt {
 //            prompter.info(line);
 //        }
 //    }
+
     public void dataFromFile(String filePath) throws IOException {
 
         String text = Files.readString(Path.of("resources/" + filePath));

@@ -15,7 +15,9 @@ public class Exercise {
         this.targetMuscles = jsonParser.getObjectFromJSONObject(exercise, "target muscles");
         this.exerciseStatus = jsonParser.getObjectStringFromJSONObject(exercise, "status");
         this.energyCost = jsonParser.getLongFromJSONObject(exercise, "energy cost");
+
         this.MET = jsonParser.getLongFromJSONObject(exercise, "MET");
+
     }
 
     public Object getTargetMuscles() {
