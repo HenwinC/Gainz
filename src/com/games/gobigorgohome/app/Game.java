@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.games.gobigorgohome.Colors.*;
 
@@ -166,9 +163,17 @@ public class Game {
                     grabItem(playerAction);
                     break;
                 case "go":
-                    prompter.info("you're going here: " + playerAction);
-                    currentRoomName = playerAction;
-                    setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
+                    //condition in case room does not exist.
+                    HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
+                    if (allRooms.containsKey(playerAction)) {
+                        prompter.info("you're going here: " + playerAction);
+                        currentRoomName = playerAction;
+                        setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
+                    } else {
+                        System.out.println("hey");
+                        prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+                        promptForPlayerInput();
+                    }
                     break;
                 case "workout":
                     playerUseMachine(playerAction);
@@ -423,6 +428,7 @@ public class Game {
         // check if the room has the item
         if (items.contains(playerAction)) {
             prompter.info("you got the :" + playerAction);
+            items.remove(playerAction);
             player.getInventory().add(playerAction);
         } else {
             prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
