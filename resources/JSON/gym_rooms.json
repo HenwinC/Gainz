@@ -8,7 +8,8 @@
         "items": ["No Items"],
         "required items": ["none"],
         "directions" : ["free weights", "yoga studio"],
-        "NPCS" : ["maintenance lady"]
+        "NPCS" : ["maintenance lady"],
+        "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656366316/gogh/front_desk.png"
 
     },
     "managers office": {
@@ -19,7 +20,8 @@
       "items": ["energy drink"],
       "required items": ["none"],
       "directions" : ["machine", "yoga studio", "free weights"],
-      "NPCS" : ["manager"]
+      "NPCS" : ["manager"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367375/gogh/manager_xvh2wn.png"
   },
     "free weights": {
       "name" : "free weights",
@@ -68,7 +70,8 @@
       "items": ["No Items"],
       "required items": ["none"],
       "directions" : ["machines", "yoga studio", "front desk", "managers office"],
-      "NPCS" : ["none"]
+      "NPCS" : ["none"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656366092/gogh/free_weights.png"
     },
     "machines": {
       "name" : "machines",
@@ -107,7 +110,8 @@
       "items": ["steroids"],
       "required items": ["none"],
       "directions" : ["yoga studio", "managers office", "free weights"],
-      "NPCS" : ["none"]
+      "NPCS" : ["none"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367375/gogh/machines_cbdqil.png"
     },
     "yoga studio": {
       "name": "yoga studio",
@@ -146,7 +150,8 @@
       "items": [],
       "required items": ["key"],
       "directions" : ["front desk", "machines", "free weights"],
-      "NPCS" : []
+      "NPCS" : [],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367437/gogh/yoga_b95vn9.png"
     }
   }
 }
