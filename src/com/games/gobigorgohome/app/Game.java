@@ -53,14 +53,8 @@ public class Game {
         //voiceRecognition.start();
     }
 
-    public Image welcome(String filename) {
-        Image img = null;
-        try {
-            img = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return img;
+    public void welcome() {
+        prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
 
     }
 
@@ -117,7 +111,7 @@ public class Game {
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
         soundPlayer.playIntro();
-        welcome(filename);
+        welcome();
         //page.instructions();
         getNewPlayerInfo();
         // runs a while loop
@@ -411,7 +405,7 @@ public class Game {
         } else if ("S".equalsIgnoreCase(playAgain)) {
             player.playerScore();
             gui.clear();
-            welcome(filename);
+            welcome();
             prompter.info("Saved!");
             prompter.info("Hello " + player.getName() + " you can resume the game you saved");
             String keepPlaying = prompter.prompt("Would you like to load your saved game?").toLowerCase();
