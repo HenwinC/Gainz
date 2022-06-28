@@ -55,7 +55,7 @@ public class Game {
     private void getNewPlayerInfo() {
         soundPlayer.playName();
         String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
-        prompter.info("Hello " + playerName + " let's get more information about you...");
+        prompter.info("Hello " + CYAN + playerName + RESET + " let's get more information about you...");
         soundPlayer.playHeight();
         double playerHeight = validDouble("What is your height in inches? ",
                 "height", "inches", "^[0-9]{1,2}$");
@@ -150,7 +150,9 @@ public class Game {
             // TODO play CONGRATULATIONS
             result = "CONGRATULATIONS! YOU WORKED OUT!";
         }
+        player.playerScore();
         prompter.info(result);
+
     }
 
     public void promptForPlayerInput() throws IOException, ParseException {

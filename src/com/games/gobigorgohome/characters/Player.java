@@ -14,6 +14,8 @@ public class Player {
     //    fields
     private int age;
     private String name;
+    private int wins = 0;
+    private int losses = 0;
     private int energy = 100;
     public double weight;
     private double height;
@@ -51,6 +53,14 @@ public class Player {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public int getLosses() {
+        return losses;
     }
     //    business methods
 
@@ -95,15 +105,13 @@ public class Player {
     private boolean isItemInInventory(String item) {
         return getInventory().contains(item);
     }
-    public int playerScore() {
-        int score = 0;
+    public void playerScore() {
         if(isWorkoutComplete()) {
-            score ++;
+            this.wins ++;
         }
         else {
-            System.out.println("No score recorded");
+            this.losses ++;
         }
-        return score;
     }
 
 //    public Boolean useItem(String item, boolean isItemRequired) {
@@ -289,7 +297,7 @@ public class Player {
         return "Player: " + name + "\n" +
                 "Age: " + age + ", Weight: " + weight + ", Height: " + height + "\n" +
                 "Current Energy: " + energy + " out of " + BASE_ENERGY + "\n" +
-                "Gym Bag Contents: " + inventory + "\n" +
+                "Gym Bag Contents: " + inventory + "\n" + "Win count :" + getWins() + "|" + "Loss count: " + getLosses() +
                 "Workout Status: " + getMusclesWorked().toString();
     }
 
