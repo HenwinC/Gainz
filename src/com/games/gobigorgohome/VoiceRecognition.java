@@ -4,7 +4,7 @@ import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.Microphone;
 import edu.cmu.sphinx.api.StreamSpeechRecognizer;
 
-public class VoiceRecognition extends Thread{
+public class VoiceRecognition extends Thread {
 
     private Configuration configuration;
     private Microphone micro;
@@ -34,7 +34,9 @@ public class VoiceRecognition extends Thread{
 //            recognizer.stopRecognition();
 //            micro.stopRecording();
 
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
@@ -51,7 +53,9 @@ public class VoiceRecognition extends Thread{
 
             recognizer.stopRecognition();
             micro.stopRecording();
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUtterance() {

@@ -218,7 +218,7 @@ public class Player {
     public void setWeight(double weight) {
         this.weight = weight;
     }
-    
+
 
     public List<String> getInventory() {
         return inventory;

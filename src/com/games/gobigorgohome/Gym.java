@@ -8,6 +8,7 @@ public class Gym {
     private final String starterRoomName = "front desk";
     private final String boxingRoomName = "machine";
     private final Room starterRoom;
+
     ParseJSON jsonParser = new ParseJSON();
 
     public Gym() {
@@ -16,14 +17,15 @@ public class Gym {
         rooms = jsonParser.getJSONObjectFromFile(gymRoomFilePath);
         starterRoom = new Room(jsonParser.getObjectFromJSONObject(getRooms(), getStarterRoomName()));
         //boxingRoom = new Room(jsonParser.getObjectFromJSONObject(getRooms(), getBoxingRoomName()));
-
     }
 
     public static Gym getInstance() {
         return new Gym();
     }
 
+
     public Object getRooms() {
+
         return jsonParser.getObjectFromJSONObject(this.rooms, "rooms");
     }
 
@@ -34,6 +36,7 @@ public class Gym {
     public String getStarterRoomName() {
         return starterRoomName;
     }
+
     public String getBoxingRoomName() {
         return boxingRoomName;
     }

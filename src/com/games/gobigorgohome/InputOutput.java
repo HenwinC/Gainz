@@ -2,12 +2,14 @@ package com.games.gobigorgohome;
 
 
 import com.games.gobigorgohome.app.Game;
+
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Element;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.html.HTMLDocument;
-import static com.games.gobigorgohome.Colors.*;
 
+import static com.games.gobigorgohome.Colors.RED;
+import static com.games.gobigorgohome.Colors.RESET;
 
 
 public class InputOutput {
@@ -76,16 +78,16 @@ public class InputOutput {
 
     public String addColorTags(String message) {
         Colors colors[] = Colors.values();
-        for(Colors color: colors) {
-            message = message.replaceAll(color.toString(),"<span style=\"color:"+color.toString()+";\">");
+        for (Colors color : colors) {
+            message = message.replaceAll(color.toString(), "<span style=\"color:" + color.toString() + ";\">");
         }
         return message;
     }
 
     public String stripColorTags(String message) {
         Colors colors[] = Colors.values();
-        for(Colors color: colors) {
-            message = message.replaceAll(color.toString(),"");
+        for (Colors color : colors) {
+            message = message.replaceAll(color.toString(), "");
         }
         return message;
     }

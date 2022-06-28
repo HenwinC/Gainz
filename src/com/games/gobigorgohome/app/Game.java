@@ -5,19 +5,19 @@ import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
+
 import com.games.gobigorgohome.characters.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.games.gobigorgohome.Colors.*;
 
@@ -193,9 +193,8 @@ public class Game {
                     grabItem(playerAction);
                     break;
                 case "go":
-                    prompter.info("you're going here: " + playerAction);
-                    currentRoomName = playerAction;
-                    setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, playerAction));
+                    //condition in case room does not exist.
+                    changeLocation(playerAction);
                     break;
                 case "workout":
                     playerUseMachine(playerAction);
@@ -227,15 +226,27 @@ public class Game {
         } catch
         (Exception exception) {
 //            TODO: add array with possible values for commands
-            prompter.info(actionPrefix + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-//            DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
-            promptForPlayerInput();
+            invalidCommand(actionPrefix + " " + playerAction);
+            // DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
+        }
+    }
+
+    private void changeLocation(String location) {
+        HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
+        if (allRooms.containsKey(location)) {
+            prompter.info("you're going here: " + location);
+            currentRoomName = location;
+            setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
+        } else {
+            invalidCommand("This location does not exist!");
         }
     }
 
     private void boxingLocation() throws IOException, ParseException {
+
         if (currentRoomName.equals("machines")) {
             //List<String> list = Arrays.asList("A", "B", "C", "D");
+
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
@@ -274,6 +285,7 @@ public class Game {
                     player.setHealth(player.getHealth() - 40);
                 }
             }
+
             int xp = 0;
             if (player.getHealth() > partnerHealth) {
                 prompter.info(GREEN + "You fought like a pro !" + RESET);
@@ -289,10 +301,12 @@ public class Game {
                         "height= 150 width= 200 '/>");
                 //gui.clear();
                 promptForPlayerInput();
+
             }
         }
         fightOver = true;
     }
+
 
 
 
@@ -313,6 +327,7 @@ public class Game {
         }
     }
 
+
     public static void setInputStream(ByteArrayInputStream inputStream) {
         Game.inputStream = inputStream;
     }
@@ -322,7 +337,9 @@ public class Game {
     }
 
     private void getRoomMap() throws IOException {
-        currentRoom.getRoomMap(currentRoomName);
+
+        currentRoom.getRoomMap(prompter);
+
     }
 
     private void talkToNPC() {
@@ -374,21 +391,55 @@ public class Game {
     }
 
     //MET (metabolic equivalent for task) calculation above.
+
     public void totalCalories(Long MET) {
         double totalBurned = 0;
         // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
         int minutes = 15;
         Double playerWeight = player.weight;
         playerWeight = playerWeight * 0.45359237; //converet lbs to KG
+
         totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
         totalBurned = (int) totalBurned;
+
         prompter.info("You burned " + totalBurned + " calories! From this workout");
     }
 
 
+    //This function does not validate if item exist at the location. Refactored
+//    private void grabItem(String playerAction) {
+//        prompter.info("you got the :" + playerAction);
+//        player.getInventory().add(playerAction);
+//    }
+
+
     private void grabItem(String playerAction) {
-        prompter.info("you got the :" + playerAction);
-        player.getInventory().add(playerAction);
+
+        // makes a list to be able to manipulate data
+        ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
+        // check if the room has the item
+        if (items.contains(playerAction)) {
+            prompter.info("you got the :" + playerAction);
+            items.remove(playerAction);
+            player.getInventory().add(playerAction);
+        } else {
+            prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+            try {
+                promptForPlayerInput();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void invalidCommand(String command) {
+        prompter.info(command + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+        try {
+            promptForPlayerInput();
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void playAgain() throws IOException, ParseException {
