@@ -6,7 +6,13 @@ import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
 
+import com.games.gobigorgohome.characters.Player;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +39,7 @@ public class Game {
     private Room currentRoom = gym.getStarterRoom();
     private final Object rooms = gym.getRooms();
     private boolean fightOver = false;
+    private String filename = "/Images/logo.png";
 
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
@@ -45,6 +52,12 @@ public class Game {
         voiceRecognition = new VoiceRecognition();
         //voiceRecognition.start();
     }
+
+    public void welcome() {
+        prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
+
+    }
+
 
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
@@ -98,8 +111,25 @@ public class Game {
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
         soundPlayer.playIntro();
-        page.instructions();
+        welcome();
+        //page.instructions();
         getNewPlayerInfo();
+        // runs a while loop
+        while (!isGameOver()) {
+            gameStatus();
+            promptForPlayerInput();
+            if (checkGameStatus()) {
+                break;
+            }
+        }
+        gameResult();
+    }
+
+    public void getCommands() throws IOException, ParseException {
+//        soundPlayer.playIntro();
+//        page.instructions();
+//        getNewPlayerInfo();
+        //welcome();
         // runs a while loop
         while (!isGameOver()) {
             gameStatus();
@@ -184,10 +214,13 @@ public class Game {
                     getRoomMap();
                     break;
                 case "q":
-                    quit();
+                    playAgain();
                     break;
                 case "fight":
                     boxingLocation();
+                    break;
+                case "run":
+                    runAway();
                     break;
             }
         } catch
@@ -209,7 +242,7 @@ public class Game {
         }
     }
 
-    private void boxingLocation() {
+    private void boxingLocation() throws IOException, ParseException {
 
         if (currentRoomName.equals("machines")) {
             //List<String> list = Arrays.asList("A", "B", "C", "D");
@@ -252,20 +285,46 @@ public class Game {
                     player.setHealth(player.getHealth() - 40);
                 }
             }
-            String badge = "Medallion";
-            if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
+
+            int xp = 0;
+            if (player.getHealth() > partnerHealth) {
                 prompter.info(GREEN + "You fought like a pro !" + RESET);
-                prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
-            } else {
-                prompter.info(RED + "Your sparring partner won :( " + RESET);
-                prompter.info(RED + "You live to fight another day" + RESET);
-                gui.clear();
-//                String banner = Files.readString(Path.of("resources/loser"));
-//                prompter.asciiArt(banner);
-                quit();
+                xp++;
+                prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
+                        " experience point(s)" + RESET);
+                prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
+                promptForPlayerInput();
+
+            } else if (player.getHealth() <= 10) {
+                prompter.info(ORANGE + "Your sparring partner won :( \n You live to fight another day" + RESET);
+                prompter.info("<img src=\"https://imgix.ranker.com/list_img_v2/1511/2761511/original/anime-characters-who-could-beat-goku\" " +
+                        "height= 150 width= 200 '/>");
+                //gui.clear();
+                promptForPlayerInput();
+
             }
         }
         fightOver = true;
+    }
+
+
+
+
+    public void runAway() throws IOException, ParseException {
+        if (currentRoomName.equals("machines")) {
+            String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " + YELLOW +
+                    "Type 'Yes' to save face or 'No' to face your fears" + RESET);
+            if (fighter.equalsIgnoreCase("Yes")) {
+                prompter.info(ORANGE + "Whelp, better to be safe than sorry" + RESET);
+                promptForPlayerInput();
+            }
+            if (fighter.equalsIgnoreCase("No")) {
+                prompter.info(CYAN + "Let's see what you've got!" + RESET);
+                boxingLocation();
+            } else {
+                prompter.info("Too legit to quit!");
+            }
+        }
     }
 
 
@@ -383,15 +442,51 @@ public class Game {
         }
     }
 
+    public void playAgain() throws IOException, ParseException {
+        String playAgain = prompter.prompt("Would you like to play again? " +
+                        GREEN + " [N]ew Game " + RESET + YELLOW +
+                        "[R]ematch" + RESET + RED + " [E]xit" + RESET + CYAN + " [S]ave " + RESET,
+                "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
+
+        if ("N".equalsIgnoreCase(playAgain)) {
+            isGameOver = false;
+            gui.clear();
+            //currentRoom = gym.getStarterRoom();
+            playGame();
+        } else if ("R".equalsIgnoreCase(playAgain)) {
+            gui.clear();
+            currentRoom = gym.getStarterRoom();
+            prompter.info("Hello " + player.getName() + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+            getCommands();
+
+        } else if ("S".equalsIgnoreCase(playAgain)) {
+            player.playerScore();
+            gui.clear();
+            welcome();
+            prompter.info("Saved!");
+            prompter.info("Hello " + player.getName() + " you can resume the game you saved");
+            String keepPlaying = prompter.prompt("Would you like to load your saved game?").toLowerCase();
+            prompter.info(GREEN + "enter Y " + RESET +" to continue, " + RED + " N to quit the game" + RESET);
+            if (keepPlaying.equalsIgnoreCase("y")) {
+                getCommands();
+            }else {
+                playAgain();
+            }
+
+        } else {
+            quit();
+        }
+
+    }
+
     //    gives player ability to quit
     private void quit() {
         try {
             gui.clear();
-            String banner = Files.readString(Path.of("resources/thankyou.txt"));
-            prompter.asciiArt(banner);
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656389954/Cool_Text_-_Thank_you_for_playing_414162939030150_v7ywzk.png\" '/>");
             Thread.sleep(3000);
             System.exit(0);
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

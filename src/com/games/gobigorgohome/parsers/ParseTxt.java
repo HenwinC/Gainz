@@ -38,7 +38,6 @@ public class ParseTxt {
     }
 
     public void instructions() throws IOException {
-        //String bannerPath = "banner.txt";
         String banner = Files.readString(Path.of("resources/banner.txt"));
         prompter.asciiArt(banner);
         prompter.info("\033[33;1;2mWELCOME TO 'GO BIG OR GO HOME! v.1.1'\033[0m\nA game by \033[33;1;2mGAINZZZ Productions\033[0m where you maybe learn " +
