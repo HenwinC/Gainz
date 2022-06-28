@@ -1,17 +1,18 @@
 package com.games.gobigorgohome.characters;
 
-import com.games.gobigorgohome.characters.NPC;
 import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class NPCTest {
     NPC maintenanceGirl;
     NPC brobro;
+
     //    we'll need to do testing on the exceptions, for either exception
     @Before
     public void setUp() throws IOException, ParseException {
@@ -31,6 +32,7 @@ public class NPCTest {
     public void getNPCName_shouldReturnStringOfName_whenCalled() {
         assertEquals(maintenanceGirl.getNpcName(), "Kate the maintenance lady");
     }
+
     @Test
     public void getNPCName_shouldReturnFail_whenIncorrectName_isGiven() {
         assertNotEquals(maintenanceGirl.getNpcName(), "Katiepoops");
@@ -55,7 +57,6 @@ public class NPCTest {
     public void getPhrases_shouldFailIF_theValuesDoNotMatch() {
         assertNotEquals(maintenanceGirl.getPhrases().get(0), "You do it!");
     }
-
 
 
 }
