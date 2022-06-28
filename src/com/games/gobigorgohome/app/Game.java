@@ -274,10 +274,12 @@ public class Game {
                     player.setHealth(player.getHealth() - 40);
                 }
             }
-            String badge = "Medallion";
-            if (player.getHealth() > partnerHealth || player.getHealth() == partnerHealth) {
+            int xp = 0;
+            if (player.getHealth() > partnerHealth) {
                 prompter.info(GREEN + "You fought like a pro !" + RESET);
-                prompter.info(GREEN + "You have earned yourself a " + RESET + ORANGE + badge + RESET);
+                xp ++;
+                prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
+                        " experience point(s)" + RESET);
             } else {
                 prompter.info(RED + "Your sparring partner won :( " + RESET);
                 prompter.info(RED + "You live to fight another day" + RESET);
@@ -287,19 +289,19 @@ public class Game {
 
             }
         }
-        fightOver = true;
+        //fightOver = true;
     }
 
     public void runAway() throws IOException, ParseException {
         if (currentRoomName.equals("machines")) {
-            String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " +
-                    "Type 'Yes' to save face or 'No' to face your fears");
+            String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " + YELLOW +
+                    "Type 'Yes' to save face or 'No' to face your fears" + RESET);
             if (fighter.equalsIgnoreCase("Yes")) {
                 prompter.info(ORANGE + "Whelp, better to be safe than sorry" + RESET);
                 promptForPlayerInput();
             }
             if (fighter.equalsIgnoreCase("No")) {
-                prompter.info("Let's see what you've got!");
+                prompter.info(CYAN + "Let's see what you've got!" + RESET);
                 boxingLocation();
             } else {
                 prompter.info("Too legit to quit!");
