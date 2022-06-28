@@ -150,7 +150,7 @@
       "items": [],
       "required items": ["key"],
       "directions" : ["front desk", "machines", "free weights"],
-      "NPCS" : [],
+      "NPCS" : ["none"],
       "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367437/gogh/yoga_b95vn9.png"
     }
   }

@@ -1,15 +1,14 @@
 package com.games.gobigorgohome.characters;
 
-import junit.framework.TestCase;
-import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 public class PlayerTest {
 
     Player roni;
@@ -25,13 +24,13 @@ public class PlayerTest {
     }
 
     @Test
-    public void isWorkoutComplete_shouldReturnFalse_ifAllMuscleBooleansAreNotTrue(){
+    public void isWorkoutComplete_shouldReturnFalse_ifAllMuscleBooleansAreNotTrue() {
 //        we didn't change any of the muscle values which are all initially defined at false.
         assertEquals(roni.isWorkoutComplete(), false);
     }
 
     @Test
-    public void isWorkoutComplete_shouldReturnFalse_evenIfOneMuscleIsNotWorked(){
+    public void isWorkoutComplete_shouldReturnFalse_evenIfOneMuscleIsNotWorked() {
         roni.setChestWorked(true);
         roni.setLegsWorked(true);
         roni.setBackWorked(true);
@@ -40,7 +39,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void isWorkoutComplete_shouldReturnTrue_whenAllMusclesAreWorked(){
+    public void isWorkoutComplete_shouldReturnTrue_whenAllMusclesAreWorked() {
         roni.setChestWorked(true);
         roni.setLegsWorked(true);
         roni.setBackWorked(true);
@@ -53,35 +52,37 @@ public class PlayerTest {
     public void removeItemFromInventory_shouldRemoveItemFromInventory_whenCalled() {
         List<String> andEmptyList = new ArrayList<>();
         roni.removeItemFromInventory("flail");
-        assertEquals(roni.getInventory(), andEmptyList );
+        assertEquals(roni.getInventory(), andEmptyList);
     }
 
     @Test
     public void getHeight_shouldReturnEnergyValue_whenCalled() {
-        assertEquals(roni.getAge(), 42 );
+        assertEquals(roni.getAge(), 42);
     }
 
     @Test
     public void getHeight_shouldFailWhen_ageIsWrong() {
-        assertNotEquals(roni.getAge(), 32 );
+        assertNotEquals(roni.getAge(), 32);
     }
+
     @Test
     public void getAge_shouldReturnAgeValue_whenCalled() {
-        assertEquals(roni.getAge(), 42 );
+        assertEquals(roni.getAge(), 42);
     }
 
     @Test
     public void getAge_shouldFailWhen_ageIsWrong() {
-        assertNotEquals(roni.getAge(), 32 );
+        assertNotEquals(roni.getAge(), 32);
     }
+
     @Test
     public void getEnergy_shouldReturnEnergyValue_whenCalled() {
-        assertEquals(roni.getEnergy(), 100 );
+        assertEquals(roni.getEnergy(), 100);
     }
 
     @Test
     public void getEnergy_shouldFail_ifTheEnergyIsNotCorrect() {
-        assertNotEquals(roni.getEnergy(), 40 );
+        assertNotEquals(roni.getEnergy(), 40);
     }
 
 }
