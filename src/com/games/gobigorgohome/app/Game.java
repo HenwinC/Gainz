@@ -6,19 +6,10 @@ import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
 
-import com.games.gobigorgohome.characters.Player;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.*;
-import java.util.List;
 
 import static com.games.gobigorgohome.Colors.*;
 
@@ -142,7 +133,7 @@ public class Game {
         gameResult();
     }
 
-    private boolean checkGameStatus() {
+    public boolean checkGameStatus() {
         return player.isWorkoutComplete() || player.isSteroidsUsed() || player.isExhausted();
     }
 
@@ -229,6 +220,7 @@ public class Game {
             }
         } catch
         (Exception exception) {
+            System.out.println(exception);
 //            TODO: add array with possible values for commands
             invalidCommand(actionPrefix + " " + playerAction);
             // DONE: fix bug caused by pressing enter where prompt for player does not work and calls inspect - chris
@@ -237,12 +229,13 @@ public class Game {
 
     private void changeLocation(String location) {
         HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
-        if (allRooms.containsKey(location)) {
+
+        if (allRooms.containsKey(location) && isItemRequired(location)) {
+            setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
             prompter.info("you're going here: " + location);
             currentRoomName = location;
-            setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
         } else {
-            invalidCommand("This location does not exist!");
+            invalidCommand("This room does not exist or you may need an specific item to entered the room");
         }
     }
 
@@ -312,8 +305,6 @@ public class Game {
     }
 
 
-
-
     public void runAway() throws IOException, ParseException {
         if (currentRoomName.equals("machines")) {
             String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " + YELLOW +
@@ -336,8 +327,16 @@ public class Game {
         Game.inputStream = inputStream;
     }
 
-    public static boolean isItemRequired(List items) {
-        return !"none".equals(items.get(0));
+    public boolean isItemRequired(String nextLocation) {
+        boolean isItRequired = false;
+        Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, nextLocation));
+        ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
+
+        if (requiredItems.get(0).equals("none") || player.getInventory().contains(requiredItems.get(0))) {
+                isItRequired = true;
+        }
+
+        return isItRequired;
     }
 
     private void getRoomMap() throws IOException {
@@ -470,10 +469,10 @@ public class Game {
             prompter.info("Saved!");
             prompter.info("Hello " + player.getName() + " you can resume the game you saved");
             String keepPlaying = prompter.prompt("Would you like to load your saved game?").toLowerCase();
-            prompter.info(GREEN + "enter Y " + RESET +" to continue, " + RED + " N to quit the game" + RESET);
+            prompter.info(GREEN + "enter Y " + RESET + " to continue, " + RED + " N to quit the game" + RESET);
             if (keepPlaying.equalsIgnoreCase("y")) {
                 getCommands();
-            }else {
+            } else {
                 playAgain();
             }
 
