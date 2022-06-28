@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.*;
+import java.util.List;
 
 import static com.games.gobigorgohome.Colors.*;
 
@@ -198,6 +199,9 @@ public class Game {
                     break;
                 case "workout":
                     playerUseMachine(playerAction);
+                    break;
+                case "help":
+                    page.instructions();
                     break;
                 case "consume":
                     if (player.consumeItem(playerAction)) {
