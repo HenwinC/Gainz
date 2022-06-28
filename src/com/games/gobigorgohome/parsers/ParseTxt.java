@@ -1,5 +1,6 @@
 package com.games.gobigorgohome.parsers;
 
+import static com.games.gobigorgohome.Colors.*;
 import com.games.gobigorgohome.GUI;
 import com.games.gobigorgohome.InputOutput;
 
@@ -38,13 +39,15 @@ public class ParseTxt {
     }
 
     public void instructions() throws IOException {
-        String banner = Files.readString(Path.of("resources/banner.txt"));
-        prompter.asciiArt(banner);
-        prompter.info("\033[33;1;2mWELCOME TO 'GO BIG OR GO HOME! v.1.1'\033[0m\nA game by \033[33;1;2mGAINZZZ Productions\033[0m where you maybe learn " +
+//        String banner = Files.readString(Path.of("resources/banner.txt"));// new banner was added
+//        prompter.asciiArt(banner);
+
+        prompter.info( CYAN + "WELCOME TO 'GO BIG OR GO HOME! A game by GAINZZZ Productions" +
+                RESET + " where you will learn "+
                 "to use your gym time wisely and get BIG!");
-        prompter.info("\033[31;4;1mINSTRUCTIONS:\033[0m");
+        prompter.info(GREEN + "INSTRUCTIONS:" + RESET);
         dataFromFile("instructions.txt");
-        prompter.info("\033[31;4;1m!!!IMPORTANT!!!:\033[0m");
+        prompter.info(RED + "!!!IMPORTANT!!!: " + RESET);
         dataFromFile("instructions2.txt");
 
     }
