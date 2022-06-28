@@ -233,7 +233,7 @@ public class Game {
         }
     }
 
-    private void boxingLocation() {
+    private void boxingLocation() throws IOException, ParseException {
         if (currentRoomName.equals("machines")) {
             //List<String> list = Arrays.asList("A", "B", "C", "D");
             int partnerHealth = 100;
@@ -277,20 +277,24 @@ public class Game {
             int xp = 0;
             if (player.getHealth() > partnerHealth) {
                 prompter.info(GREEN + "You fought like a pro !" + RESET);
-                xp ++;
+                xp++;
                 prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
                         " experience point(s)" + RESET);
-            } else {
-                prompter.info(RED + "Your sparring partner won :( " + RESET);
-                prompter.info(RED + "You live to fight another day" + RESET);
-                gui.clear();
-//                String banner = Files.readString(Path.of("resources/loser"));
-//                prompter.asciiArt(banner);
+                prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
+                promptForPlayerInput();
 
+            } else if (player.getHealth() <= 10) {
+                prompter.info(ORANGE + "Your sparring partner won :( \n You live to fight another day" + RESET);
+                prompter.info("<img src=\"https://imgix.ranker.com/list_img_v2/1511/2761511/original/anime-characters-who-could-beat-goku\" " +
+                        "height= 150 width= 200 '/>");
+                //gui.clear();
+                promptForPlayerInput();
             }
         }
-        //fightOver = true;
+        fightOver = true;
     }
+
+
 
     public void runAway() throws IOException, ParseException {
         if (currentRoomName.equals("machines")) {
