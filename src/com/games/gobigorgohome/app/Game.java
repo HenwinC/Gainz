@@ -432,11 +432,10 @@ public class Game {
     private void quit() {
         try {
             gui.clear();
-            String banner = Files.readString(Path.of("resources/thankyou.txt"));
-            prompter.asciiArt(banner);
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656389954/Cool_Text_-_Thank_you_for_playing_414162939030150_v7ywzk.png\" '/>");
             Thread.sleep(3000);
             System.exit(0);
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
