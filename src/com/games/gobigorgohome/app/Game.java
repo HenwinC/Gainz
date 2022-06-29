@@ -371,6 +371,7 @@ public class Game {
     }
 
     private void playerUseMachine(String playerExcerciseInput) {
+        gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
 
@@ -384,6 +385,7 @@ public class Game {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
             prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET)+ " calories this workout!");
+            prompter.info("You have burned "+ player.totalCaloriesBurnedToday + " so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 

@@ -17,6 +17,8 @@ public class Player {
     private int wins = 0;
     private int losses = 0;
     private int energy = 100;
+    private double caloriesBurned = 0;
+    public int totalCaloriesBurnedToday = 0;
     private double weight;
     private double height;
     private final List<String> inventory = new ArrayList<>();
@@ -116,13 +118,14 @@ public class Player {
     // MET (metabolic equivalent for task) calculation above.
     // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
     public int caloriesBurnedPerWorkout(Long MET) {
-        double caloriesBurned = 0;
         int minutes = 15;
         Double playerWeight = getWeight();
         playerWeight = playerWeight * 0.45359237; //converet lbs to KG
         caloriesBurned = minutes * (MET * 3.5 * playerWeight) / 200;
+        totalCaloriesBurnedToday += caloriesBurned;
         return (int) caloriesBurned;
     }
+
 
 //    public Boolean useItem(String item, boolean isItemRequired) {
 //        boolean isItemConsumed = false;
@@ -187,6 +190,10 @@ public class Player {
 
     public boolean isExhausted() {
         return getEnergy() == 0;
+    }
+
+    public int getCaloriesBurned(){
+return 3;
     }
 
 
