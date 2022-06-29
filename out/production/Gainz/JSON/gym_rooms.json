@@ -1,0 +1,157 @@
+{
+  "rooms": {
+      "front desk": {
+        "name" : "front desk",
+        "exercises": {
+          "none" : "none"
+        },
+        "items": ["No Items"],
+        "required items": ["none"],
+        "directions" : ["free weights", "yoga studio"],
+        "NPCS" : ["maintenance lady"],
+        "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656366316/gogh/front_desk.png"
+
+    },
+    "managers office": {
+      "name" : "managers office",
+      "exercises": {
+        "none" : "none"
+      },
+      "items": ["energy drink"],
+      "required items": ["none"],
+      "directions" : ["machine", "yoga studio", "free weights"],
+      "NPCS" : ["manager"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367375/gogh/manager_xvh2wn.png"
+  },
+    "free weights": {
+      "name" : "free weights",
+      "exercises": {
+        "bench press": {
+          "target muscles": [
+            "chest"
+          ],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 6
+        },
+        "skull crushers": {
+          "target muscles": [
+            "triceps"
+          ],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "overhead press": {
+          "target muscles": [
+            "shoulders"
+          ],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 5
+        },
+        "squat": {
+          "target muscles": [
+            "legs"
+          ],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 6
+        },
+        "deadlift": {
+          "target muscles": [
+            "back"
+          ],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 6
+        }
+      },
+      "items": ["No Items"],
+      "required items": ["none"],
+      "directions" : ["machines", "yoga studio", "front desk", "managers office"],
+      "NPCS" : ["none"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656366092/gogh/free_weights.png"
+    },
+    "machines": {
+      "name" : "machines",
+      "exercises": {
+        "leg press": {
+          "target muscles": ["legs"],
+          "status": "broken",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "chest fly": {
+          "target muscles": ["chest"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "cable curl": {
+          "target muscles": ["biceps"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "crunch machine": {
+          "target muscles": ["core"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "tricep extension": {
+          "target muscles": ["triceps"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        }
+      },
+      "items": ["steroids"],
+      "required items": ["none"],
+      "directions" : ["yoga studio", "managers office", "free weights"],
+      "NPCS" : ["none"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367375/gogh/machines_cbdqil.png"
+    },
+    "yoga studio": {
+      "name": "yoga studio",
+      "exercises": {
+        "row": {
+          "target muscles": ["back"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "bike": {
+          "target muscles": ["leg"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 5
+        },
+        "push ups": {
+          "target muscles": ["chest"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "ab wheel": {
+          "target muscles": ["core"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 4
+        },
+        "dips": {
+          "target muscles": ["triceps"],
+          "status": "fixed",
+          "energy cost" : 5,
+          "MET": 5
+        }
+      },
+      "items": ["No Items"],
+      "required items": ["key"],
+      "directions" : ["front desk", "machines", "free weights"],
+      "NPCS" : ["none"],
+      "map" : "https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656367437/gogh/yoga_b95vn9.png"
+    }
+  }
+}
