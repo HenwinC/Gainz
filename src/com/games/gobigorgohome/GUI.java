@@ -5,6 +5,8 @@ import com.games.gobigorgohome.app.Game;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -67,6 +69,7 @@ public class GUI {
         pane.setLayout(new GridBagLayout());
         pane.setSize(boardWidth, boardHeight);
 
+
         textPane = new JTextPane();
         textPane.setContentType("text/html;charset=UTF-16");
         textPane.setEditable(false);
@@ -121,10 +124,7 @@ public class GUI {
         clockTextConstraints.gridx = 1;
         clockTextConstraints.gridy = 1;
         pane.add(clockText, clockTextConstraints);
-
         frame.setVisible(true);
-//        Image imageIcon = getImageFile("a1.png");
-//        frame.setIconImage(imageIcon);
         commandInput.requestFocus();
     }
 
