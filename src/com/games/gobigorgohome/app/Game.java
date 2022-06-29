@@ -3,7 +3,7 @@ package com.games.gobigorgohome.app;
 
 import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
-import com.games.gobigorgohome.parsers.ParseJSON;
+import com.games.gobigorgohome.parsers .ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
 
 import java.io.ByteArrayInputStream;
@@ -19,7 +19,7 @@ public class Game {
     public static ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
-    private SoundPlayer soundPlayer = new SoundPlayer();
+    private SoundPlayer soundPlayer;
     private VoiceRecognition voiceRecognition;
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
@@ -41,21 +41,27 @@ public class Game {
 //    }
 
     public Game() {
+        soundPlayer = new SoundPlayer();
+        soundPlayer.start();
         voiceRecognition = new VoiceRecognition();
         //voiceRecognition.start();
     }
 
     public void welcome() {
         prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
-
     }
-
 
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
         soundPlayer.playName();
         String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
-        prompter.info("Hello " + playerName + " let's get more information about you...");
+        String[] nameSoundFiles = new String[]{"chris","david","henwin","manni","renni","scott"};
+        if(Arrays.asList(nameSoundFiles).contains(playerName)) {
+            soundPlayer.playSoundFile("h_" + playerName + ".wav");
+        } else {
+            soundPlayer.playSoundFile("h_generic.wav");
+        }
+        prompter.info("Hello " + CYAN + playerName + RESET + " let's get more information about you...");
         soundPlayer.playHeight();
         double playerHeight = validDouble("What is your height in inches? ",
                 "height", "inches", "^[0-9]{1,2}$");
@@ -64,6 +70,7 @@ public class Game {
                 "weight", "lbs", "^[0-9]{2,3}$");
         soundPlayer.playAge();
         int playerAge = validInt("What is your age", "age", "years", "^[0-9]{1,2}$");
+        soundPlayer.playGetBig();
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
 
@@ -150,7 +157,9 @@ public class Game {
             // TODO play CONGRATULATIONS
             result = "CONGRATULATIONS! YOU WORKED OUT!";
         }
+        player.playerScore();
         prompter.info(result);
+
     }
 
     public void promptForPlayerInput() throws IOException, ParseException {
@@ -232,9 +241,11 @@ public class Game {
 
         if (allRooms.containsKey(location) && isItemRequired(location)) {
             setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
+            soundPlayer.playSoundFile("g_" + location.replaceAll(" ","") + ".wav");
             prompter.info("you're going here: " + location);
             currentRoomName = location;
         } else {
+            soundPlayer.playSoundFile("g_doesntexist.wav");
             invalidCommand("This room does not exist or you may need an specific item to entered the room");
         }
     }
@@ -426,6 +437,7 @@ public class Game {
             items.remove(playerAction);
             player.getInventory().add(playerAction);
         } else {
+            //invalidCommand(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
             prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
             try {
                 promptForPlayerInput();
@@ -437,7 +449,8 @@ public class Game {
     }
 
     private void invalidCommand(String command) {
-        prompter.info(command + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+        //soundPlayer.playSoundFile("invalidcommand.wav");
+        prompter.info(command + " was sadly an invalid answer. \n please ensure you are using a valid and complete command. ");
         try {
             promptForPlayerInput();
         } catch (IOException | ParseException e) {
