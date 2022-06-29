@@ -11,7 +11,7 @@ public class NPC {
     private final List phrases;
 
 
-    public NPC(String npc_type) {
+    public NPC(String npc_type) throws org.json.simple.parser.ParseException {
 
         ParseJSON jsonParser = new ParseJSON();
         Object theObject = jsonParser.getJSONObjectFromFile("JSON/NPCwName.json");
