@@ -238,6 +238,8 @@ public class Game {
 
     private void changeLocation(String location) {
         HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
+        Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, location));
+        ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
         if (allRooms.containsKey(location) && isItemRequired(location)) {
             setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
@@ -246,7 +248,9 @@ public class Game {
             currentRoomName = location;
         } else {
             soundPlayer.playSoundFile("g_doesntexist.wav");
-            invalidCommand("This room does not exist or you may need an specific item to entered the room");
+            String message = !isItemRequired(location) ? "you need " + requiredItems + " to enter " + location : "This room does not exist \n";
+            invalidCommand(message);
+
         }
     }
 
@@ -450,7 +454,7 @@ public class Game {
 
     private void invalidCommand(String command) {
         //soundPlayer.playSoundFile("invalidcommand.wav");
-        prompter.info(command + " was sadly an invalid answer. \n please ensure you are using a valid and complete command. ");
+        prompter.info(command + " Try again with a valid command or use help command to get some help.");
         try {
             promptForPlayerInput();
         } catch (IOException | ParseException e) {
