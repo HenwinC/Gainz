@@ -367,8 +367,10 @@ public class Game {
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
-        player.getInventory().add(npcItem);
-        prompter.info("You added " + npcItem + " to your gym bag.");
+       if(!player.getInventory().contains(npcItem)){
+           player.getInventory().add(npcItem);
+           prompter.info("You added " + npcItem + " to your gym bag.");
+       }
     }
 
     private void inspectRoom() {
