@@ -5,6 +5,10 @@
 .idea/
 *.iml
 
+#others
+.idea/
+.out/
+
 # Log file
 *.log
 
