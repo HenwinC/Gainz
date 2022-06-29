@@ -38,7 +38,9 @@ public class Room {
         if (!"none".equals(npc_type)) {
             try {
                 this.npc = new NPC(npc_type);
-            } catch(Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

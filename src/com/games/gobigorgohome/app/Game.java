@@ -3,7 +3,7 @@ package com.games.gobigorgohome.app;
 
 import com.games.gobigorgohome.*;
 import com.games.gobigorgohome.characters.Player;
-import com.games.gobigorgohome.parsers .ParseJSON;
+import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
 
 import java.io.ByteArrayInputStream;
@@ -55,8 +55,8 @@ public class Game {
     private void getNewPlayerInfo() {
         soundPlayer.playName();
         String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
-        String[] nameSoundFiles = new String[]{"chris","david","henwin","manni","renni","scott"};
-        if(Arrays.asList(nameSoundFiles).contains(playerName)) {
+        String[] nameSoundFiles = new String[]{"chris", "david", "henwin", "manni", "renni", "scott"};
+        if (Arrays.asList(nameSoundFiles).contains(playerName)) {
             soundPlayer.playSoundFile("h_" + playerName + ".wav");
         } else {
             soundPlayer.playSoundFile("h_generic.wav");
@@ -243,7 +243,7 @@ public class Game {
 
         if (allRooms.containsKey(location) && isItemRequired(location)) {
             setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
-            soundPlayer.playSoundFile("g_" + location.replaceAll(" ","") + ".wav");
+            soundPlayer.playSoundFile("g_" + location.replaceAll(" ", "") + ".wav");
             prompter.info("you're going here: " + location);
             currentRoomName = location;
         } else {
@@ -348,7 +348,7 @@ public class Game {
         ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
         if (requiredItems.get(0).equals("none") || player.getInventory().contains(requiredItems.get(0))) {
-                isItRequired = true;
+            isItRequired = true;
         }
 
         return isItRequired;
@@ -379,6 +379,7 @@ public class Game {
         Object exercises = getCurrentRoom().getExercises();
 
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
+
         Object targetMuscle = exercise.getTargetMuscles();
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
