@@ -110,6 +110,7 @@ public class Game {
 
     //    main function running the game, here we call all other functions necessary to run the game
     public void playGame() throws IOException, ParseException {
+
         soundPlayer.playIntro();
         welcome();
         //page.instructions();
@@ -131,6 +132,7 @@ public class Game {
 //        getNewPlayerInfo();
         //welcome();
         // runs a while loop
+
         while (!isGameOver()) {
             gameStatus();
             promptForPlayerInput();
@@ -156,11 +158,17 @@ public class Game {
             result = "You're too tired, go home dude";
         } else if (player.isWorkoutComplete()) {
             // TODO play CONGRATULATIONS
-            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET;
-            player.getWins();
             player.playerScore();
+            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET + "\n"
+                    + "Wins: " + player.getWins() + " | Losses: " + player.getLosses();
+
         }
         prompter.info(result);
+        try {
+            playAgain();
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -265,9 +273,9 @@ public class Game {
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
                 String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-                prompter.info("Enter a valid command");
-            }
+                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+                    prompter.info("Enter a valid command");
+                }
                 if (playerAttack.equals("a")) {
                     prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                     partnerHealth = partnerHealth - 25;
@@ -367,10 +375,10 @@ public class Game {
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
-       if(!player.getInventory().contains(npcItem)){
-           player.getInventory().add(npcItem);
-           prompter.info("You added " + npcItem + " to your gym bag.");
-       }
+        if (!player.getInventory().contains(npcItem)) {
+            player.getInventory().add(npcItem);
+            prompter.info("You added " + npcItem + " to your gym bag.");
+        }
     }
 
     private void inspectRoom() {
@@ -392,8 +400,8 @@ public class Game {
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET)+ " calories this workout!");
-            prompter.info("You have burned "+ player.totalCaloriesBurnedToday + " so far today!");
+            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET) + " calories this workout!");
+            prompter.info("You have burned " + player.totalCaloriesBurnedToday + " so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 

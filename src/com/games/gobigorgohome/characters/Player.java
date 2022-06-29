@@ -116,6 +116,7 @@ public class Player {
             this.losses++;
         }
     }
+
     // MET (metabolic equivalent for task) calculation above.
     // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
     public int caloriesBurnedPerWorkout(Long MET) {
@@ -193,8 +194,8 @@ public class Player {
         return getEnergy() == 0;
     }
 
-    public int getCaloriesBurned(){
-return 3;
+    public int getCaloriesBurned() {
+        return 3;
     }
 
 
