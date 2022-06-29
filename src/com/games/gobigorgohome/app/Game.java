@@ -302,7 +302,7 @@ public class Game {
                 prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
                         " experience point(s)" + RESET);
                 prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" " +
-                        "height= 150 width= 200 '/>");
+                        "height= 150 width= 180 '/>");
                 promptForPlayerInput();
 
             } else if (player.getHealth() <= 10) {
