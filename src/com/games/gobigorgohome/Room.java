@@ -36,7 +36,11 @@ public class Room {
 //        System.out.println(this.requiredItems);
 
         if (!"none".equals(npc_type)) {
-            this.npc = new NPC(npc_type);
+            try {
+                this.npc = new NPC(npc_type);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

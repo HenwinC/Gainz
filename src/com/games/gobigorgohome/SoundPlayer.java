@@ -124,8 +124,11 @@ public class SoundPlayer extends Thread {
         setVolume(mutedVolume);
     }
 
+    public void playSoundFile(String fileName) {
+        addSoundFile(fileName);
+    }
+
     public void playIntro() {
-        start();
         addSoundFile("intro.wav");
     }
 

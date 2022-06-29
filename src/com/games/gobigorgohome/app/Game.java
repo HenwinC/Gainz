@@ -19,7 +19,7 @@ public class Game {
     public static ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
-    private SoundPlayer soundPlayer = new SoundPlayer();
+    private SoundPlayer soundPlayer;
     private VoiceRecognition voiceRecognition;
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
@@ -41,20 +41,26 @@ public class Game {
 //    }
 
     public Game() {
+        soundPlayer = new SoundPlayer();
+        soundPlayer.start();
         voiceRecognition = new VoiceRecognition();
         //voiceRecognition.start();
     }
 
     public void welcome() {
         prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
-
     }
-
 
     //    collects current input from user to update their avatar
     private void getNewPlayerInfo() {
         soundPlayer.playName();
         String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
+        String[] nameSoundFiles = new String[]{"chris", "david", "henwin", "manni", "renni", "scott"};
+        if (Arrays.asList(nameSoundFiles).contains(playerName)) {
+            soundPlayer.playSoundFile("h_" + playerName + ".wav");
+        } else {
+            soundPlayer.playSoundFile("h_generic.wav");
+        }
         prompter.info("Hello " + CYAN + playerName + RESET + " let's get more information about you...");
         soundPlayer.playHeight();
         double playerHeight = validDouble("What is your height in inches? ",
@@ -64,8 +70,10 @@ public class Game {
                 "weight", "lbs", "^[0-9]{2,3}$");
         soundPlayer.playAge();
         int playerAge = validInt("What is your age", "age", "years", "^[0-9]{1,2}$");
+        soundPlayer.playGetBig();
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
+
 
     // validates String using regex
     private String validString(String msg, String criteria) {
@@ -232,13 +240,19 @@ public class Game {
 
     private void changeLocation(String location) {
         HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
+        Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, location));
+        ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
         if (allRooms.containsKey(location) && isItemRequired(location)) {
             setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
+            soundPlayer.playSoundFile("g_" + location.replaceAll(" ", "") + ".wav");
             prompter.info("you're going here: " + location);
             currentRoomName = location;
         } else {
-            invalidCommand("This room does not exist or you may need an specific item to entered the room");
+            soundPlayer.playSoundFile("g_doesntexist.wav");
+            String message = !isItemRequired(location) ? "you need " + requiredItems + " to enter " + location : "This room does not exist \n";
+            invalidCommand(message);
+
         }
     }
 
@@ -325,7 +339,6 @@ public class Game {
         }
     }
 
-
     public static void setInputStream(ByteArrayInputStream inputStream) {
         Game.inputStream = inputStream;
     }
@@ -336,7 +349,7 @@ public class Game {
         ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
         if (requiredItems.get(0).equals("none") || player.getInventory().contains(requiredItems.get(0))) {
-                isItRequired = true;
+            isItRequired = true;
         }
 
         return isItRequired;
@@ -363,22 +376,27 @@ public class Game {
     }
 
     private void playerUseMachine(String playerExcerciseInput) {
+        gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
 
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
+
         Object targetMuscle = exercise.getTargetMuscles();
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
-        totalCalories(MET);
+
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
+            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET)+ " calories this workout!");
+            prompter.info("You have burned "+ player.totalCaloriesBurnedToday + " so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 
         }
+
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
@@ -395,22 +413,6 @@ public class Game {
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
         }
     }
-
-    //MET (metabolic equivalent for task) calculation above.
-
-    public void totalCalories(Long MET) {
-        double totalBurned = 0;
-        // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
-        int minutes = 15;
-        Double playerWeight = player.weight;
-        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
-
-        totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
-        totalBurned = (int) totalBurned;
-
-        prompter.info("You burned " + totalBurned + " calories! From this workout");
-    }
-
 
     //This function does not validate if item exist at the location. Refactored
 //    private void grabItem(String playerAction) {
@@ -429,6 +431,7 @@ public class Game {
             items.remove(playerAction);
             player.getInventory().add(playerAction);
         } else {
+            //invalidCommand(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
             prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
             try {
                 promptForPlayerInput();
@@ -440,7 +443,8 @@ public class Game {
     }
 
     private void invalidCommand(String command) {
-        prompter.info(command + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+        //soundPlayer.playSoundFile("invalidcommand.wav");
+        prompter.info(command + " Try again with a valid command or use help command to get some help.");
         try {
             promptForPlayerInput();
         } catch (IOException | ParseException e) {

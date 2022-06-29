@@ -50,7 +50,6 @@ public class VoiceRecognition extends Thread {
                 String utterance = recognizer.getResult().getHypothesis();
                 System.out.println(utterance);
             }
-
             recognizer.stopRecognition();
             micro.stopRecording();
         } catch (Exception e) {

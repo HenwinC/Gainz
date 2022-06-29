@@ -2,7 +2,7 @@ package com.games.gobigorgohome.characters;
 
 import com.games.gobigorgohome.Colors;
 import com.games.gobigorgohome.parsers.ParseJSON;
-import com.games.gobigorgohome.InputOutput;
+
 import java.util.*;
 
 public class Player {
@@ -18,7 +18,9 @@ public class Player {
     private int wins = 0;
     private int losses = 0;
     private int energy = 100;
-    public double weight;
+    private double caloriesBurned = 0;
+    public int totalCaloriesBurnedToday = 0;
+    private double weight;
     private double height;
     private final List<String> inventory = new ArrayList<>();
     //    just realize that the boolean values are named the same for the getters, idk why but they did it when I did it with the intellij autgenerated ones
@@ -106,14 +108,25 @@ public class Player {
     private boolean isItemInInventory(String item) {
         return getInventory().contains(item);
     }
+
     public void playerScore() {
-        if(isWorkoutComplete()) {
-            this.wins ++;
-        }
-        else {
-            this.losses ++;
+        if (isWorkoutComplete()) {
+            this.wins++;
+        } else {
+            this.losses++;
         }
     }
+    // MET (metabolic equivalent for task) calculation above.
+    // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
+    public int caloriesBurnedPerWorkout(Long MET) {
+        int minutes = 15;
+        Double playerWeight = getWeight();
+        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
+        caloriesBurned = minutes * (MET * 3.5 * playerWeight) / 200;
+        totalCaloriesBurnedToday += caloriesBurned;
+        return (int) caloriesBurned;
+    }
+
 
 //    public Boolean useItem(String item, boolean isItemRequired) {
 //        boolean isItemConsumed = false;
@@ -178,6 +191,10 @@ public class Player {
 
     public boolean isExhausted() {
         return getEnergy() == 0;
+    }
+
+    public int getCaloriesBurned(){
+return 3;
     }
 
 
