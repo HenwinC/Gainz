@@ -40,7 +40,7 @@
           ],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.5
+          "MET": 4
         },
         "overhead press": {
           "target muscles": [
@@ -86,25 +86,25 @@
           "target muscles": ["chest"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.5
+          "MET": 4
         },
         "cable curl": {
           "target muscles": ["biceps"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.5
+          "MET": 4
         },
         "crunch machine": {
           "target muscles": ["core"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.5
+          "MET": 4
         },
         "tricep extension": {
           "target muscles": ["triceps"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.5
+          "MET": 4
         }
       },
       "items": ["steroids"],
@@ -126,13 +126,13 @@
           "target muscles": ["leg"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 4.8
+          "MET": 5
         },
         "push ups": {
           "target muscles": ["chest"],
           "status": "fixed",
           "energy cost" : 5,
-          "MET": 3.8
+          "MET": 4
         },
         "ab wheel": {
           "target muscles": ["core"],
@@ -147,7 +147,7 @@
           "MET": 5
         }
       },
-      "items": [],
+      "items": ["No Items"],
       "required items": ["key"],
       "directions" : ["front desk", "machines", "free weights"],
       "NPCS" : ["none"],
