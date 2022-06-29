@@ -74,6 +74,7 @@ public class Game {
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
 
+
     // validates String using regex
     private String validString(String msg, String criteria) {
         return prompter.prompt("What is your name? ", criteria, "TRY AGAIN: " + msg);
@@ -155,9 +156,10 @@ public class Game {
             result = "You're too tired, go home dude";
         } else if (player.isWorkoutComplete()) {
             // TODO play CONGRATULATIONS
-            result = "CONGRATULATIONS! YOU WORKED OUT!";
+            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET;
+            player.getWins();
+            player.playerScore();
         }
-        player.playerScore();
         prompter.info(result);
 
     }
@@ -257,15 +259,15 @@ public class Game {
     private void boxingLocation() throws IOException, ParseException {
 
         if (currentRoomName.equals("machines")) {
-            //List<String> list = Arrays.asList("A", "B", "C", "D");
+            List<String> list = Arrays.asList("A", "B", "C", "D");
 
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
                 String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-//            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-//                prompter.info("Enter a valid command");
-//            }
+            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+                prompter.info("Enter a valid command");
+            }
                 if (playerAttack.equals("a")) {
                     prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                     partnerHealth = partnerHealth - 25;
@@ -337,7 +339,6 @@ public class Game {
         }
     }
 
-
     public static void setInputStream(ByteArrayInputStream inputStream) {
         Game.inputStream = inputStream;
     }
@@ -366,8 +367,10 @@ public class Game {
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
-        player.getInventory().add(npcItem);
-        prompter.info("You added " + npcItem + " to your gym bag.");
+       if(!player.getInventory().contains(npcItem)){
+           player.getInventory().add(npcItem);
+           prompter.info("You added " + npcItem + " to your gym bag.");
+       }
     }
 
     private void inspectRoom() {
@@ -375,6 +378,7 @@ public class Game {
     }
 
     private void playerUseMachine(String playerExcerciseInput) {
+        gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
 
@@ -384,13 +388,60 @@ public class Game {
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
-        totalCalories(MET);
+
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
+            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET)+ " calories this workout!");
+            prompter.info("You have burned "+ player.totalCaloriesBurnedToday + " so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("push ups")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/push-up_cldtxj.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("ab wheel")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/ab-wheel_lud0bu.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("dips")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/dips_txutdt.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("row")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/row_zbnofo.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("bike")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/bike_busvzq.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("chest fly")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/chest_fly_zbhqfm.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("tricep extension")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Tricep_uvnrwb.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("leg press")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/leg_press_cqxbqp.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("crunch machine")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/crunch_machine_iq1evh.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("cable curl")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/cable_curl_y5nztm.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("squat")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/squat_gjoxnm.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("bench press")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/bench_press_buaimb.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("overhead press")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Overhead_Press_v6i829.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("deadlift")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/deadlift_ezow1x.png\"'/>");
+        }
+        if (playerExcerciseInput.equalsIgnoreCase("skull crushers")) {
+            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Skull_Crushers_t6rjzx.png\"'/>");
         }
     }
 
@@ -408,22 +459,6 @@ public class Game {
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
         }
     }
-
-    //MET (metabolic equivalent for task) calculation above.
-
-    public void totalCalories(Long MET) {
-        double totalBurned = 0;
-        // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
-        int minutes = 15;
-        Double playerWeight = player.weight;
-        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
-
-        totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
-        totalBurned = (int) totalBurned;
-
-        prompter.info("You burned " + totalBurned + " calories! From this workout");
-    }
-
 
     //This function does not validate if item exist at the location. Refactored
 //    private void grabItem(String playerAction) {
