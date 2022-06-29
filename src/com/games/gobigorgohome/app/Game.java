@@ -148,9 +148,10 @@ public class Game {
             result = "You're too tired, go home dude";
         } else if (player.isWorkoutComplete()) {
             // TODO play CONGRATULATIONS
-            result = "CONGRATULATIONS! YOU WORKED OUT!";
+            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET;
+            player.getWins();
+            player.playerScore();
         }
-        player.playerScore();
         prompter.info(result);
 
     }
@@ -244,15 +245,15 @@ public class Game {
     private void boxingLocation() throws IOException, ParseException {
 
         if (currentRoomName.equals("machines")) {
-            //List<String> list = Arrays.asList("A", "B", "C", "D");
+            List<String> list = Arrays.asList("A", "B", "C", "D");
 
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
                 String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-//            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-//                prompter.info("Enter a valid command");
-//            }
+            if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+                prompter.info("Enter a valid command");
+            }
                 if (playerAttack.equals("a")) {
                     prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                     partnerHealth = partnerHealth - 25;

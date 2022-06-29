@@ -1,5 +1,6 @@
 package com.games.gobigorgohome.characters;
 
+import com.games.gobigorgohome.Colors;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.InputOutput;
 import java.util.*;
@@ -297,8 +298,9 @@ public class Player {
         return "Player: " + name + "\n" +
                 "Age: " + age + ", Weight: " + weight + ", Height: " + height + "\n" +
                 "Current Energy: " + energy + " out of " + BASE_ENERGY + "\n" +
-                "Gym Bag Contents: " + inventory + "\n" + "Win count :" + getWins() + "|" + "Loss count: " + getLosses() +
-                "Workout Status: " + getMusclesWorked().toString();
+                "Gym Bag Contents: " + inventory + "\n" + Colors.GREEN + "Win"
+                + Colors.RESET + "|" + Colors.RED + "Loss: " + Colors.RESET + getWins() + "|" + getLosses() +
+                "\n Workout Status: " + getMusclesWorked().toString();
     }
 
 //    @Override
