@@ -46,13 +46,15 @@ public class VoiceRecognition extends Thread {
             recognizer = new StreamSpeechRecognizer(
                     configuration);
             recognizer.startRecognition(micro.getStream());
-            while(record) {
+            while (record) {
                 String utterance = recognizer.getResult().getHypothesis();
                 System.out.println(utterance);
             }
             recognizer.stopRecognition();
             micro.stopRecording();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUtterance() {

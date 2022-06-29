@@ -1,7 +1,7 @@
 package com.games.gobigorgohome.characters;
 
 import com.games.gobigorgohome.parsers.ParseJSON;
-import com.games.gobigorgohome.InputOutput;
+
 import java.util.*;
 
 public class Player {
@@ -105,12 +105,12 @@ public class Player {
     private boolean isItemInInventory(String item) {
         return getInventory().contains(item);
     }
+
     public void playerScore() {
-        if(isWorkoutComplete()) {
-            this.wins ++;
-        }
-        else {
-            this.losses ++;
+        if (isWorkoutComplete()) {
+            this.wins++;
+        } else {
+            this.losses++;
         }
     }
 
