@@ -17,7 +17,7 @@ public class Player {
     private int wins = 0;
     private int losses = 0;
     private int energy = 100;
-    public double weight;
+    private double weight;
     private double height;
     private final List<String> inventory = new ArrayList<>();
     //    just realize that the boolean values are named the same for the getters, idk why but they did it when I did it with the intellij autgenerated ones
@@ -112,6 +112,16 @@ public class Player {
         else {
             this.losses ++;
         }
+    }
+    // MET (metabolic equivalent for task) calculation above.
+    // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
+    public int caloriesBurnedPerWorkout(Long MET) {
+        double caloriesBurned = 0;
+        int minutes = 15;
+        Double playerWeight = getWeight();
+        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
+        caloriesBurned = minutes * (MET * 3.5 * playerWeight) / 200;
+        return (int) caloriesBurned;
     }
 
 //    public Boolean useItem(String item, boolean isItemRequired) {

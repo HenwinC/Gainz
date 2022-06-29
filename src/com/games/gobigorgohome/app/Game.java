@@ -74,6 +74,7 @@ public class Game {
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
 
+
     // validates String using regex
     private String validString(String msg, String criteria) {
         return prompter.prompt("What is your name? ", criteria, "TRY AGAIN: " + msg);
@@ -333,7 +334,6 @@ public class Game {
         }
     }
 
-
     public static void setInputStream(ByteArrayInputStream inputStream) {
         Game.inputStream = inputStream;
     }
@@ -379,10 +379,11 @@ public class Game {
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
-        totalCalories(MET);
+
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
+            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET)+ " calories this workout!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
 
@@ -403,22 +404,6 @@ public class Game {
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
         }
     }
-
-    //MET (metabolic equivalent for task) calculation above.
-
-    public void totalCalories(Long MET) {
-        double totalBurned = 0;
-        // Total calories burned = Duration (in minutes)*(MET*3.5*weight in kg)/200
-        int minutes = 15;
-        Double playerWeight = player.weight;
-        playerWeight = playerWeight * 0.45359237; //converet lbs to KG
-
-        totalBurned = minutes * (MET * 3.5 * playerWeight) / 200;
-        totalBurned = (int) totalBurned;
-
-        prompter.info("You burned " + totalBurned + " calories! From this workout");
-    }
-
 
     //This function does not validate if item exist at the location. Refactored
 //    private void grabItem(String playerAction) {
