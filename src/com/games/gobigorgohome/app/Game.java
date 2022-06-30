@@ -273,9 +273,9 @@ public class Game {
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
                 String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-                    prompter.info("Enter a valid command");
-                }
+//                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+//                    prompter.info("Enter a valid command");
+//                }
                 if (playerAttack.equals("a")) {
                     prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                     partnerHealth = partnerHealth - 25;
