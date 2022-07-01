@@ -73,11 +73,6 @@ public class GUI {
         pane.setLayout(new GridBagLayout());
         pane.setSize(boardWidth, boardHeight);
 
-        resetButton = new JButton();
-        resetButton.setText("Reset");
-        resetButton.setSize(100, 50);
-        resetButton.setLocation(0, 200);
-        resetButton.addActionListener((ActionListener) frame);
 
 
 
