@@ -124,14 +124,14 @@ public class Game {
     private void gameStatus() {
         soundPlayer.playCommand();
         String command = voiceRecognition.getUtterance();
-        prompter.info(PURPLE + "------------------------------");
+        prompter.info(YELLOW + "-"+ PURPLE +"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-" + PURPLE + "-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-");
         prompter.info(PURPLE +"Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
         prompter.info(PURPLE+ "You are in the " + YELLOW + currentRoomName + " room.");
         if(currentRoomName.equalsIgnoreCase("machines")) {
             prompter.info(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by typing " + YELLOW + "'Fight'" + RESET);
         }
         prompter.info(PURPLE + player.toString());
-        prompter.info(YELLOW + "-"+ PURPLE +"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+PURPLE+"-" + PURPLE + "-\"+PURPLE+\"-\"+PURPLE+\"-\"+PURPLE+\"-\"+PURPLE+\"---------"+ YELLOW +"----------");
+        prompter.info(YELLOW + "-"+ PURPLE +"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-" + PURPLE + "-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-");
 
     }
 
@@ -275,7 +275,7 @@ public class Game {
         if (allRooms.containsKey(location) && isItemRequired(location)) {
             setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
             soundPlayer.playSoundFile("g_" + location.replaceAll(" ", "") + ".wav");
-            prompter.info("you're going here: " + location);
+            prompter.info(PURPLE + "you're going here: " + YELLOW + location);
             currentRoomName = location;
         } else {
             soundPlayer.playSoundFile("g_doesntexist.wav");
