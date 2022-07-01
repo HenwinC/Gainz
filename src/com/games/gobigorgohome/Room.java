@@ -6,6 +6,7 @@ import com.games.gobigorgohome.parsers.ParseJSON;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import static com.games.gobigorgohome.Colors.*;
 
 public class Room {
     private final ParseJSON jsonParser = new ParseJSON();
@@ -86,10 +87,10 @@ public class Room {
 
     @Override
     public String toString() {
-        return "You are in " + getRoomName() + "\n" +
-                "Exercises available are: " + getExerciseList() + "\n" +
-                "You see: " + getItems() + "\n" +
-                getValidNpc() + " is standing there with you.\n";
+        return PURPLE + "You are in " + YELLOW + getRoomName() + "\n" +
+                PURPLE + "Exercises available are: " + YELLOW +  getExerciseList() + "\n" +
+                PURPLE + "You see: " + YELLOW + getItems() + "\n" +
+                YELLOW + getValidNpc() + PURPLE + " is standing there with you.\n" + RESET;
 //        TODO: if adding direction limitations, call getDirections
     }
 }
