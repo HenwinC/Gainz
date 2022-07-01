@@ -102,7 +102,7 @@ public class Player {
     }
 
     public boolean isWorkoutComplete() {
-        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked;
+        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
     }
 
     private boolean isItemInInventory(String item) {
@@ -316,9 +316,9 @@ public class Player {
         return "Player: " + name + "\n" +
                 "Age: " + age + ", Weight: " + weight + ", Height: " + height + "\n" +
                 "Current Energy: " + energy + " out of " + BASE_ENERGY + "\n" +
-                "Gym Bag Contents: " + inventory + "\n" + Colors.GREEN + "Win"
-                + Colors.RESET + "|" + Colors.RED + "Loss: " + Colors.RESET + getWins() + "|" + getLosses() +
-                "\n Workout Status: " + getMusclesWorked().toString();
+                "Gym Bag Contents: " + inventory + "\n" +Colors.RESET +
+                Colors.GREEN + "Win" + Colors.RESET + "|" + Colors.RED + "Loss: " + Colors.RESET + getWins() + "|"
+                + getLosses() + "\n Workout Status: " + getMusclesWorked().toString();
     }
 
 //    @Override
