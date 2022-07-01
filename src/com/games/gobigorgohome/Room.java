@@ -20,10 +20,12 @@ public class Room {
     public NPC npc;
     private final Map roomMap = new Map();
 
+
     public Room(Object room) {
         this.roomName = jsonParser.getObjectStringFromJSONObject(room, "name");
         this.map = jsonParser.getObjectStringFromJSONObject(room, "map");
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
+
 
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
 

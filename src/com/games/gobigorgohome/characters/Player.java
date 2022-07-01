@@ -102,7 +102,7 @@ public class Player {
     }
 
     public boolean isWorkoutComplete() {
-        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked;
+        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
     }
 
     private boolean isItemInInventory(String item) {

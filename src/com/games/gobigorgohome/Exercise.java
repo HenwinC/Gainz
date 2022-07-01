@@ -10,6 +10,9 @@ public class Exercise {
     private final Long energyCost;
     private final Long MET;
 
+
+    private final String exercisePicture;
+
     public Exercise(Object exercises, String exerciseName) {
         Object exercise = jsonParser.getObjectFromJSON(exercises, exerciseName);
         this.targetMuscles = jsonParser.getObjectFromJSONObject(exercise, "target muscles");
@@ -17,6 +20,7 @@ public class Exercise {
         this.energyCost = jsonParser.getLongFromJSONObject(exercise, "energy cost");
 
         this.MET = jsonParser.getLongFromJSONObject(exercise, "MET");
+        this.exercisePicture = jsonParser.getObjectStringFromJSONObject(exercise, "exercisePicture");
 
     }
 
@@ -34,5 +38,9 @@ public class Exercise {
 
     public Long getMET() {
         return MET;
+    }
+
+    public String getExercisePicture() {
+        return exercisePicture;
     }
 }

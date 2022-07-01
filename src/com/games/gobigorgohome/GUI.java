@@ -2,13 +2,15 @@ package com.games.gobigorgohome;
 
 import com.games.gobigorgohome.app.Game;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import java.awt.*;
+
+import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.PrintStream;
 
 public class GUI {
@@ -23,7 +25,7 @@ public class GUI {
     private JTextField clockText;
     private String playerName = "you";
     private long time = 0;
-    private Clock clock;
+//    private Clock clock;
     private Font sysOutTextFont = new Font("SansSerif", Font.BOLD, 12);
     private Font inputTextFont = new Font("SansSerif", Font.BOLD, 35);
     private Colors sysOutColorBG = Colors.LIGHT_GREY;
@@ -34,7 +36,7 @@ public class GUI {
     private SoundPlayer soundPlayer = new SoundPlayer();
     private SoundPlayer soundEffectPlayer = new SoundPlayer();
     private Color textPaneBg = new Color(106, 105, 111);
-
+    private JButton button;
     private static GUI instance;
 
     public GUI() {
@@ -60,7 +62,9 @@ public class GUI {
     public void createBoard() {
 
         frame = new JFrame("goBigORgohome");
+
         frame.setSize(new Dimension(boardWidth, boardHeight));
+
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -121,91 +125,94 @@ public class GUI {
         });
         pane.add(commandInput, commandInputConstraints);
 
-        clockText = new JTextField(" ");
-        clockText.setMinimumSize(new Dimension(100, 45));
-        clockText.setMaximumSize(new Dimension(100, 45));
-        clockText.setEditable(false);
-        clockText.setFont(inputTextFont);
-        GridBagConstraints clockTextConstraints = new GridBagConstraints();
-        clockTextConstraints.fill = GridBagConstraints.BOTH;
-        clockTextConstraints.gridx = 1;
-        clockTextConstraints.gridy = 1;
-        pane.add(clockText, clockTextConstraints);
+
         frame.setVisible(true);
         commandInput.requestFocus();
+    }
+
+    public void createButton(String label,Game currentGame){
+        JButton button = new JButton(label);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentGame.playerUseMachine(label);
+            }
+        });
+        textPane.insertComponent(button);
     }
 
     public JTextPane getTextPane() {
         return textPane;
     }
 
-    public void setTextPane(JTextPane textPane) {
-        this.textPane = textPane;
-    }
+//    public void setTextPane(JTextPane textPane) {
+//        this.textPane = textPane;
+//    }
 
     public TextFieldPlaceholder getCommandInput() {
         return commandInput;
     }
 
-    public void setCommandInput(TextFieldPlaceholder commandInput) {
-        this.commandInput = commandInput;
-    }
+//    public void setCommandInput(TextFieldPlaceholder commandInput) {
+//        this.commandInput = commandInput;
+//    }
+//
+//    public void playSoundEffect(String name) {
+//        soundEffectPlayer.addSoundFile(name);
+//        soundEffectPlayer.start();
+//    }
+//
+//    public Image getImageFile(String fileName) {
+//        try {
+//            return ImageIO.read(getResourceFile(fileName));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-    public void playSoundEffect(String name) {
-        soundEffectPlayer.addSoundFile(name);
-        soundEffectPlayer.start();
-    }
+//    public void startClock() {
+//        if (clock == null)
+//            clock = new Clock();
+//        clock.start();
+//    }
+//
+//    public void stopClock() {
+//        clock.clockRunning = false;
+//        clock = null;
+//    }
 
-    public Image getImageFile(String fileName) {
-        try {
-            return ImageIO.read(getResourceFile(fileName));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public void resetClock() {
+//        stopClock();
+//        time = 0;
+//    }
 
-    public void startClock() {
-        if (clock == null)
-            clock = new Clock();
-        clock.start();
-    }
+//    class Clock extends Thread {
+//
+//        public boolean clockRunning = true;
+//
+//        @Override
+//        public void run() {
+//            while (clockRunning) {
+//                try {
+//                    Thread.sleep(1000);
+//                    time++;
+//                    if (time > 3600) {
+//                        time = 0;
+//                    }
+//                    String timeString = String.format("%02d:%02d", time / 60, time % 60);
+//                    clockText.setText(timeString);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
-    public void stopClock() {
-        clock.clockRunning = false;
-        clock = null;
-    }
-
-    public void resetClock() {
-        stopClock();
-        time = 0;
-    }
-
-    class Clock extends Thread {
-
-        public boolean clockRunning = true;
-
-        @Override
-        public void run() {
-            while (clockRunning) {
-                try {
-                    Thread.sleep(1000);
-                    time++;
-                    if (time > 3600) {
-                        time = 0;
-                    }
-                    String timeString = String.format("%02d:%02d", time / 60, time % 60);
-                    clockText.setText(timeString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public File getResourceFile(String fileName) {
-        return new File("resources/" + fileName);
-    }
+//    public File getResourceFile(String fileName) {
+//        return new File("resources/" + fileName);
+//    }
 
     public void attachVolumeControls(JComponent component) {
         component.addKeyListener(new java.awt.event.KeyAdapter() {

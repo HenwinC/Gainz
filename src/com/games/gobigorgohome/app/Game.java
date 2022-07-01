@@ -36,6 +36,7 @@ public class Game {
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
 
+
 //    public Game(InputOutput prompter) throws IOException, ParseException {
 //        this.prompter = prompter;
 //    }
@@ -226,7 +227,7 @@ public class Game {
                     changeLocation(playerAction);
                     break;
                 case "workout":
-                    playerUseMachine(playerAction);
+                    performWorkout();
                     break;
                 case "help":
                     page.instructions();
@@ -388,7 +389,6 @@ public class Game {
     }
 
     private void getRoomMap() throws IOException {
-
         currentRoom.getRoomMap(prompter);
 
     }
@@ -406,10 +406,19 @@ public class Game {
     }
 
     private void inspectRoom() {
+
         prompter.info(currentRoom.toString());
     }
 
-    private void playerUseMachine(String playerExcerciseInput) {
+    private void performWorkout(){
+        prompter.info("======================WORKOUTS======================");
+        for(Object exercise : getCurrentRoom().getExerciseList()){
+            gui.createButton(exercise.toString(),this);
+        }
+        prompter.info("\n======================================================");
+    }
+
+    public void playerUseMachine(String playerExcerciseInput) {
         gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
@@ -421,6 +430,7 @@ public class Game {
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
 
+
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
@@ -428,53 +438,10 @@ public class Game {
             prompter.info("You have burned " + player.totalCaloriesBurnedToday + " so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
+        }
+        prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
 
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("push ups")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/push-up_cldtxj.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("ab wheel")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/ab-wheel_lud0bu.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("dips")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/dips_txutdt.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("row")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/row_zbnofo.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("bike")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/bike_busvzq.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("chest fly")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/chest_fly_zbhqfm.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("tricep extension")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Tricep_uvnrwb.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("leg press")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/leg_press_cqxbqp.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("crunch machine")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/crunch_machine_iq1evh.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("cable curl")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/cable_curl_y5nztm.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("squat")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/squat_gjoxnm.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("bench press")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533563/bench_press_buaimb.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("overhead press")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Overhead_Press_v6i829.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("deadlift")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/deadlift_ezow1x.png\"'/>");
-        }
-        if (playerExcerciseInput.equalsIgnoreCase("skull crushers")) {
-            prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656533564/Skull_Crushers_t6rjzx.png\"'/>");
-        }
+
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
