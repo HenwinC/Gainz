@@ -48,8 +48,10 @@ public class Game {
         //voiceRecognition.start();
     }
 
-    public void welcome() {
+    public void welcome() throws IOException {
         prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
+        page.welcome();
+        page.instructions();
     }
 
     //    collects current input from user to update their avatar
@@ -62,7 +64,7 @@ public class Game {
         } else {
             soundPlayer.playSoundFile("h_generic.wav");
         }
-        prompter.info("Hello " + CYAN + playerName + RESET + " let's get more information about you...");
+        prompter.info("Hello " + YELLOW + playerName + RESET + " let's get more information about you...");
         soundPlayer.playHeight();
         double playerHeight = validDouble("What is your height in inches? ",
                 "height", "inches", "^[0-9]{1,2}$");
@@ -103,7 +105,7 @@ public class Game {
         ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
         // check if the room has the item
         if (items.contains(playerAction)) {
-            prompter.info("you got the :" + playerAction);
+            prompter.info(PURPLE + "you got the :" + YELLOW + playerAction);
             items.remove(playerAction);
             player.getInventory().add(playerAction);
         } else {
@@ -122,14 +124,14 @@ public class Game {
     private void gameStatus() {
         soundPlayer.playCommand();
         String command = voiceRecognition.getUtterance();
-        prompter.info("------------------------------");
-        prompter.info("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
-        prompter.info("You are in the " + currentRoomName + " room.");
+        prompter.info(PURPLE + "------------------------------");
+        prompter.info(PURPLE +"Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
+        prompter.info(PURPLE+ "You are in the " + YELLOW + currentRoomName + " room.");
         if(currentRoomName.equalsIgnoreCase("machines")) {
-            prompter.info(RED + "You can fight here, or choose to run from conflict!" + RESET);
+            prompter.info(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by typing " + YELLOW + "'Fight'" + RESET);
         }
-        prompter.info(player.toString());
-        prompter.info("------------------------------");
+        prompter.info(PURPLE + player.toString());
+        prompter.info(YELLOW + "-"+ PURPLE +"-"+ YELLOW +"-"+PURPLE+"-"+YELLOW+"-"+PURPLE+"-"+PURPLE+"-" + PURPLE + "-\"+PURPLE+\"-\"+PURPLE+\"-\"+PURPLE+\"-\"+PURPLE+\"---------"+ YELLOW +"----------");
 
     }
 
@@ -434,19 +436,20 @@ public class Game {
         if ("fixed".equals(exerciseStatus)) {
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET) + " calories this workout!");
-            prompter.info("You have burned " + player.totalCaloriesBurnedToday + " so far today!");
+            prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
+            prompter.info(PURPLE+ "you have burned " + YELLOW + player.caloriesBurnedPerWorkout(MET) + PURPLE + " calories this workout!");
+            prompter.info(PURPLE+ "You have burned " + YELLOW + player.totalCaloriesBurnedToday + PURPLE +" so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
         }
-        prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
+
 
 
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
         if (player.getInventory().contains("wrench")) {
-            String playerResponse = prompter.prompt("This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");
+            String playerResponse = prompter.prompt(RED + "This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");
             if ("y".equalsIgnoreCase(playerResponse)) {
                 player.getInventory().remove("wrench");
                 player.workout(targetMuscle, energyCost);
