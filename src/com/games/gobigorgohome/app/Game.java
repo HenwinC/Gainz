@@ -397,8 +397,7 @@ public class Game {
 
     private void talkToNPC() {
         String dialog = currentRoom.getNpc().generateDialog();
-        prompter.info(dialog);
-
+        prompter.info(GREEN + currentRoom.getNpc().getNpcName() + RESET + " says: " + "'" + dialog + "'");
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
         if (!player.getInventory().contains(npcItem)) {
@@ -408,13 +407,16 @@ public class Game {
     }
 
     private void inspectRoom() {
-
         prompter.info(currentRoom.toString());
     }
 
     private void performWorkout(){
         prompter.info("======================WORKOUTS======================");
         for(Object exercise : getCurrentRoom().getExerciseList()){
+            if(exercise.toString().equals("none")){
+                prompter.info(GREEN + getCurrentRoom().getRoomName() + RESET + " is not a room where you can workout! Feel free to go to any of the workout rooms available in the GYM.");
+                break;
+            }
             gui.createButton(exercise.toString(),this);
         }
         prompter.info("\n======================================================");
@@ -441,6 +443,7 @@ public class Game {
             prompter.info(PURPLE+ "You have burned " + YELLOW + player.totalCaloriesBurnedToday + PURPLE +" so far today!");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
+
         }
 
 
@@ -448,8 +451,11 @@ public class Game {
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
+
         if (player.getInventory().contains("wrench")) {
-            String playerResponse = prompter.prompt(RED + "This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");
+
+            String playerResponse = prompter.prompt( git "This machine is broken. Would you like to use your wrench to fix it?(y/n)");
+
             if ("y".equalsIgnoreCase(playerResponse)) {
                 player.getInventory().remove("wrench");
                 player.workout(targetMuscle, energyCost);
