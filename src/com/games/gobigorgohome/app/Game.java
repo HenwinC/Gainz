@@ -434,8 +434,8 @@ public class Game {
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
 
-        if ("fixed".equals(exerciseStatus) || fixBrokenMachine()) {
-            if(fixBrokenMachine()){
+        if ("fixed".equals(exerciseStatus) || fixBrokenMachine(exerciseStatus)) {
+            if(fixBrokenMachine(exerciseStatus)){
                 prompter.info("You got the wrench! you did a great job fixing the machine now you can use it.");
                 player.getInventory().remove("wrench");
             }
@@ -448,12 +448,12 @@ public class Game {
 
     }
 
-    private boolean fixBrokenMachine() {
+    private boolean fixBrokenMachine(String machine) {
 
         boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
             isFixed = true;
-        }else{
+        }else if("broken".equals(machine)){
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
             prompter.info("<img src=\"https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656711532/gogh/wrench_jtss1n.png\"'/>");
 
