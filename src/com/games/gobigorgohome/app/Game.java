@@ -438,8 +438,6 @@ public class Game {
             if(fixBrokenMachine()){
                 prompter.info("You got the wrench! you did a great job fixing the machine now you can use it.");
                 player.getInventory().remove("wrench");
-            }else{
-                prompter.info("This machine is broken, please come back with a wrench to fix it.");
             }
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
@@ -455,6 +453,10 @@ public class Game {
         boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
             isFixed = true;
+        }else{
+            prompter.info("This machine is broken, please come back with a wrench to fix it.");
+            prompter.info("<img src=\"https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656711532/gogh/wrench_jtss1n.png\"'/>");
+
         }
 
         return isFixed;
