@@ -382,7 +382,6 @@ public class Game {
     }
 
     private void inspectRoom() {
-
         prompter.info(currentRoom.toString());
     }
 
@@ -412,12 +411,10 @@ public class Game {
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
             prompter.info("you have burned " + player.caloriesBurnedPerWorkout(MET) + " calories this workout!");
             prompter.info("You have burned " + player.totalCaloriesBurnedToday + " so far today!");
+            prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
         } else {
             fixBrokenMachine(targetMuscle, energyCost);
         }
-        prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
-
-
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {

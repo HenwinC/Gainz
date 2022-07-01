@@ -63,7 +63,7 @@ public class Room {
         return exercises;
     }
 
-    //    TODO: determine the Set value types
+
     public Set getExerciseList() {
         return jsonParser.getKeySetFromJSONObject(getExercises());
     }

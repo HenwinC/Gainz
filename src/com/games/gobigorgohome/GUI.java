@@ -33,7 +33,7 @@ public class GUI {
     private SoundPlayer soundPlayer = new SoundPlayer();
     private SoundPlayer soundEffectPlayer = new SoundPlayer();
     private Color textPaneBg = new Color(106, 105, 111);
-    private JButton button;
+
     private static GUI instance;
 
     public GUI() {
