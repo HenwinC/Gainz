@@ -421,7 +421,6 @@ public class Game {
         }
         prompter.info("\n======================================================");
     }
-
     public void playerUseMachine(String playerExcerciseInput) {
         gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
@@ -434,38 +433,28 @@ public class Game {
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
 
-
-        if ("fixed".equals(exerciseStatus)) {
+        if ("fixed".equals(exerciseStatus) || fixBrokenMachine()) {
+            if(fixBrokenMachine()){
+                prompter.info("You got the wrench! you did a great job fixing the machine now you can use it.");
+                player.getInventory().remove("wrench");
+            }else{
+                prompter.info("This machine is broken, please come back with a wrench to fix it.");
+            }
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
             prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
             prompter.info(PURPLE+ "you have burned " + YELLOW + player.caloriesBurnedPerWorkout(MET) + PURPLE + " calories this workout!");
             prompter.info(PURPLE+ "You have burned " + YELLOW + player.totalCaloriesBurnedToday + PURPLE +" so far today!");
-        } else {
-            fixBrokenMachine(targetMuscle, energyCost);
-
         }
-
-
 
     }
 
-    private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
-
+    private boolean fixBrokenMachine() {
+        boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
-
-            String playerResponse = prompter.prompt( git "This machine is broken. Would you like to use your wrench to fix it?(y/n)");
-
-            if ("y".equalsIgnoreCase(playerResponse)) {
-                player.getInventory().remove("wrench");
-                player.workout(targetMuscle, energyCost);
-                player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            } else {
-                prompter.info("When you are ready to workout, come back with the wrench and get to it.");
-            }
-        } else {
-            prompter.info("This machine is broken, please come back with a wrench to fix it.");
+            isFixed = true;
         }
+        return isFixed;
     }
 
     //This function does not validate if item exist at the location. Refactored
