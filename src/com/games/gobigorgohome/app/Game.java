@@ -55,7 +55,7 @@ public class Game {
     private void getNewPlayerInfo() {
         soundPlayer.playName();
         String playerName = validString("What is your name? ", "^[a-zA-Z]{1,16}$");
-        String[] nameSoundFiles = new String[]{"chris", "david", "henwin", "manni", "renni", "scott"};
+        String[] nameSoundFiles = new String[]{"chris", "david", "henwin", "mannie", "renni", "scott"};
         if (Arrays.asList(nameSoundFiles).contains(playerName)) {
             soundPlayer.playSoundFile("h_" + playerName + ".wav");
         } else {
@@ -96,6 +96,26 @@ public class Game {
         player.setHeight(playerHeight);
         player.setWeight(playerWeight);
     }
+    private void grabItem(String playerAction) {
+
+        // makes a list to be able to manipulate data
+        ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
+        // check if the room has the item
+        if (items.contains(playerAction)) {
+            prompter.info("you got the :" + playerAction);
+            items.remove(playerAction);
+            player.getInventory().add(playerAction);
+        } else {
+            //invalidCommand(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+            prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
+            try {
+                promptForPlayerInput();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     //    updates player with current game status e.g. player inventory, current room etc.
     private void gameStatus() {
@@ -104,8 +124,12 @@ public class Game {
         prompter.info("------------------------------");
         prompter.info("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
         prompter.info("You are in the " + currentRoomName + " room.");
+        if(currentRoomName.equalsIgnoreCase("machines")) {
+            prompter.info(RED + "You can fight here, or choose to run from conflict!" + RESET);
+        }
         prompter.info(player.toString());
         prompter.info("------------------------------");
+
     }
 
     //    main function running the game, here we call all other functions necessary to run the game
@@ -127,12 +151,6 @@ public class Game {
     }
 
     public void getCommands() throws IOException, ParseException {
-//        soundPlayer.playIntro();
-//        page.instructions();
-//        getNewPlayerInfo();
-        //welcome();
-        // runs a while loop
-
         while (!isGameOver()) {
             gameStatus();
             promptForPlayerInput();
@@ -267,15 +285,15 @@ public class Game {
     private void boxingLocation() throws IOException, ParseException {
 
         if (currentRoomName.equals("machines")) {
-            List<String> list = Arrays.asList("A", "B", "C", "D");
+            //List<String> list = Arrays.asList("A", "B", "C", "D");
 
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
                 String playerAttack = prompter.prompt("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-                    prompter.info("Enter a valid command");
-                }
+//                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+//                    prompter.info("Enter a valid command");
+//                }
                 if (playerAttack.equals("a")) {
                     prompter.info(ORANGE + "Crack! Right in the kisser!" + RESET);
                     partnerHealth = partnerHealth - 25;
@@ -315,6 +333,8 @@ public class Game {
                 prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
                         " experience point(s)" + RESET);
                 prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
+                dropItems();
+                prompter.info(GREEN + "New items have been dropped by your enemy, don't forget to pick them up" + RESET);
                 promptForPlayerInput();
 
             } else if (player.getHealth() <= 10) {
@@ -475,25 +495,13 @@ public class Game {
 //    }
 
 
-    private void grabItem(String playerAction) {
 
-        // makes a list to be able to manipulate data
+    private  void dropItems() {
         ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
-        // check if the room has the item
-        if (items.contains(playerAction)) {
-            prompter.info("you got the :" + playerAction);
-            items.remove(playerAction);
-            player.getInventory().add(playerAction);
-        } else {
-            //invalidCommand(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-            prompter.info(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-            try {
-                promptForPlayerInput();
-            } catch (IOException | ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
+        items.add("pancake");
+        items.add("caffeine");
+        items.add("croissant");
+        items.add("protein shake");
     }
 
     private void invalidCommand(String command) {
