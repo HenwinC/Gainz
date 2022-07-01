@@ -398,7 +398,7 @@ public class Game {
     private void talkToNPC() {
         gui.clear();
         String dialog = currentRoom.getNpc().generateDialog();
-        prompter.info( PURPLE + dialog);
+        prompter.info(PURPLE+ currentRoom.getNpc().getNpcName() + RESET + " says: " + "'" + YELLOW + dialog + "'");
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
@@ -416,11 +416,14 @@ public class Game {
     private void performWorkout(){
         prompter.info("======================WORKOUTS======================");
         for(Object exercise : getCurrentRoom().getExerciseList()){
+            if(exercise.toString().equals("none")){
+                prompter.info(GREEN + getCurrentRoom().getRoomName() + RESET + " is not a room where you can workout! Feel free to go to any of the workout rooms available in the GYM.");
+                break;
+            }
             gui.createButton(exercise.toString(),this);
         }
         prompter.info("\n======================================================");
     }
-
     public void playerUseMachine(String playerExcerciseInput) {
         gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
@@ -429,45 +432,39 @@ public class Game {
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
 
         Object targetMuscle = exercise.getTargetMuscles();
+
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
 
-
-        if ("fixed".equals(exerciseStatus)) {
+        if ("fixed".equals(exerciseStatus) || fixBrokenMachine(exerciseStatus)) {
+            if(fixBrokenMachine(exerciseStatus)){
+                prompter.info("You got the wrench! you did a great job fixing the machine now you can use it.");
+                player.getInventory().remove("wrench");
+            }
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
             prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
             prompter.info(PURPLE+ "you have burned " + YELLOW + player.caloriesBurnedPerWorkout(MET) + PURPLE + " calories this workout!");
             prompter.info(PURPLE+ "You have burned " + YELLOW + player.totalCaloriesBurnedToday + PURPLE +" so far today!");
-        } else {
-            fixBrokenMachine(targetMuscle, energyCost);
         }
-
-
 
     }
 
-    private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
+    private boolean fixBrokenMachine(String machine) {
+
+        boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
-            String playerResponse = prompter.prompt(RED + "This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");
-            if ("y".equalsIgnoreCase(playerResponse)) {
-                player.getInventory().remove("wrench");
-                player.workout(targetMuscle, energyCost);
-                player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            } else {
-                prompter.info("When you are ready to workout, come back with the wrench and get to it.");
-            }
-        } else {
+            isFixed = true;
+        }else if("broken".equals(machine)){
             prompter.info("This machine is broken, please come back with a wrench to fix it.");
+            prompter.info("<img src=\"https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656711532/gogh/wrench_jtss1n.png\"'/>");
+
         }
+
+        return isFixed;
     }
 
-    //This function does not validate if item exist at the location. Refactored
-//    private void grabItem(String playerAction) {
-//        prompter.info("you got the :" + playerAction);
-//        player.getInventory().add(playerAction);
-//    }
 
 
 

@@ -87,11 +87,11 @@ public class Room {
 
     @Override
     public String toString() {
-        return PURPLE + "You are in " + YELLOW + getRoomName() + "\n" +
-                PURPLE + "Exercises available are: " + YELLOW +  getExerciseList() + "\n" +
-                PURPLE + "You see: " + YELLOW + getItems() + "\n" +
-                YELLOW + getValidNpc() + PURPLE + " is standing there with you.\n" + RESET;
-//        TODO: if adding direction limitations, call getDirections
+
+        return  Colors.YELLOW + "THIS IS WHAT YOU CAN SEE HERE: \n You are in " + Colors.RESET + getRoomName() + "\n" +
+                "Exercises available are: " + getExerciseList() + "\n" +
+                "You see: " + getItems() + "\n" +
+                getValidNpc() + " is standing there with you.\n";
     }
 }
 
