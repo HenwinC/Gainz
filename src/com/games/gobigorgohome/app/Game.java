@@ -429,6 +429,7 @@ public class Game {
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
 
         Object targetMuscle = exercise.getTargetMuscles();
+
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
@@ -450,18 +451,15 @@ public class Game {
     }
 
     private boolean fixBrokenMachine() {
+
         boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
             isFixed = true;
         }
+
         return isFixed;
     }
 
-    //This function does not validate if item exist at the location. Refactored
-//    private void grabItem(String playerAction) {
-//        prompter.info("you got the :" + playerAction);
-//        player.getInventory().add(playerAction);
-//    }
 
 
 
