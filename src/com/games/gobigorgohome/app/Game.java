@@ -36,6 +36,7 @@ public class Game {
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
 
+
 //    public Game(InputOutput prompter) throws IOException, ParseException {
 //        this.prompter = prompter;
 //    }
@@ -226,7 +227,7 @@ public class Game {
                     changeLocation(playerAction);
                     break;
                 case "workout":
-                    playerUseMachine(playerAction);
+                    performWorkout();
                     break;
                 case "help":
                     page.instructions();
@@ -401,12 +402,19 @@ public class Game {
     }
 
     private void inspectRoom() {
+
         prompter.info(currentRoom.toString());
-
-
     }
 
-    private void playerUseMachine(String playerExcerciseInput) {
+    private void performWorkout(){
+        prompter.info("======================WORKOUTS======================");
+        for(Object exercise : getCurrentRoom().getExerciseList()){
+            gui.createButton(exercise.toString(),this);
+        }
+        prompter.info("\n======================================================");
+    }
+
+    public void playerUseMachine(String playerExcerciseInput) {
         gui.clear();
         prompter.info("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
@@ -428,6 +436,8 @@ public class Game {
             fixBrokenMachine(targetMuscle, energyCost);
         }
         prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
+
+
     }
 
     private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
