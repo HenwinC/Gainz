@@ -6,6 +6,7 @@ import com.games.gobigorgohome.parsers.ParseJSON;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import static com.games.gobigorgohome.Colors.*;
 
 public class Room {
     private final ParseJSON jsonParser = new ParseJSON();
@@ -86,6 +87,7 @@ public class Room {
 
     @Override
     public String toString() {
+
         return  Colors.YELLOW + "THIS IS WHAT YOU CAN SEE HERE: \n You are in " + Colors.RESET + getRoomName() + "\n" +
                 "Exercises available are: " + getExerciseList() + "\n" +
                 "You see: " + getItems() + "\n" +

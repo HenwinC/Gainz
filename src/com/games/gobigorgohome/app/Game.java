@@ -180,7 +180,7 @@ public class Game {
         } else if (player.isWorkoutComplete()) {
             // TODO play CONGRATULATIONS
             player.playerScore();
-            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET + "\n"
+            result = YELLOW + "CONGRATULATIONS! YOU WORKED OUT!" + RESET + "\n"
                     + "Wins: " + player.getWins() + " | Losses: " + player.getLosses();
 
         }
@@ -335,17 +335,17 @@ public class Game {
 
             int xpPoints = 0;
             if (player.getHealth() > partnerHealth) {
-                prompter.info(GREEN + "You fought like a pro !" + RESET);
+                prompter.info(PURPLE + "You fought like a pro !" + RESET);
                 xpPoints++;
-                prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xpPoints +
+                prompter.info(PURPLE + "You have earned yourself " + RESET + YELLOW + xpPoints +
                         " experience point(s)" + RESET);
                 prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
                 dropItems();
-                prompter.info(GREEN + "New items have been dropped by your enemy, don't forget to pick them up" + RESET);
+                prompter.info(PURPLE + "New items have been dropped by your enemy, don't forget to pick them up" + RESET);
                 promptForPlayerInput();
 
             } else if (player.getHealth() <= 10) {
-                prompter.info(ORANGE + "Your sparring partner won :( \n You live to fight another day" + RESET);
+                prompter.info(RED + "Your sparring partner won :( \n You live to fight another day" + RESET);
                 prompter.info("<img src=\"https://imgix.ranker.com/list_img_v2/1511/2761511/original/anime-characters-who-could-beat-goku\" " +
                         "height= 150 width= 200 '/>");
                 //gui.clear();
@@ -362,11 +362,11 @@ public class Game {
             String fighter = prompter.prompt("Do you wish to run away or take on a fight? \n " + YELLOW +
                     "Type 'Yes' to save face or 'No' to face your fears" + RESET);
             if (fighter.equalsIgnoreCase("Yes")) {
-                prompter.info(ORANGE + "Whelp, better to be safe than sorry" + RESET);
+                prompter.info(PURPLE + "Whelp, better to be safe than sorry" + RESET);
                 promptForPlayerInput();
             }
             if (fighter.equalsIgnoreCase("No")) {
-                prompter.info(CYAN + "Let's see what you've got!" + RESET);
+                prompter.info(RED + "Let's see what you've got!" + RESET);
                 boxingLocation();
             } else {
                 prompter.info("Too legit to quit!");
@@ -396,17 +396,20 @@ public class Game {
     }
 
     private void talkToNPC() {
+        gui.clear();
         String dialog = currentRoom.getNpc().generateDialog();
-        prompter.info(GREEN + currentRoom.getNpc().getNpcName() + RESET + " says: " + "'" + dialog + "'");
+        prompter.info(PURPLE+ currentRoom.getNpc().getNpcName() + RESET + " says: " + "'" + YELLOW + dialog + "'");
+
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
         if (!player.getInventory().contains(npcItem)) {
             player.getInventory().add(npcItem);
-            prompter.info("You added " + npcItem + " to your gym bag.");
+            prompter.info(PURPLE + "You added " + YELLOW +  npcItem + PURPLE + " to your gym bag.");
         }
     }
 
     private void inspectRoom() {
+        gui.clear();
         prompter.info(currentRoom.toString());
     }
 
