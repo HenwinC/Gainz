@@ -311,17 +311,21 @@ public class Game {
                     partnerHealth = partnerHealth - 10;
                 }
                 Random rand = new Random();
-                int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+                int randomNum = rand.nextInt((4 - 1) + 1) + 1;
                 if (randomNum == 1) {
                     prompter.info(RED + "Your partner backhanded you.....Disrespectful" + RESET);
                     player.setHealth(player.getHealth() - 10);
                 }
                 if (randomNum == 2) {
                     prompter.info(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
-                    player.setHealth(player.getHealth() - 30);
+                    player.setHealth(player.getHealth() - 20);
                 }
                 if (randomNum == 3) {
                     prompter.info(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
+                    player.setHealth(player.getHealth() - 30);
+                }
+                if (randomNum == 4) {
+                    prompter.info(RED + "What a nerve! Don't allow that hit to settle" + RESET);
                     player.setHealth(player.getHealth() - 40);
                 }
             }

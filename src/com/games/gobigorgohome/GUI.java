@@ -5,6 +5,7 @@ import com.games.gobigorgohome.app.Game;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,6 +17,7 @@ public class GUI {
     private int boardWidth = 800;
     private int boardHeight = 800;
     private JFrame frame;
+    private JButton resetButton;
     private JTextPane textPane;
     private TextFieldPlaceholder commandInput;
     private JTextField clockText;
@@ -66,6 +68,13 @@ public class GUI {
         Container pane = frame.getContentPane();
         pane.setLayout(new GridBagLayout());
         pane.setSize(boardWidth, boardHeight);
+
+        resetButton = new JButton();
+        resetButton.setText("Reset");
+        resetButton.setSize(100, 50);
+        resetButton.setLocation(0, 200);
+        resetButton.addActionListener((ActionListener) frame);
+
 
 
         textPane = new JTextPane();
