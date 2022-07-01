@@ -330,11 +330,11 @@ public class Game {
                 }
             }
 
-            int xp = 0;
+            int xpPoints = 0;
             if (player.getHealth() > partnerHealth) {
                 prompter.info(GREEN + "You fought like a pro !" + RESET);
-                xp++;
-                prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
+                xpPoints++;
+                prompter.info(GREEN + "You have earned yourself " + RESET + ORANGE + xpPoints +
                         " experience point(s)" + RESET);
                 prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
                 dropItems();
