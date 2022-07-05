@@ -4,11 +4,11 @@ import com.games.gobigorgohome.app.Game;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.html.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
+import java.text.NumberFormat;
 
 public class GUI {
 
@@ -27,11 +27,12 @@ public class GUI {
     private Colors sysOutColorBG = Colors.LIGHT_GREY;
     private Color commandInputColorBG = Color.LIGHT_GRAY;
     private Color clockColorBG = Color.darkGray;
-    //private Player player;
     private ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
     private SoundPlayer soundPlayer = new SoundPlayer();
     private SoundPlayer soundEffectPlayer = new SoundPlayer();
     private Color textPaneBg = new Color(106, 105, 111);
+    private HTMLEditorKit kit = new HTMLEditorKit();
+    private HTMLDocument doc;
 
     private static GUI instance;
 
@@ -47,12 +48,56 @@ public class GUI {
         return instance;
     }
 
-//    public GUI(Player player) {
-//        this.player = player;
-//    }
-
     public void clear() {
-        textPane.setText("<html><head><style>body{font-size:18px;margin:10px;width:100%;text-align:left;}</style></head><body><div id=\"content\"></div></body></html>");
+        textPane.setText("<html><head></head><body></body></html>");
+    }
+
+    class ImagePanel extends JPanel {
+
+        private String fileName;
+        private int width = 500;
+        private int height = 335;
+        private int xAlign = 0;
+        private int yAlign = 0;
+
+        ImagePanel(String fileName) {
+            this.fileName = fileName;
+            this.setBackground(Color.RED);
+            this.setOpaque(true);
+            this.xAlign = (boardWidth - width) / 2;
+            this.yAlign = (boardWidth - height) / 2;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            ImageIcon img = new ImageIcon(getImageFile(fileName));
+            g.drawImage(img.getImage(), xAlign, yAlign, width, height, null);
+        }
+    }
+
+    public void showWhiteBoard() {
+        Container pane2 = new Container();
+        pane2.setLayout(new OverlayLayout(pane2));
+        frame.setContentPane(pane2);
+        ImagePanel wbPanel = new ImagePanel("/Images/whiteboard.jpg");
+        wbPanel.setSize(new Dimension(boardWidth, boardHeight));
+        wbPanel.setPreferredSize(new Dimension(boardWidth, boardHeight));
+        wbPanel.setMaximumSize(new Dimension(boardWidth, boardHeight));
+        pane2.add(wbPanel, BorderLayout.SOUTH);
+        pane2.setVisible(true);
+        JLabel nameLabel = new JLabel("name");
+        nameLabel.setMinimumSize(new Dimension(100,30));
+        wbPanel.add(nameLabel);
+        JLabel heightLabel = new JLabel("name");
+        wbPanel.add(heightLabel);
+        NumberFormat paymentFormat = NumberFormat.getIntegerInstance();
+        JFormattedTextField nameField = new JFormattedTextField(paymentFormat);
+        nameField.setPreferredSize(new Dimension(new Dimension(100,30)));
+        wbPanel.add(nameField);
+        JLabel weightLabel = new JLabel("name");
+        JLabel ageLabel = new JLabel("name");
+        pane2.add(wbPanel);
     }
 
     public void createBoard() {
@@ -60,20 +105,19 @@ public class GUI {
         frame = new JFrame("goBigORgohome");
         frame.setSize(new Dimension(boardWidth, boardHeight));
         frame.setLocationByPlatform(true);
-        frame.setVisible(true);
+        frame.setBackground(Color.YELLOW);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
         Container pane = frame.getContentPane();
         pane.setLayout(new GridBagLayout());
         pane.setSize(boardWidth, boardHeight);
 
-
         textPane = new JTextPane();
-        textPane.setContentType("text/html;charset=UTF-16");
+        textPane.setContentType("text/html");
         textPane.setEditable(false);
         textPane.setBackground(textPaneBg);
         textPane.setFont(sysOutTextFont);
-        textPane.setText("<html><head><style>body{width:100%;text-align:left;}</style></head><body><div id=\"content\"></div></body></html>");
         attachVolumeControls(textPane);
 
         GridBagConstraints sysOutScrollPaneConstraints = new GridBagConstraints();
@@ -150,9 +194,7 @@ public class GUI {
     public Image getImageFile(String fileName) {
         try {
             return ImageIO.read(getResourceFile(fileName));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
 
@@ -212,5 +254,21 @@ public class GUI {
                 }
             }
         });
+    }
+
+    public HTMLEditorKit getKit() {
+        return kit;
+    }
+
+    public void setKit(HTMLEditorKit  kit) {
+        this.kit = kit;
+    }
+
+    public HTMLDocument getDoc() {
+        return doc;
+    }
+
+    public void setDoc(HTMLDocument doc) {
+        this.doc = doc;
     }
 }

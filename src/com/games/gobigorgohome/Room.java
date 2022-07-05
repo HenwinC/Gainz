@@ -26,9 +26,7 @@ public class Room {
         this.map = jsonParser.getObjectStringFromJSONObject(room, "map");
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
 
-
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
-
 
         Object npcTypeObject = jsonParser.getObjectFromJSONObject(room, "NPCS");
         this.npc_type = jsonParser.getStringValueFromIndexInJSONArray(npcTypeObject, 0);
