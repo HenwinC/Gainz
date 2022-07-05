@@ -134,9 +134,9 @@ public class Game {
 
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
         prompter.info(PURPLE + "Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
-        prompter.announceAndDisplay(PURPLE + "You are in the " + YELLOW + currentRoomName + " room.");
+        prompter.announceAndDisplay(PURPLE + "You are in the " + RESET + YELLOW + currentRoomName + " room.");
         if (currentRoomName.equalsIgnoreCase("machines")) {
-            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by typing " + YELLOW + "'Fight'" + RESET);
+            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by saying or entering " + YELLOW + "'Fight'" + RESET);
         }
         prompter.info(PURPLE + player.toString());
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
@@ -202,7 +202,6 @@ public class Game {
 
     public void promptForPlayerInput() throws IOException, ParseException {
         String command = prompter.getResponse("What is your move?");
-        command = prompter.cleanTranscribe(command);
         String[] commandArr = command.split(" ");
         parseThroughPlayerInput(commandArr);
     }
@@ -227,6 +226,7 @@ public class Game {
     }
 
     private void validatePlayerCommands(String actionPrefix, String playerAction) throws IOException, ParseException {
+        System.out.println("validatePlayerCommands: " + actionPrefix + " " + playerAction);
         try {
             switch (actionPrefix) {
                 case "get":
@@ -436,7 +436,6 @@ public class Game {
 
         String dialog = currentRoom.getNpc().generateDialog(); // review change voice?
         prompter.announceAndDisplay(currentRoom.getNpc().getNpcName() + ". says: " + dialog);
-
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 

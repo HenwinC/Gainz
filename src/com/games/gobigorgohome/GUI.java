@@ -58,7 +58,8 @@ public class GUI {
     }
 
     public void clear() {
-        textPane.setText("<html><head></head><body></body></html>");
+        textPane.setText("<html><head><style>body{font-size:18px;margin:10px;width:100%;text-align:left;}" +
+                "</style></head><body><div id=\"content\"></div></body></html>");
     }
 
     class ImagePanel extends JPanel {

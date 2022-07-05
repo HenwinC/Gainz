@@ -24,7 +24,6 @@ public class InputOutput {
     private Transcriber transcriber;
     private String inputType = "v"; //  v = voice   k = keyboard
     private Map<String, String> thesaurus = new HashMap();
-    private Map<String, String> fragments = new HashMap();
 
     public InputOutput(GUI gui) {
         this.gui = gui;
@@ -110,14 +109,6 @@ public class InputOutput {
         return message;
     }
 
-    public String stripColorTags(String message) {
-        Colors colors[] = Colors.values();
-        for (Colors color : colors) {
-            message = message.replaceAll(color.toString(), "");
-        }
-        return message;
-    }
-
     public void announceAndDisplay(String message) {
         announce(message, true);
         info(message);
@@ -158,6 +149,7 @@ public class InputOutput {
                 }
             }
         }
+        System.out.println("edited1: " + anInt);
         return anInt;
     }
 
@@ -178,6 +170,7 @@ public class InputOutput {
                 }
             }
         }
+        System.out.println("edited1: " + aDouble);
         return aDouble;
     }
 
@@ -186,10 +179,9 @@ public class InputOutput {
         String answer = null;
         try {
             Future<String> answerFuture = Game.executorService.submit(new Transcriber.Ask());
-            answer = checkForSynonyms(answerFuture.get().toLowerCase());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            answer = cleanTranscribe(answerFuture.get().toLowerCase());
+            System.out.println("edited0: " + answer);
+        } catch (Exception e) { e.printStackTrace(); }
         return answer;
     }
 
@@ -224,6 +216,40 @@ public class InputOutput {
         return prompt(message);
     }
 
+    public String cleanSpeak(String message) {
+        message = stripColorTags(message);
+        message = message.replaceAll("\\<.*?\\>", "");
+        message = message.replaceAll("[^\\w ]+", "");
+        message = "<speak>" + message + "</speak>";
+        return message;
+    }
+
+    public String stripColorTags(String message) {
+        Colors colors[] = Colors.values();
+        for (Colors color : colors) {
+            message = message.replaceAll(color.toString(), "");
+        }
+        return message;
+    }
+
+    public String cleanTranscribe(String voiceInput) {
+        voiceInput = voiceInput.toLowerCase();
+        voiceInput = voiceInput.replace("[^\\w ]", "");
+        voiceInput = voiceInput.replace(".", "");
+        voiceInput = voiceInput.replace("'", "");
+        voiceInput = checkForSynonyms(voiceInput);
+        return voiceInput;
+    }
+
+    public String checkForSynonyms(String voiceInput) {
+        for (Map.Entry<String, String> entry : thesaurus.entrySet()) {
+            if (voiceInput.contains(entry.getKey())) {
+                voiceInput = voiceInput.replace(entry.getKey(),entry.getValue());entry.getValue();
+            }
+        }
+        return voiceInput;
+    }
+
     public void loadThesaurus() {
         thesaurus.put("yes", "y");
         thesaurus.put("no", "n");
@@ -239,44 +265,9 @@ public class InputOutput {
         thesaurus.put("nine", "9");
         thesaurus.put("david", "daveed");
         thesaurus.put("work out", "workout");
-        thesaurus.put("manager's", "managers");
-    }
-
-    public String checkForSynonyms(String response) {
-        for (Map.Entry<String, String> entry : thesaurus.entrySet()) {
-            if (response.equals(entry.getKey())) {
-                response = entry.getValue();
-            }
-        }
-        return response;
-    }
-
-    public String cleanSpeak(String message) {
-        Colors colors[] = Colors.values();
-        for (Colors color : colors) {
-            message = message.replaceAll(color.name(), "");
-        }
-        message = message.replaceAll("\\<.*?\\>", "");
-        message = message.replaceAll("[^\\w ]+", "");
-        message = "<speak>" + message + "</speak>";
-        return message;
-    }
-
-    public String cleanTranscribe(String command) {
-        Map<String, String> fragments = new HashMap();
-        fragments.put("go to the", "go");
-        fragments.put("go to", "go");
-        fragments.put("goto", "go");
-        fragments.put("yogastudio", "yoga studio");
-
-        command = command.toLowerCase();
-        command = command.replace("[^\\w]", "");
-        command = command.replace(".", "");
-        for (Map.Entry<String, String> entry : fragments.entrySet()) {
-            if (command.contains(entry.getKey())) {
-                command = command.replace(entry.getKey(), entry.getValue());
-            }
-        }
-        return command;
+        thesaurus.put("go to the", "go");
+        thesaurus.put("go to", "go");
+        thesaurus.put("goto", "go");
+        thesaurus.put("yogastudio", "yoga studio");
     }
 }
