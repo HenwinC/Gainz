@@ -258,10 +258,10 @@ public class Player {
     public List<String> getInventory() {
         return inventory;
     }
+
     public List<String> setInventory(Object o) {
         return inventory;
     }
-
 
 
     public boolean isChestWorked() {
@@ -328,7 +328,7 @@ public class Player {
         return "Player: " + name + "\n" +
                 "Age: " + age + ", Weight: " + weight + ", Height: " + height + "\n" +
                 "Current Energy: " + energy + " out of " + BASE_ENERGY + "\n" +
-                "Gym Bag Contents: " + inventory + "\n" +Colors.RESET +
+                "Gym Bag Contents: " + inventory + "\n" + Colors.RESET +
                 Colors.GREEN + "Win" + Colors.RESET + "|" + Colors.RED + "Loss: " + Colors.RESET + getWins() + "|"
                 + getLosses() + "\n Workout Status: " + getMusclesWorked().toString();
     }

@@ -47,9 +47,9 @@ public class ParseTxt {
 
     }
 
-    public void welcome() throws IOException{
+    public void welcome() throws IOException {
         prompter.info(PURPLE + "WELCOME TO 'GO BIG OR GO HOME! A game by GAINZZZ Productions" +
-                 " where you will learn " +
+                " where you will learn " +
                 "to use your gym time wisely and get BIG!");
 
         dataFromFile("instructions.txt");
