@@ -26,9 +26,7 @@ public class Room {
         this.map = jsonParser.getObjectStringFromJSONObject(room, "map");
         this.items = jsonParser.getObjectFromJSONObject(room, "items");
 
-
         this.exercises = jsonParser.getObjectFromJSON(room, "exercises");
-
 
         Object npcTypeObject = jsonParser.getObjectFromJSONObject(room, "NPCS");
         this.npc_type = jsonParser.getStringValueFromIndexInJSONArray(npcTypeObject, 0);
@@ -86,7 +84,8 @@ public class Room {
 
     @Override
     public String toString() {
-        return  Colors.YELLOW + "THIS IS WHAT YOU CAN SEE HERE: \n You are in " + Colors.RESET + getRoomName() + "\n" +
+
+        return Colors.YELLOW + "THIS IS WHAT YOU CAN SEE HERE: \n You are in " + Colors.RESET + getRoomName() + "\n" +
                 "Exercises available are: " + getExerciseList() + "\n" +
                 "You see: " + getItems() + "\n" +
                 getValidNpc() + " is standing there with you.\n";

@@ -62,6 +62,14 @@ public class Player {
         return wins;
     }
 
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
     public int getLosses() {
         return losses;
     }
@@ -102,7 +110,7 @@ public class Player {
     }
 
     public boolean isWorkoutComplete() {
-        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
+        return isShoulderWorked && isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
     }
 
     private boolean isItemInInventory(String item) {
@@ -251,6 +259,10 @@ public class Player {
         return inventory;
     }
 
+    public List<String> setInventory(Object o) {
+        return inventory;
+    }
+
 
     public boolean isChestWorked() {
         return isChestWorked;
@@ -316,7 +328,7 @@ public class Player {
         return "Player: " + name + "\n" +
                 "Age: " + age + ", Weight: " + weight + ", Height: " + height + "\n" +
                 "Current Energy: " + energy + " out of " + BASE_ENERGY + "\n" +
-                "Gym Bag Contents: " + inventory + "\n" +Colors.RESET +
+                "Gym Bag Contents: " + inventory + "\n" + Colors.RESET +
                 Colors.GREEN + "Win" + Colors.RESET + "|" + Colors.RED + "Loss: " + Colors.RESET + getWins() + "|"
                 + getLosses() + "\n Workout Status: " + getMusclesWorked().toString();
     }
