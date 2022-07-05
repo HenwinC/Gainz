@@ -11,11 +11,12 @@ public enum Colors {
     RED("#ff0000"),
     RED_UNDERLINED("RED_UNDERLINED"),
     GREEN("#00FF00"),
-    YELLOW("#FFFF00"),
+    YELLOW("#FCD900"),
     DARK_YELLOW("#8B8000"),
     LIGHT_GREY("#A9ADAF"),
     WHITE("#000000"),
-    BLACK("#ffffff");
+    BLACK("#ffffff"),
+    PURPLE("#401F42");
 
     private final String color;
 

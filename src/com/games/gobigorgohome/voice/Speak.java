@@ -3,6 +3,7 @@ package com.games.gobigorgohome.voice;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
+import javazoom.jl.player.advanced.PlaybackListener;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -19,8 +20,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javazoom.jl.player.advanced.PlaybackListener;
-
 public class Speak extends Thread {
 
     private static Creds creds = Creds.getInstance();
@@ -34,7 +33,7 @@ public class Speak extends Thread {
     private static Speak instance;
     private static boolean running = false;
 
-    public static class Announce implements Callable<String>{
+    public static class Announce implements Callable<String> {
 
         private final String whatToSay;
 
@@ -48,8 +47,10 @@ public class Speak extends Thread {
                     Thread.sleep(100);
                 }
                 say(whatToSay);
-                while(speaking);
-            } catch(Exception e) { e.printStackTrace(); }
+                while (speaking) ;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return "speak success";
         }
     }
@@ -66,7 +67,9 @@ public class Speak extends Thread {
         try {
             init();
             System.out.println("Speak init completed ");
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void init() {
@@ -76,7 +79,7 @@ public class Speak extends Thread {
                 "ytTdAww913dDayLfySmN7Dg9OjYK92PXjwsLR2xJ");*/
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                creds.getAccessKeyId(),creds.getSecretAccessKey());
+                creds.getAccessKeyId(), creds.getSecretAccessKey());
 
         polly = PollyClient.builder()
                 .region(Region.US_EAST_1)
@@ -98,7 +101,9 @@ public class Speak extends Thread {
 
             running = true;
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void say(String what) {
@@ -110,6 +115,7 @@ public class Speak extends Thread {
                 public void playbackStarted(PlaybackEvent evt) {
                     System.out.println("Playback started: " + what);
                 }
+
                 public void playbackFinished(PlaybackEvent evt) {
                     speaking = false;
                 }

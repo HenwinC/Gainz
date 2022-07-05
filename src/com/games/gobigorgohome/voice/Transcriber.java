@@ -11,6 +11,7 @@ import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.transcribestreaming.TranscribeStreamingAsyncClient;
 import software.amazon.awssdk.services.transcribestreaming.model.*;
+
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -50,7 +51,9 @@ public class Transcriber extends Thread {
                 }
                 result = transcribedList.get(0);
                 transcribedList.clear();
-            } catch(Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return result;
         }
     }
@@ -66,13 +69,15 @@ public class Transcriber extends Thread {
     public void run() {
         try {
             init();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void init() {
         try {
             AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                    creds.getAccessKeyId(),creds.getSecretAccessKey());
+                    creds.getAccessKeyId(), creds.getSecretAccessKey());
 
             client = TranscribeStreamingAsyncClient.builder()
                     .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
@@ -88,7 +93,9 @@ public class Transcriber extends Thread {
 
             result.get();
 
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static InputStream getStreamFromMic() throws LineUnavailableException {
@@ -142,8 +149,8 @@ public class Transcriber extends Thread {
                     //System.out.println(((TranscriptEvent) event).sdkEventType());
                     //System.out.println("size: " + results.size() + " " + ((TranscriptEvent) event).transcript().results().size());
                     if (results.size() > 0) {
-                        if(!results.get(0).alternatives().get(0).transcript().isEmpty() && !results.get(0).isPartial()) {
-                            if(asking.get()) {
+                        if (!results.get(0).alternatives().get(0).transcript().isEmpty() && !results.get(0).isPartial()) {
+                            if (asking.get()) {
                                 asking.compareAndSet(true, false);
                                 String response = results.get(0).alternatives().get(0).transcript();
                                 //Game.setInputStream(new ByteArrayInputStream(response.getBytes()));
@@ -203,7 +210,7 @@ public class Transcriber extends Thread {
                     System.out.println("executorexecutorexecutorexecutor ");
                     do {
                         ByteBuffer audioBuffer = getNextEvent();
-                        if(!asking.get()) {
+                        if (!asking.get()) {
                             audioBuffer = ByteBuffer.allocate(1000);
                         }
                         if (audioBuffer.remaining() > 0) {
@@ -214,7 +221,9 @@ public class Transcriber extends Thread {
                             break;
                         }
                     } while (demand.decrementAndGet() > 0);
-                } catch (Exception e) { subscriber.onError(e); }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
                 System.out.println("end end end end");
             });
         }

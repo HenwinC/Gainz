@@ -42,15 +42,17 @@ public class ParseTxt {
     public void instructions() throws IOException {
 //        String banner = Files.readString(Path.of("resources/banner.txt"));// new banner was added
 //        prompter.asciiArt(banner);
-
-        prompter.info(CYAN + "WELCOME TO 'GO BIG OR GO HOME! A game by GAINZZZ Productions" +
-                RESET + " where you will learn " +
-                "to use your gym time wisely and get BIG!");
-        prompter.info(GREEN + "INSTRUCTIONS:" + RESET);
-        dataFromFile("instructions.txt");
-        prompter.info(RED + "!!!IMPORTANT!!!: " + RESET);
+        prompter.info(YELLOW + "INSTRUCTIONS:" + RESET);
         dataFromFile("instructions2.txt");
 
+    }
+
+    public void welcome() throws IOException {
+        prompter.info(PURPLE + "WELCOME TO 'GO BIG OR GO HOME! A game by GAINZZZ Productions" +
+                " where you will learn " +
+                "to use your gym time wisely and get BIG!");
+
+        dataFromFile("instructions.txt");
     }
 
 }

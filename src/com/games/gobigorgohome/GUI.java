@@ -4,11 +4,17 @@ import com.games.gobigorgohome.app.Game;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.html.*;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.PrintStream;
 import java.text.NumberFormat;
+
 
 public class GUI {
 
@@ -16,12 +22,13 @@ public class GUI {
     private int boardWidth = 800;
     private int boardHeight = 800;
     private JFrame frame;
+    private JButton resetButton;
     private JTextPane textPane;
     private TextFieldPlaceholder commandInput;
     private JTextField clockText;
     private String playerName = "you";
     private long time = 0;
-    private Clock clock;
+    //    private Clock clock;
     private Font sysOutTextFont = new Font("SansSerif", Font.BOLD, 12);
     private Font inputTextFont = new Font("SansSerif", Font.BOLD, 35);
     private Colors sysOutColorBG = Colors.LIGHT_GREY;
@@ -31,8 +38,10 @@ public class GUI {
     private SoundPlayer soundPlayer = new SoundPlayer();
     private SoundPlayer soundEffectPlayer = new SoundPlayer();
     private Color textPaneBg = new Color(106, 105, 111);
+
     private HTMLEditorKit kit = new HTMLEditorKit();
     private HTMLDocument doc;
+
 
     private static GUI instance;
 
@@ -87,13 +96,13 @@ public class GUI {
         pane2.add(wbPanel, BorderLayout.SOUTH);
         pane2.setVisible(true);
         JLabel nameLabel = new JLabel("name");
-        nameLabel.setMinimumSize(new Dimension(100,30));
+        nameLabel.setMinimumSize(new Dimension(100, 30));
         wbPanel.add(nameLabel);
         JLabel heightLabel = new JLabel("name");
         wbPanel.add(heightLabel);
         NumberFormat paymentFormat = NumberFormat.getIntegerInstance();
         JFormattedTextField nameField = new JFormattedTextField(paymentFormat);
-        nameField.setPreferredSize(new Dimension(new Dimension(100,30)));
+        nameField.setPreferredSize(new Dimension(new Dimension(100, 30)));
         wbPanel.add(nameField);
         JLabel weightLabel = new JLabel("name");
         JLabel ageLabel = new JLabel("name");
@@ -103,7 +112,9 @@ public class GUI {
     public void createBoard() {
 
         frame = new JFrame("goBigORgohome");
+
         frame.setSize(new Dimension(boardWidth, boardHeight));
+
         frame.setLocationByPlatform(true);
         frame.setBackground(Color.YELLOW);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,6 +123,7 @@ public class GUI {
         Container pane = frame.getContentPane();
         pane.setLayout(new GridBagLayout());
         pane.setSize(boardWidth, boardHeight);
+
 
         textPane = new JTextPane();
         textPane.setContentType("text/html");
@@ -156,31 +168,35 @@ public class GUI {
         });
         pane.add(commandInput, commandInputConstraints);
 
-        clockText = new JTextField(" ");
-        clockText.setMinimumSize(new Dimension(100, 45));
-        clockText.setMaximumSize(new Dimension(100, 45));
-        clockText.setEditable(false);
-        clockText.setFont(inputTextFont);
-        GridBagConstraints clockTextConstraints = new GridBagConstraints();
-        clockTextConstraints.fill = GridBagConstraints.BOTH;
-        clockTextConstraints.gridx = 1;
-        clockTextConstraints.gridy = 1;
-        pane.add(clockText, clockTextConstraints);
+
         frame.setVisible(true);
         commandInput.requestFocus();
+    }
+
+    public void createButton(String label, Game currentGame) {
+        JButton button = new JButton(label);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentGame.playerUseMachine(label);
+            }
+        });
+        textPane.insertComponent(button);
     }
 
     public JTextPane getTextPane() {
         return textPane;
     }
 
-    public void setTextPane(JTextPane textPane) {
-        this.textPane = textPane;
-    }
+//    public void setTextPane(JTextPane textPane) {
+//        this.textPane = textPane;
+//    }
 
     public TextFieldPlaceholder getCommandInput() {
         return commandInput;
     }
+
 
     public void setCommandInput(TextFieldPlaceholder commandInput) {
         this.commandInput = commandInput;
@@ -194,47 +210,69 @@ public class GUI {
     public Image getImageFile(String fileName) {
         try {
             return ImageIO.read(getResourceFile(fileName));
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public void startClock() {
-        if (clock == null)
-            clock = new Clock();
-        clock.start();
-    }
 
-    public void stopClock() {
-        clock.clockRunning = false;
-        clock = null;
-    }
+//    public void setCommandInput(TextFieldPlaceholder commandInput) {
+//        this.commandInput = commandInput;
+//    }
+//
+//    public void playSoundEffect(String name) {
+//        soundEffectPlayer.addSoundFile(name);
+//        soundEffectPlayer.start();
+//    }
+//
+//    public Image getImageFile(String fileName) {
+//        try {
+//            return ImageIO.read(getResourceFile(fileName));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-    public void resetClock() {
-        stopClock();
-        time = 0;
-    }
 
-    class Clock extends Thread {
+//    public void startClock() {
+//        if (clock == null)
+//            clock = new Clock();
+//        clock.start();
+//    }
+//
+//    public void stopClock() {
+//        clock.clockRunning = false;
+//        clock = null;
+//    }
 
-        public boolean clockRunning = true;
+//    public void resetClock() {
+//        stopClock();
+//        time = 0;
+//    }
 
-        @Override
-        public void run() {
-            while (clockRunning) {
-                try {
-                    Thread.sleep(1000);
-                    time++;
-                    if (time > 3600) {
-                        time = 0;
-                    }
-                    String timeString = String.format("%02d:%02d", time / 60, time % 60);
-                    clockText.setText(timeString);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    class Clock extends Thread {
+//
+//        public boolean clockRunning = true;
+//
+//        @Override
+//        public void run() {
+//            while (clockRunning) {
+//                try {
+//                    Thread.sleep(1000);
+//                    time++;
+//                    if (time > 3600) {
+//                        time = 0;
+//                    }
+//                    String timeString = String.format("%02d:%02d", time / 60, time % 60);
+//                    clockText.setText(timeString);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
     public File getResourceFile(String fileName) {
         return new File("resources/" + fileName);
@@ -260,7 +298,7 @@ public class GUI {
         return kit;
     }
 
-    public void setKit(HTMLEditorKit  kit) {
+    public void setKit(HTMLEditorKit kit) {
         this.kit = kit;
     }
 

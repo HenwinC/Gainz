@@ -1,10 +1,10 @@
 package com.games.gobigorgohome.app;
 
 import com.games.gobigorgohome.*;
+import com.games.gobigorgohome.InputOutput.VoiceRecognitionException;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
-import com.games.gobigorgohome.InputOutput.VoiceRecognitionException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -34,20 +34,25 @@ public class Game {
     private String filename = "/Images/logo.png";
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
+
     public static ExecutorService executorService = Executors.newFixedThreadPool(2);
+
 
     public Game() {
     }
 
-    public void welcome() {
+    public void welcome() throws IOException {
         prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656369792/goBig_or_goHome.png\" '/>");
+        page.welcome();
+        page.instructions();
     }
 
     //collects current input from user to update their avatar
     private void getNewPlayerInfo() {
+
         try {
             getNewPlayerInfoByVoice();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             prompter.setInputType("k");
             getNewPlayerInfoByKeyboard();
@@ -73,6 +78,7 @@ public class Game {
                 "height", "inches", "^[0-9]{1,2}$");
         double playerWeight = validDouble("What is your weight in lbs? ",
                 "weight", "lbs", "^[0-9]{2,3}$");
+
         int playerAge = validInt("What is your age", "age", "years", "^[0-9]{1,2}$");
         createPlayer(playerName, playerAge, playerHeight, playerWeight);
     }
@@ -92,7 +98,7 @@ public class Game {
 
     // validates a double using regex
     private double validDouble(String msg, String measureName, String unit, String criteria) {
-        return Double.parseDouble(prompter.prompt(msg, criteria, "TRY AGAIN: " + msg,0.0));
+        return Double.parseDouble(prompter.prompt(msg, criteria, "TRY AGAIN: " + msg, 0.0));
     }
 
     // validates int using regex
@@ -100,13 +106,40 @@ public class Game {
         return Integer.parseInt(prompter.prompt(msg, criteria, "TRY AGAIN: " + msg));
     }
 
+
+    private void grabItem(String playerAction) {
+
+        // makes a list to be able to manipulate data
+        ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
+        // check if the room has the item
+        if (items.contains(playerAction)) {
+            prompter.info(PURPLE + "you got the :" + YELLOW + playerAction);
+            items.remove(playerAction);
+            player.getInventory().add(playerAction);
+        } else {
+            prompter.announceAndDisplay("there is no " + playerAction + " in the " + currentRoom.getRoomName());
+            try {
+                promptForPlayerInput();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
     //    updates player with current game status e.g. player inventory, current room etc.
     private void gameStatus() {
-        prompter.info("------------------------------");
-        prompter.info("Available commands: GO <room name>, GET <item>, CONSUME <item>, SEE MAP, WORKOUT <workout name>, INSPECT ROOM");
-        prompter.announceAndDisplay("You are in the " + currentRoomName + " room.");
-        prompter.info(player.toString());
-        prompter.info("------------------------------");
+        soundPlayer.playCommand();
+
+        prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
+        prompter.info(PURPLE + "Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
+        prompter.announceAndDisplay(PURPLE + "You are in the " + YELLOW + currentRoomName + " room.");
+        if (currentRoomName.equalsIgnoreCase("machines")) {
+            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by typing " + YELLOW + "'Fight'" + RESET);
+        }
+        prompter.info(PURPLE + player.toString());
+        prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
     }
 
     //    main function running the game, here we call all other functions necessary to run the game
@@ -128,10 +161,6 @@ public class Game {
     }
 
     public void getCommands() throws IOException, ParseException {
-//        page.instructions();
-//        getNewPlayerInfo();
-        //welcome();
-        // runs a while loop
 
         while (!isGameOver()) {
             gameStatus();
@@ -158,7 +187,7 @@ public class Game {
         } else if (player.isWorkoutComplete()) {
             // TODO play CONGRATULATIONS
             player.playerScore();
-            result = GREEN + "CONGRATULATIONS! YOU WORKED OUT!" + RESET + "\n"
+            result = YELLOW + "CONGRATULATIONS! YOU WORKED OUT!" + RESET + "\n"
                     + "Wins: " + player.getWins() + " | Losses: " + player.getLosses();
 
         }
@@ -172,7 +201,7 @@ public class Game {
     }
 
     public void promptForPlayerInput() throws IOException, ParseException {
-        String command = prompter.getResponse("What is your move? (Press Q to quit)");
+        String command = prompter.getResponse("What is your move?");
         command = prompter.cleanTranscribe(command);
         String[] commandArr = command.split(" ");
         parseThroughPlayerInput(commandArr);
@@ -207,7 +236,7 @@ public class Game {
                     changeLocation(playerAction);
                     break;
                 case "workout":
-                    playerUseMachine(playerAction);
+                    performWorkout();
                     break;
                 case "help":
                     page.instructions();
@@ -247,41 +276,52 @@ public class Game {
 
     private void changeLocation(String location) {
         HashMap<String, Object> allRooms = (HashMap<String, Object>) rooms;
-        if(allRooms.containsKey(location)) {
+
+        if (allRooms.containsKey(location)) {
             Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, location));
             ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
-            System.out.println("new location: " + location + " " +
-                allRooms.containsKey(location) + " " +isItemRequired(location) +
-                " " + requiredItems);
+//            System.out.println("new location: " + location + " " +
+//                allRooms.containsKey(location) + " " +isItemRequired(location) +
+//                " " + requiredItems);
 
             if (isItemRequired(location) &&
                     player.getInventory().contains(requiredItems.get(0))) {
                 //   review isItemRequired(location) player.getInventory()
-                // does play give up item to enter room?
                 setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
                 prompter.announceAndDisplay("ok, lets go to the " + location);
                 currentRoomName = location;
-            } else if(isItemRequired(location) &&
+            } else if (isItemRequired(location) &&
                     !player.getInventory().contains(requiredItems.get(0))) {
                 String message = "you need " + requiredItems + " to enter the " + location;
                 prompter.announceAndDisplay(message);
             } else {
                 currentRoomName = location;
             }
-        } else {
-            String message = location + " does not exist \n";
-            prompter.announce(message, true);
-            return;
-        }
 
-        //} else if(isItemRequired(location)) {
-        //    String message = "you need " + requiredItems + " to enter the " + location;
-        //}
+//        Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, location));
+//        ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
+//
+//        if (allRooms.containsKey(location) && isItemRequired(location)) {
+//            setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
+//            soundPlayer.playSoundFile("g_" + location.replaceAll(" ", "") + ".wav");
+//            prompter.info(PURPLE + "you're going here: " + YELLOW + location);
+//            currentRoomName = location;
+//
+//        } else {
+//            String message = location + " does not exist \n";
+//            prompter.announce(message, true);
+//            return;
+//        }
+
+            //} else if(isItemRequired(location)) {
+            //    String message = "you need " + requiredItems + " to enter the " + location;
+            //}
             //String message = !isItemRequired(location) ? "you need " + requiredItems + " to enter " + location : "This room does not exist \n";
             //prompter.announce(message,true);
             //prompter.prompt(message);
             //invalidCommand(message);
+        }
     }
 
     private void boxingLocation() throws IOException, ParseException {
@@ -292,6 +332,7 @@ public class Game {
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
+
                 String playerAttack = prompter.getResponse("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
                 if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
                     prompter.announceAndDisplay("Enter a valid command");
@@ -322,20 +363,25 @@ public class Game {
                         prompter.announceAndDisplay(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
                         player.setHealth(player.getHealth() - 40);
                     }
+
                 }
             }
 
-            int xp = 0;
+            int xpPoints = 0;
             if (player.getHealth() > partnerHealth) {
+
                 prompter.announceAndDisplay(GREEN + "You fought like a pro !" + RESET);
-                xp++;
-                prompter.announceAndDisplay(GREEN + "You have earned yourself " + RESET + ORANGE + xp +
-                        " experience point(s)" + RESET);
+                xpPoints++;
+                prompter.announceAndDisplay(GREEN + "You have earned yourself " + RESET + ORANGE + xpPoints + " experience point(s)" + RESET);
                 prompter.info("<img src=\"https://addicted2success.com/wp-content/uploads/2013/04/Famous-Success-Quotes1.jpg\" '/>");
+                dropItems();
+                prompter.info(PURPLE + "New items have been dropped by your enemy, don't forget to pick them up" + RESET);
                 promptForPlayerInput();
 
             } else if (player.getHealth() <= 10) {
+
                 prompter.announceAndDisplay(ORANGE + "Your sparring partner won :( \n You live to fight another day" + RESET);
+
                 prompter.info("<img src=\"https://imgix.ranker.com/list_img_v2/1511/2761511/original/anime-characters-who-could-beat-goku\" " +
                         "height= 150 width= 200 '/>");
                 //gui.clear();
@@ -350,12 +396,14 @@ public class Game {
             String fighter = prompter.getResponse("Do you wish to run away or take on a fight? \n " + YELLOW +
                     "'Yes' to save face or 'No' to face your fears" + RESET);
             if (fighter.equalsIgnoreCase("Yes")) {
+
                 prompter.announceAndDisplay(ORANGE + "Whelp, better to be safe than sorry" + RESET);
                 promptForPlayerInput();
             }
             if (fighter.equalsIgnoreCase("No")) {
                 //review remove tage for speech
                 prompter.announceAndDisplay(CYAN + "Let's see what you've got!" + RESET);
+
                 boxingLocation();
             } else {
                 prompter.announceAndDisplay("Too legit to quit!");
@@ -371,8 +419,8 @@ public class Game {
         boolean isItRequired = false;
         Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, nextLocation));
         ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
-                                                    // review: valid statement
-                                                    // || player.getInventory().contains(requiredItems.get(0))
+        // review: valid statement
+        // || player.getInventory().contains(requiredItems.get(0))
         if (!requiredItems.get(0).equals("none")) {
             isItRequired = true;
         }
@@ -385,22 +433,38 @@ public class Game {
     }
 
     private void talkToNPC() {
+
         String dialog = currentRoom.getNpc().generateDialog(); // review change voice?
-        prompter.announceAndDisplay(dialog);
+        prompter.announceAndDisplay(currentRoom.getNpc().getNpcName() + ". says: " + dialog);
+
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
         if (!player.getInventory().contains(npcItem)) {
             player.getInventory().add(npcItem);
             prompter.announceAndDisplay("You added " + npcItem + " to your gym bag.");
+
         }
     }
 
     private void inspectRoom() {
+        gui.clear();
         prompter.info(currentRoom.toString());
     }
 
-    private void playerUseMachine(String playerExcerciseInput) {
+    private void performWorkout() {
+        prompter.info("======================WORKOUTS======================");
+        for (Object exercise : getCurrentRoom().getExerciseList()) {
+            if (exercise.toString().equals("none")) {
+                prompter.info(GREEN + getCurrentRoom().getRoomName() + RESET + " is not a room where you can workout! Feel free to go to any of the workout rooms available in the GYM.");
+                break;
+            }
+            gui.createButton(exercise.toString(), this);
+        }
+        prompter.info("\n======================================================");
+    }
+
+    public void playerUseMachine(String playerExcerciseInput) {
         gui.clear();
         prompter.announceAndDisplay("you're using the: " + playerExcerciseInput);
         Object exercises = getCurrentRoom().getExercises();
@@ -408,59 +472,47 @@ public class Game {
         Exercise exercise = new Exercise(exercises, playerExcerciseInput);
 
         Object targetMuscle = exercise.getTargetMuscles();
+
         String exerciseStatus = exercise.getExerciseStatus();
         Long energyCost = exercise.getEnergyCost();
         Long MET = exercise.getMET();
 
-        if ("fixed".equals(exerciseStatus)) {
+
+        if ("fixed".equals(exerciseStatus) || fixBrokenMachine(exerciseStatus)) {
+            if (fixBrokenMachine(exerciseStatus)) {
+                prompter.announceAndDisplay("You got the wrench! you did a great job fixing the machine now you can use it.");
+                player.getInventory().remove("wrench");
+            }
             player.workout(targetMuscle, energyCost);
             player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            prompter.announceAndDisplay("you have burned " + player.caloriesBurnedPerWorkout(MET) + " calories this workout!");
-            prompter.announceAndDisplay("you have burned " + player.totalCaloriesBurnedToday + " so far today!");
-        } else {
-            fixBrokenMachine(targetMuscle, energyCost);
+            prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
+            prompter.announceAndDisplay(PURPLE + "you have burned " + YELLOW + player.caloriesBurnedPerWorkout(MET) + PURPLE + " calories this workout!");
+            prompter.announceAndDisplay(PURPLE + "You have burned " + YELLOW + player.totalCaloriesBurnedToday + PURPLE + " so far today!");
+
         }
-        prompter.info("<img src=\"" + exercise.getExercisePicture() + "\"'/>");
+
     }
 
-    private void fixBrokenMachine(Object targetMuscle, Long energyCost) {
+    private boolean fixBrokenMachine(String machine) {
+        boolean isFixed = false;
         if (player.getInventory().contains("wrench")) {
-            String playerResponse = prompter.getResponse("This machine is broken. Would you like to use your wrench to fix it? (y/n) \n >");
-            if ("y".equalsIgnoreCase(playerResponse)) {
-                player.getInventory().remove("wrench");
-                player.workout(targetMuscle, energyCost);
-                player.subtractFromPlayerEnergy(Math.toIntExact(energyCost));
-            } else {
-                prompter.announceAndDisplay("When you are ready to workout, come back with the wrench and get to it.");
-            }
-        } else {
+            isFixed = true;
+        } else if ("broken".equals(machine)) {
             prompter.announceAndDisplay("This machine is broken, please come back with a wrench to fix it.");
+            prompter.announceAndDisplay("<img src=\"https://res.cloudinary.com/dile8hu1p/image/upload/c_scale,w_386/v1656711532/gogh/wrench_jtss1n.png\"'/>");
         }
+
+        return isFixed;
     }
 
-    //This function does not validate if item exist at the location. Refactored
-//    private void grabItem(String playerAction) {
-//        prompter.info("you got the :" + playerAction);
-//        player.getInventory().add(playerAction);
-//    }
 
-
-    private void grabItem(String playerAction) {
-        // makes a list to be able to manipulate data
+    private void dropItems() {
         ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
-        // check if the room has the item
-        if (items.contains(playerAction)) {
-            prompter.announceAndDisplay("you got the " + playerAction);
-            items.remove(playerAction);
-            player.getInventory().add(playerAction);
-        } else {
-            //invalidCommand(playerAction + " was sadly and invalid answer. \n please ensure you are using a valid and complete command. ");
-            prompter.announceAndDisplay("there is no " + playerAction + " in the " + currentRoom.getRoomName());
-            // review
-            try {
-                promptForPlayerInput();
-            } catch (IOException | ParseException e) { e.printStackTrace(); }
-        }
+        items.add("pancake");
+        items.add("caffeine");
+        items.add("croissant");
+        items.add("protein shake");
+
     }
 
     private void invalidCommand(String command) {
@@ -468,29 +520,53 @@ public class Game {
         prompter.announceAndDisplay(message);
         try {
             promptForPlayerInput();
-        } catch (IOException | ParseException e) { e.printStackTrace(); }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
     }
+
+    public void resetGame() {
+        isGameOver = false;
+        player = new Player();
+        currentRoomName = gym.getStarterRoomName();
+        currentRoom = new Room(currentRoomName);
+        player.getEnergy();
+        player.setInventory(null);
+        player.setWins(0);
+        gui.clear();
+    }
+
+    public void replayGame() {
+        isGameOver = false;
+        player.setEnergy(100);
+        player.setInventory(null);
+        prompter.info("Hello " + CYAN + player.getName() + RESET + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+        gui.clear();
+    }
+
 
     public void playAgain() throws IOException, ParseException {
         // review
         String playAgain = null;
         prompter.announceAndDisplay("Would you like to play again? ");
-        if(prompter.getInputType().equals("v")) {
+        if (prompter.getInputType().equals("v")) {
             playAgain = prompter.ask("N for new Game, R to rematch, S to save or E to exit");
         } else {
             playAgain = prompter.prompt(GREEN + " [N]ew Game " + RESET + YELLOW +
-                "[R]ematch" + RESET + CYAN + " [S]ave " + RESET + RED + " [E]xit" + RESET,
+                            "[R]ematch" + RESET + CYAN + " [S]ave " + RESET + RED + " [E]xit" + RESET,
                     "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
         }
         if ("N".equalsIgnoreCase(playAgain)) {
-            isGameOver = false;
-            gui.clear();
-            //currentRoom = gym.getStarterRoom();
+            resetGame();
             playGame();
         } else if ("R".equalsIgnoreCase(playAgain)) {
+
             gui.clear();
             currentRoom = gym.getStarterRoom();
             prompter.announceAndDisplay("Hello " + player.getName() + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+
+            replayGame();
+
             getCommands();
         } else if ("S".equalsIgnoreCase(playAgain)) {
             player.playerScore();
@@ -517,7 +593,9 @@ public class Game {
             prompter.info("<img src=\"https://res.cloudinary.com/dmrsimpky/image/upload/v1656389954/Cool_Text_-_Thank_you_for_playing_414162939030150_v7ywzk.png\" '/>");
             Thread.sleep(3000);
             System.exit(0);
-        } catch (InterruptedException e) { e.printStackTrace(); }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ByteArrayInputStream getInputStream() {
