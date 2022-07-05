@@ -62,6 +62,14 @@ public class Player {
         return wins;
     }
 
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
     public int getLosses() {
         return losses;
     }
@@ -102,7 +110,7 @@ public class Player {
     }
 
     public boolean isWorkoutComplete() {
-        return isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
+        return isShoulderWorked && isChestWorked && isCoreWorked && isLegsWorked && isTricepsWorked && isBackWorked && isBicepsWorked;
     }
 
     private boolean isItemInInventory(String item) {
@@ -250,6 +258,10 @@ public class Player {
     public List<String> getInventory() {
         return inventory;
     }
+    public List<String> setInventory(Object o) {
+        return inventory;
+    }
+
 
 
     public boolean isChestWorked() {
