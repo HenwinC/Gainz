@@ -23,7 +23,7 @@ public class Game {
     private VoiceRecognition voiceRecognition;
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
-    private final Player player = new Player();
+    private Player player = new Player();
     private final int energy = player.getEnergy();
     private final int currentEnergy = player.getEnergy();
     private final String playerName = player.getName();
@@ -485,6 +485,24 @@ public class Game {
             e.printStackTrace();
         }
     }
+    public void resetGame() {
+        isGameOver = false;
+        player = new Player();
+        currentRoomName = gym.getStarterRoomName();
+        currentRoom = new Room(currentRoomName);
+        player.getEnergy();
+        player.setInventory(null);
+        player.setWins(0);
+        gui.clear();
+    }
+    public void replayGame() {
+        isGameOver = false;
+        player.setEnergy(100);
+        player.setInventory(null);
+        prompter.info("Hello " + CYAN + player.getName()+ RESET + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+        gui.clear();
+    }
+
 
     public void playAgain() throws IOException, ParseException {
         String playAgain = prompter.prompt("Would you like to play again? " +
@@ -493,16 +511,11 @@ public class Game {
                 "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
 
         if ("N".equalsIgnoreCase(playAgain)) {
-            isGameOver = false;
-            gui.clear();
-            //currentRoom = gym.getStarterRoom();
+            resetGame();
             playGame();
         } else if ("R".equalsIgnoreCase(playAgain)) {
-            gui.clear();
-            currentRoom = gym.getStarterRoom();
-            prompter.info("Hello " + player.getName() + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
+            replayGame();
             getCommands();
-
         } else if ("S".equalsIgnoreCase(playAgain)) {
             player.playerScore();
             gui.clear();
