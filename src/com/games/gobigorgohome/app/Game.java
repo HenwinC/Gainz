@@ -36,6 +36,7 @@ public class Game {
     private String filename = "/Images/logo.png";
     private final ParseTxt page = new ParseTxt();
     private final ParseJSON jsonParser = new ParseJSON();
+    boolean isARunner = false;
 
     public static ExecutorService executorService = Executors.newFixedThreadPool(2);
 
@@ -137,8 +138,8 @@ public class Game {
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
         prompter.info(PURPLE + "Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
         prompter.announceAndDisplay(PURPLE + "You are in the " + RESET + YELLOW + currentRoomName + " room.");
-        if (currentRoomName.equalsIgnoreCase("machines")) {
-            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by saying or entering " + YELLOW + "'Fight'" + RESET);
+        if (currentRoomName.equalsIgnoreCase("machines") && !isARunner) {
+            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by saying or entering " + YELLOW + "'Fight'" + RESET + " or 'run' if you wish to avoid conflict");
         }
         prompter.info(PURPLE + player.toString());
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
@@ -257,7 +258,7 @@ public class Game {
                 case "see":
                     getRoomMap();
                     break;
-                case "q":
+                case "quit":
                     playAgain();
                     break;
                 case "fight":
@@ -298,6 +299,7 @@ public class Game {
                 String message = "you need " + requiredItems + " to enter the " + location;
                 prompter.announceAndDisplay(message);
             } else {
+                setCurrentRoom(jsonParser.getObjectFromJSONObject(rooms, location));
                 currentRoomName = location;
             }
 
@@ -327,28 +329,28 @@ public class Game {
     }
 
     private void boxingLocation() throws IOException, ParseException {
-
-        if (currentRoomName.equals("machines")) {
-            List<String> list = Arrays.asList("A", "B", "C", "D");
+        isARunner = true;
+        if (currentRoomName.equals("machines") ) {
+//            List<String> list = Arrays.asList("A", "B", "C", "D");
 
             int partnerHealth = 100;
             while (player.getHealth() > 0 && partnerHealth > 0) {
                 prompter.info("Partner health: " + partnerHealth + " Your health: " + player.getHealth());
 
-                String playerAttack = prompter.getResponse("Choose your attacks: \n (A) Punch.\n (B) Kick. \n (C) BodySlam.\n (D) Open Hand smack.").toLowerCase();
-                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
-                    prompter.announceAndDisplay("Enter a valid command");
-                } else {
-                    if (playerAttack.equals("a")) {
+                String playerAttack = prompter.getResponse("Choose your attacks: \n   Punch.\n   Kick. \n   Body Slam.\n  Open Hand smack.").toLowerCase();
+//                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
+//                    prompter.announceAndDisplay("Enter a valid command");
+//                }
+                    if (playerAttack.equals("punch")) {
                         prompter.announceAndDisplay(ORANGE + "Crack! Right in the kisser!" + RESET);
                         partnerHealth = partnerHealth - 25;
-                    } else if (playerAttack.equals("b")) {
+                    } else if (playerAttack.equals("kick")) {
                         prompter.announceAndDisplay(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
                         partnerHealth = partnerHealth - 30;
-                    } else if (playerAttack.equals("c")) {
+                    } else if (playerAttack.equals("body slam")) {
                         prompter.announceAndDisplay(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
                         partnerHealth = partnerHealth - 40;
-                    } else if (playerAttack.equals("d")) {
+                    } else if (playerAttack.equals("open hand smack")) {
                         prompter.announceAndDisplay(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
                         partnerHealth = partnerHealth - 10;
                     }
@@ -362,11 +364,11 @@ public class Game {
                         prompter.announceAndDisplay(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
                         player.setHealth(player.getHealth() - 30);
                     } else if (randomNum == 3) {
-                        prompter.announceAndDisplay(RED + "OH no, your partner body slammed you into the pavement...That has to hurt" + RESET);
+                        prompter.announceAndDisplay(RED + "OH no, your partner body slammed you into the canvas...That has to hurt" + RESET);
                         player.setHealth(player.getHealth() - 40);
                     }
 
-                }
+
             }
 
             int xpPoints = 0;
@@ -394,21 +396,21 @@ public class Game {
     }
 
     public void runAway() throws IOException, ParseException {
+
         if (currentRoomName.equals("machines")) {
             String fighter = prompter.getResponse("Do you wish to run away or take on a fight? \n " + YELLOW +
                     "'Yes' to save face or 'No' to face your fears" + RESET);
-            if (fighter.equalsIgnoreCase("Yes")) {
-
+            if (fighter.equalsIgnoreCase("y")) {
+                isARunner = true;
                 prompter.announceAndDisplay(ORANGE + "Whelp, better to be safe than sorry" + RESET);
                 promptForPlayerInput();
-            }
-            if (fighter.equalsIgnoreCase("No")) {
+            }else if (fighter.equalsIgnoreCase("n")) {
                 //review remove tage for speech
-                prompter.announceAndDisplay(CYAN + "Let's see what you've got!" + RESET);
 
-                boxingLocation();
-            } else {
                 prompter.announceAndDisplay("Too legit to quit!");
+                prompter.announceAndDisplay(CYAN + "Let's see what you've got!" + RESET);
+                isARunner = false;
+                boxingLocation();
             }
         }
     }
@@ -553,17 +555,15 @@ public class Game {
         // review
         String playAgain = null;
         prompter.announceAndDisplay("Would you like to play again? ");
-        if (prompter.getInputType().equals("v")) {
-            playAgain = prompter.ask("N for new Game, R to rematch, S to save or E to exit");
-        } else {
-            playAgain = prompter.prompt(GREEN + " [N]ew Game " + RESET + YELLOW +
+
+        playAgain = prompter.prompt(GREEN + " [N]ew Game " + RESET + YELLOW +
                             "[R]ematch" + RESET + CYAN + " [S]ave " + RESET + RED + " [E]xit" + RESET,
                     "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
-        }
-        if ("N".equalsIgnoreCase(playAgain)) {
+
+        if ("N".equalsIgnoreCase(playAgain) || "New game".equalsIgnoreCase(playAgain)) {
             resetGame();
             playGame();
-        } else if ("R".equalsIgnoreCase(playAgain)) {
+        } else if ("R".equalsIgnoreCase(playAgain) || "Rematch".equalsIgnoreCase(playAgain)) {
 
             gui.clear();
             currentRoom = gym.getStarterRoom();
@@ -572,7 +572,7 @@ public class Game {
             replayGame();
 
             getCommands();
-        } else if ("S".equalsIgnoreCase(playAgain)) {
+        } else if ("S".equalsIgnoreCase(playAgain) || "save".equalsIgnoreCase(playAgain)) {
             player.playerScore();
             gui.clear();
             welcome();
@@ -585,8 +585,6 @@ public class Game {
             } else {
                 playAgain();
             }
-        } else {
-            quit();
         }
     }
 
