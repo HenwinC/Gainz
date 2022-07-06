@@ -9,6 +9,7 @@ public class NPC {
     private final String npcName;
     private final List inventory; //convert this to an Array
     private final List phrases;
+    private int voiceId = 0;
 
 
     public NPC(String npc_type) throws org.json.simple.parser.ParseException {
@@ -20,7 +21,7 @@ public class NPC {
         this.npcName = jsonParser.getObjectStringFromJSONObject(npc, "name");
         this.inventory = (List) jsonParser.getObjectFromJSONObject(npc, "inventory");
         this.phrases = (List) jsonParser.getObjectFromJSONObject(npc, "dialog");
-        ;
+        this.voiceId = jsonParser.getIntegerFromJSONObject(npc, "voiceId");
     }
 
     public String generateDialog() {
@@ -40,4 +41,5 @@ public class NPC {
         return phrases;
     }
 
+    public int getVoiceId() { return voiceId; }
 }

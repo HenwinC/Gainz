@@ -20,12 +20,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static software.amazon.awssdk.services.polly.model.Engine.STANDARD;
+
 public class Speak extends Thread {
 
     private static Creds creds = Creds.getInstance();
     private static AdvancedPlayer player = null;
     private static Voice voice;
     private static PollyClient polly;
+    private static DescribeVoicesResponse describeVoicesResponse;
     private static InputStream stream;
     private static List<String> sayList = Collections.synchronizedList(new ArrayList<>());
     private static boolean speaking = false;
@@ -74,32 +77,27 @@ public class Speak extends Thread {
 
     public static void init() {
 
-        /*AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                "AKIA42WOFZ4OV6PIFE3R",
-                "ytTdAww913dDayLfySmN7Dg9OjYK92PXjwsLR2xJ");*/
-
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
                 creds.getAccessKeyId(), creds.getSecretAccessKey());
 
         polly = PollyClient.builder()
                 .region(Region.US_EAST_1)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                //.credentialsProvider(ProfileCredentialsProvider.create())
                 .build();
 
         try {
             DescribeVoicesRequest describeVoiceRequest = DescribeVoicesRequest.builder()
                     .engine("standard")
-                    .languageCode("en-US")
+                    //.languageCode("en-US")
                     .build();
 
-            DescribeVoicesResponse describeVoicesResult = polly.describeVoices(describeVoiceRequest);
-            voice = describeVoicesResult.voices().get(1);
-
-            String vvoice = describeVoicesResult.voices().get(1).name();
-            System.out.println("vvoice: " + vvoice);
+            describeVoicesResponse = polly.describeVoices(describeVoiceRequest);
+            //voice = describeVoicesResponse.voices().get(1);
+            setVoice(43);
 
             running = true;
+
+            listVoices();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,16 +127,39 @@ public class Speak extends Thread {
 
     public static InputStream synthesize(PollyClient polly, String text, Voice voice, OutputFormat format) throws IOException {
 
+        System.out.println("============ " + voice.id());
+        Engine ENGINE = Engine.NEURAL;
+        if(voice.idAsString().equals("Russell")) {
+            ENGINE = Engine.STANDARD;
+        }
+
         SynthesizeSpeechRequest synthReq = SynthesizeSpeechRequest.builder()
                 .text(text)
                 .textType(TextType.SSML) //TextType.SSML TextType.TEXT
-                .engine(Engine.NEURAL)
+                .engine(ENGINE)
                 .voiceId(voice.id())
                 .outputFormat(format)
                 .build();
 
         ResponseInputStream<SynthesizeSpeechResponse> synthRes = polly.synthesizeSpeech(synthReq);
         return synthRes;
+    }
+
+    public static String getVoice() {
+        return voice.id().toString();
+    }
+
+    public static void setVoice(int voiceId) {
+        voice = describeVoicesResponse.voices().get(voiceId);
+        System.out.println("voice: " + voice.name());
+        // 43=Joanna 40=Maintenance Lady
+    }
+
+    public static void listVoices() {
+        List<Voice> voices = describeVoicesResponse.voices();
+        for(int i=0;i<voices.size();i++) {
+            System.out.println("" + i + " " + voices.get(i).name() + " " + voices.get(i).id());
+        }
     }
 
     public static boolean isSpeaking() {

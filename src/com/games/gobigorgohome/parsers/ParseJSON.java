@@ -74,6 +74,11 @@ public class ParseJSON {
         return (String) jsonObjectName.get(string);
     }
 
+    public Integer getIntegerFromJSONObject(Object objectName, String string) {
+        JSONObject jsonObjectName = (JSONObject) objectName;
+        return ((Long)jsonObjectName.get(string)).intValue();
+    }
+
     public Long getLongFromJSONObject(Object objectName, String string) {
         JSONObject jsonObjectName = (JSONObject) objectName;
         return (Long) jsonObjectName.get(string);
