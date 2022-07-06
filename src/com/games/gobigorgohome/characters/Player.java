@@ -148,7 +148,7 @@ public class Player {
 //                removeItemFromInventory(item);
 //            }
 //        } else {
-//            System.out.println("oi mate! that's not in your inventory");
+//            // System.out.println("oi mate! that's not in your inventory");
 //        }
 //        //the idea is to return the string for validation purposes
 //        return isItemConsumed;
@@ -175,14 +175,14 @@ public class Player {
 //        this could be replaced with a try catch but it would have to have an exception in it.
 
         if (item.equals("energy drink")) {
-            System.out.println("Ahh yeah man more energy to work out!!");
+            // System.out.println("Ahh yeah man more energy to work out!!");
             addToPlayerEnergy(5); // hard coded value that we can talk about later
             couldYouConsume = true;
         } else if (item.equals("steroids")) {
             hasPlayerUsedSteroids(true);
             couldYouConsume = true;
         } else {
-            System.out.println("oi mate! that's not in your inventory");
+            // System.out.println("oi mate! that's not in your inventory");
         }
 
         return couldYouConsume;
@@ -220,6 +220,10 @@ public class Player {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public int getAge() {
