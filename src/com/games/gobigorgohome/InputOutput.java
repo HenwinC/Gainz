@@ -219,8 +219,13 @@ public class InputOutput {
     public String cleanSpeak(String message) {
         message = stripColorTags(message);
         message = message.replaceAll("\\<.*?\\>", "");
-        message = message.replaceAll("[^\\w ]+", "");
+        message = message.replaceAll("[^\\w,'\\\"\\.{} ]+", "");
+        message = message.replaceAll("[,\\!\\.]+", "<break time=\".5s\"/>");
+        message = message.replaceAll("[{]+", "<prosody rate=\"125%\">")
+                .replaceAll("[}]+", "</prosody>");
+        //message = message.replaceAll("[\\]]+", "</prosody>");
         message = "<speak>" + message + "</speak>";
+        System.out.println(message);
         return message;
     }
 
@@ -269,5 +274,7 @@ public class InputOutput {
         thesaurus.put("go to", "go");
         thesaurus.put("goto", "go");
         thesaurus.put("yogastudio", "yoga studio");
+        thesaurus.put("w8s", "weights");
+
     }
 }
