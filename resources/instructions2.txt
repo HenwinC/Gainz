@@ -1,16 +1,16 @@
 
-	* To move type GO and the name of the room where you want to go. For example: GO MACHINES.
+	* To move type or say GO and the name of the room where you want to go. For example: GO MACHINES.
 
-	* To use a Machine or perform an exercise type WORKOUT and click the button which workout you would like to do. For example: WORKOUT
+	* To use a Machine or perform an exercise type or say WORKOUT and click the button which workout you would like to do. For example: WORKOUT
 
-	* If you want to see what items or equipment there is in the current room type 'INSPECT'. For example: INSPECT ROOM.
+	* If you want to see what items or equipment there is in the current room type or say 'INSPECT'. For example: INSPECT ROOM.
 
-	* To pick up an item you see use GET. For example: GET KEYS .
+	* To pick up an item you see type or say GET. For example: GET KEYS .
 
-	* To CONSUME an item, type CONSUME. For example: CONSUME ENERGY DRINK.
+	* To CONSUME an item, type or say CONSUME. For example: CONSUME ENERGY DRINK.
 
-	* To see a map use see map. For example: SEE MAP.
+	* To see a map type or say see map. For example: SEE MAP.
 
 	* To interact with NPC's type 'talk'. For example: talk mike
 
-    LET'S PLAY!!!...
+    LET'S GET BIG!!!...
