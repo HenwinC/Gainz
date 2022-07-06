@@ -5,6 +5,7 @@ import com.games.gobigorgohome.InputOutput.VoiceRecognitionException;
 import com.games.gobigorgohome.characters.Player;
 import com.games.gobigorgohome.parsers.ParseJSON;
 import com.games.gobigorgohome.parsers.ParseTxt;
+import com.games.gobigorgohome.voice.Speak;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class Game {
     private GUI gui = GUI.getInstance();
     private InputOutput prompter = new InputOutput(gui);
     private SoundPlayer soundPlayer = new SoundPlayer();
+    private int defaultVoice = 43;
     boolean isGameOver = false;
     private final Gym gym = Gym.getInstance();
     private Player player = new Player();
@@ -134,9 +136,9 @@ public class Game {
 
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
         prompter.info(PURPLE + "Available commands:" + YELLOW + "GO " + PURPLE + "<room name>," + YELLOW + "GET " + PURPLE + "<item>, " + YELLOW + "CONSUME " + PURPLE + "<item>, " + YELLOW + "SEE MAP, " + YELLOW + "WORKOUT, " + YELLOW + "INSPECT" + RESET);
-        prompter.announceAndDisplay(PURPLE + "You are in the " + YELLOW + currentRoomName + " room.");
+        prompter.announceAndDisplay(PURPLE + "You are in the " + RESET + YELLOW + currentRoomName + " room.");
         if (currentRoomName.equalsIgnoreCase("machines")) {
-            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by typing " + YELLOW + "'Fight'" + RESET);
+            prompter.announceAndDisplay(RED + "We recently added a boxing ring! " + PURPLE + "You can test out your skills by saying or entering " + YELLOW + "'Fight'" + RESET);
         }
         prompter.info(PURPLE + player.toString());
         prompter.info(YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-" + YELLOW + "-" + PURPLE + "-");
@@ -202,7 +204,6 @@ public class Game {
 
     public void promptForPlayerInput() throws IOException, ParseException {
         String command = prompter.getResponse("What is your move?");
-        command = prompter.cleanTranscribe(command);
         String[] commandArr = command.split(" ");
         parseThroughPlayerInput(commandArr);
     }
@@ -227,6 +228,7 @@ public class Game {
     }
 
     private void validatePlayerCommands(String actionPrefix, String playerAction) throws IOException, ParseException {
+        System.out.println("validatePlayerCommands: " + actionPrefix + " " + playerAction);
         try {
             switch (actionPrefix) {
                 case "get":
@@ -435,8 +437,10 @@ public class Game {
     private void talkToNPC() {
 
         String dialog = currentRoom.getNpc().generateDialog(); // review change voice?
-        prompter.announceAndDisplay(currentRoom.getNpc().getNpcName() + ". says: " + dialog);
-
+        prompter.announceAndDisplay(currentRoom.getNpc().getNpcName() + ". says: ");
+        Speak.setVoice(currentRoom.getNpc().getVoiceId());
+        prompter.announceAndDisplay(dialog);
+        Speak.setVoice(getDefaultVoice());
 
         String npcItem = (String) currentRoom.npc.getInventory().get(0);
 
@@ -626,4 +630,6 @@ public class Game {
     public String getPlayerName() {
         return playerName;
     }
+
+    public int getDefaultVoice() { return defaultVoice; }
 }

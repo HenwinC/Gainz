@@ -154,7 +154,7 @@ public class Transcriber extends Thread {
                                 asking.compareAndSet(true, false);
                                 String response = results.get(0).alternatives().get(0).transcript();
                                 //Game.setInputStream(new ByteArrayInputStream(response.getBytes()));
-                                System.out.println("said: " + response);
+                                System.out.println("  heard: " + response);
                                 transcribedList.add(response);
                             }
                         }
