@@ -116,7 +116,7 @@ public class Game {
         ArrayList<String> items = (ArrayList<String>) currentRoom.getItems();
         // check if the room has the item
         if (items.contains(playerAction)) {
-            prompter.info(PURPLE + "you got the :" + YELLOW + playerAction);
+            prompter.announceAndDisplay(PURPLE + "you got the :" + YELLOW + playerAction);
             items.remove(playerAction);
             player.getInventory().add(playerAction);
         } else {
@@ -229,7 +229,7 @@ public class Game {
     }
 
     private void validatePlayerCommands(String actionPrefix, String playerAction) throws IOException, ParseException {
-        System.out.println("validatePlayerCommands: " + actionPrefix + " " + playerAction);
+        // System.out.println("validatePlayerCommands: " + actionPrefix + " " + playerAction);
         try {
             switch (actionPrefix) {
                 case "get":
@@ -284,7 +284,7 @@ public class Game {
             Room nextRom = new Room(jsonParser.getObjectFromJSONObject(rooms, location));
             ArrayList<String> requiredItems = (ArrayList<String>) nextRom.getRequiredItems();
 
-//            System.out.println("new location: " + location + " " +
+//            // System.out.println("new location: " + location + " " +
 //                allRooms.containsKey(location) + " " +isItemRequired(location) +
 //                " " + requiredItems);
 
@@ -330,7 +330,7 @@ public class Game {
 
     private void boxingLocation() throws IOException, ParseException {
         isARunner = true;
-        if (currentRoomName.equals("machines") ) {
+        if (currentRoomName.equals("machines")) {
 //            List<String> list = Arrays.asList("A", "B", "C", "D");
 
             int partnerHealth = 100;
@@ -341,32 +341,32 @@ public class Game {
 //                if (!playerAttack.toLowerCase().contains((CharSequence) list)) {
 //                    prompter.announceAndDisplay("Enter a valid command");
 //                }
-                    if (playerAttack.equals("punch")) {
-                        prompter.announceAndDisplay(ORANGE + "Crack! Right in the kisser!" + RESET);
-                        partnerHealth = partnerHealth - 25;
-                    } else if (playerAttack.equals("kick")) {
-                        prompter.announceAndDisplay(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
-                        partnerHealth = partnerHealth - 30;
-                    } else if (playerAttack.equals("body slam")) {
-                        prompter.announceAndDisplay(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
-                        partnerHealth = partnerHealth - 40;
-                    } else if (playerAttack.equals("open hand smack")) {
-                        prompter.announceAndDisplay(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
-                        partnerHealth = partnerHealth - 10;
-                    }
+                if (playerAttack.equals("punch")) {
+                    prompter.announceAndDisplay(ORANGE + "Crack! Right in the kisser!" + RESET);
+                    partnerHealth = partnerHealth - 25;
+                } else if (playerAttack.equals("kick")) {
+                    prompter.announceAndDisplay(ORANGE + "Phenomenal head kick! You may be in the wrong profession here" + RESET);
+                    partnerHealth = partnerHealth - 30;
+                } else if (playerAttack.equals("body slam")) {
+                    prompter.announceAndDisplay(ORANGE + "OHHHHH Snap! You slammed your partner down!" + RESET);
+                    partnerHealth = partnerHealth - 40;
+                } else if (playerAttack.equals("open hand smack")) {
+                    prompter.announceAndDisplay(ORANGE + "WHAP! You didn't do much damage but you certainly showed who's boss!" + RESET);
+                    partnerHealth = partnerHealth - 10;
+                }
 
-                    Random rand = new Random();
-                    int randomNum = rand.nextInt((3 - 1) + 1) + 1;
-                    if (randomNum == 1) {
-                        prompter.announceAndDisplay(RED + "Your partner backhanded you.....Disrespectful" + RESET);
-                        player.setHealth(player.getHealth() - 10);
-                    } else if (randomNum == 2) {
-                        prompter.announceAndDisplay(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
-                        player.setHealth(player.getHealth() - 30);
-                    } else if (randomNum == 3) {
-                        prompter.announceAndDisplay(RED + "OH no, your partner body slammed you into the canvas...That has to hurt" + RESET);
-                        player.setHealth(player.getHealth() - 40);
-                    }
+                Random rand = new Random();
+                int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+                if (randomNum == 1) {
+                    prompter.announceAndDisplay(RED + "Your partner backhanded you.....Disrespectful" + RESET);
+                    player.setHealth(player.getHealth() - 10);
+                } else if (randomNum == 2) {
+                    prompter.announceAndDisplay(RED + "partner throws a nasty uppercut that connected...ouch" + RESET);
+                    player.setHealth(player.getHealth() - 30);
+                } else if (randomNum == 3) {
+                    prompter.announceAndDisplay(RED + "OH no, your partner body slammed you into the canvas...That has to hurt" + RESET);
+                    player.setHealth(player.getHealth() - 40);
+                }
 
 
             }
@@ -404,7 +404,7 @@ public class Game {
                 isARunner = true;
                 prompter.announceAndDisplay(ORANGE + "Whelp, better to be safe than sorry" + RESET);
                 promptForPlayerInput();
-            }else if (fighter.equalsIgnoreCase("n")) {
+            } else if (fighter.equalsIgnoreCase("n")) {
                 //review remove tage for speech
 
                 prompter.announceAndDisplay("Too legit to quit!");
@@ -544,8 +544,7 @@ public class Game {
 
     public void replayGame() {
         isGameOver = false;
-        player.setEnergy(100);
-        player.setInventory(null);
+        createPlayer(player.getName(), player.getAge(), player.getHeight(), player.getWeight());
         prompter.info("Hello " + CYAN + player.getName() + RESET + YELLOW + " welcome back to goBigOrGoHome !" + RESET);
         gui.clear();
     }
@@ -557,8 +556,8 @@ public class Game {
         prompter.announceAndDisplay("Would you like to play again? ");
 
         playAgain = prompter.prompt(GREEN + " [N]ew Game " + RESET + YELLOW +
-                            "[R]ematch" + RESET + CYAN + " [S]ave " + RESET + RED + " [E]xit" + RESET,
-                    "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
+                        "[R]ematch" + RESET + CYAN + " [S]ave " + RESET + RED + " [E]xit" + RESET,
+                "^[EeRrNnSs]{1}$", "Please enter 'E', 'R', 'N' or 'S'");
 
         if ("N".equalsIgnoreCase(playAgain) || "New game".equalsIgnoreCase(playAgain)) {
             resetGame();
@@ -585,6 +584,8 @@ public class Game {
             } else {
                 playAgain();
             }
+        } else if ("e".equalsIgnoreCase(playAgain) || "exit".equalsIgnoreCase(playAgain)) {
+            quit();
         }
     }
 
@@ -629,5 +630,7 @@ public class Game {
         return playerName;
     }
 
-    public int getDefaultVoice() { return defaultVoice; }
+    public int getDefaultVoice() {
+        return defaultVoice;
+    }
 }

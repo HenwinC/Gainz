@@ -25,7 +25,7 @@ public class ParseJSON {
 
             json = (JSONObject) parser.parse(text);
 
-//            System.out.println(json);
+//            // System.out.println(json);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class ParseJSON {
 //        } catch (IOException | ParseException e) {
 //            e.printStackTrace();
 //        }
-////        System.out.println(result);
+////        // System.out.println(result);
 //        return result;
 //    }
 
@@ -76,7 +76,7 @@ public class ParseJSON {
 
     public Integer getIntegerFromJSONObject(Object objectName, String string) {
         JSONObject jsonObjectName = (JSONObject) objectName;
-        return ((Long)jsonObjectName.get(string)).intValue();
+        return ((Long) jsonObjectName.get(string)).intValue();
     }
 
     public Long getLongFromJSONObject(Object objectName, String string) {

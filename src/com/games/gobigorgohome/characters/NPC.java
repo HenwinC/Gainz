@@ -41,5 +41,7 @@ public class NPC {
         return phrases;
     }
 
-    public int getVoiceId() { return voiceId; }
+    public int getVoiceId() {
+        return voiceId;
+    }
 }

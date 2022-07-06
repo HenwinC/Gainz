@@ -89,7 +89,7 @@ public class Transcriber extends Thread {
             CompletableFuture<Void> result = client.startStreamTranscription(getRequest(16_000),
                     new AudioStreamPublisher(getStreamFromMic()), getResponseHandler());
 
-            System.out.println("Transcribe init completed ");
+            // System.out.println("Transcribe init completed ");
 
             result.get();
 
@@ -105,7 +105,7 @@ public class Transcriber extends Thread {
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
         if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("Line not supported");
+            // System.out.println("Line not supported");
             System.exit(0);
         }
 
@@ -133,28 +133,28 @@ public class Transcriber extends Thread {
 
         return StartStreamTranscriptionResponseHandler.builder()
                 .onResponse(r -> {
-                    System.out.println("we are live...");
+                    // System.out.println("we are live...");
                 })
                 .onError(e -> {
-                    System.out.println(e.getMessage());
+                    // System.out.println(e.getMessage());
                     StringWriter sw = new StringWriter();
                     e.printStackTrace(new PrintWriter(sw));
-                    System.out.println("Error Occurred: " + sw.toString());
+                    // System.out.println("Error Occurred: " + sw.toString());
                 })
                 .onComplete(() -> {
-                    System.out.println("we are offline...");
+                    // System.out.println("we are offline...");
                 })
                 .subscriber(event -> {
                     List<Result> results = ((TranscriptEvent) event).transcript().results();
-                    //System.out.println(((TranscriptEvent) event).sdkEventType());
-                    //System.out.println("size: " + results.size() + " " + ((TranscriptEvent) event).transcript().results().size());
+                    //// System.out.println(((TranscriptEvent) event).sdkEventType());
+                    //// System.out.println("size: " + results.size() + " " + ((TranscriptEvent) event).transcript().results().size());
                     if (results.size() > 0) {
                         if (!results.get(0).alternatives().get(0).transcript().isEmpty() && !results.get(0).isPartial()) {
                             if (asking.get()) {
                                 asking.compareAndSet(true, false);
                                 String response = results.get(0).alternatives().get(0).transcript();
                                 //Game.setInputStream(new ByteArrayInputStream(response.getBytes()));
-                                System.out.println("  heard: " + response);
+                                // System.out.println("  heard: " + response);
                                 transcribedList.add(response);
                             }
                         }
@@ -207,7 +207,7 @@ public class Transcriber extends Thread {
 
             executor.submit(() -> {
                 try {
-                    System.out.println("executorexecutorexecutorexecutor ");
+                    // System.out.println("executorexecutorexecutorexecutor ");
                     do {
                         ByteBuffer audioBuffer = getNextEvent();
                         if (!asking.get()) {
@@ -224,7 +224,7 @@ public class Transcriber extends Thread {
                 } catch (Exception e) {
                     subscriber.onError(e);
                 }
-                System.out.println("end end end end");
+                // System.out.println("end end end end");
             });
         }
 
