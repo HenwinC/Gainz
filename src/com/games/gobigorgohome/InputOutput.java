@@ -149,7 +149,7 @@ public class InputOutput {
                 }
             }
         }
-        System.out.println("edited1: " + anInt);
+        // System.out.println("edited1: " + anInt);
         return anInt;
     }
 
@@ -170,7 +170,7 @@ public class InputOutput {
                 }
             }
         }
-        System.out.println("edited1: " + aDouble);
+        // System.out.println("edited1: " + aDouble);
         return aDouble;
     }
 
@@ -180,8 +180,10 @@ public class InputOutput {
         try {
             Future<String> answerFuture = Game.executorService.submit(new Transcriber.Ask());
             answer = cleanTranscribe(answerFuture.get().toLowerCase());
-            System.out.println("edited0: " + answer);
-        } catch (Exception e) { e.printStackTrace(); }
+            // System.out.println("edited0: " + answer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return answer;
     }
 
@@ -225,7 +227,7 @@ public class InputOutput {
                 .replaceAll("[}]+", "</prosody>");
         //message = message.replaceAll("[\\]]+", "</prosody>");
         message = "<speak>" + message + "</speak>";
-        System.out.println(message);
+        // System.out.println(message);
         return message;
     }
 
@@ -249,7 +251,8 @@ public class InputOutput {
     public String checkForSynonyms(String voiceInput) {
         for (Map.Entry<String, String> entry : thesaurus.entrySet()) {
             if (voiceInput.contains(entry.getKey())) {
-                voiceInput = voiceInput.replace(entry.getKey(),entry.getValue());entry.getValue();
+                voiceInput = voiceInput.replace(entry.getKey(), entry.getValue());
+                entry.getValue();
             }
         }
         return voiceInput;

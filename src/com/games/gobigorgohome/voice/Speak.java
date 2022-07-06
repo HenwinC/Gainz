@@ -20,8 +20,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static software.amazon.awssdk.services.polly.model.Engine.STANDARD;
-
 public class Speak extends Thread {
 
     private static Creds creds = Creds.getInstance();
@@ -69,7 +67,7 @@ public class Speak extends Thread {
     public void run() {
         try {
             init();
-            System.out.println("Speak init completed ");
+            // System.out.println("Speak init completed ");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +109,7 @@ public class Speak extends Thread {
             player = new AdvancedPlayer(stream, javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice());
             player.setPlayBackListener(new PlaybackListener() {
                 public void playbackStarted(PlaybackEvent evt) {
-                    System.out.println("Playback started: " + what);
+                    // System.out.println("Playback started: " + what);
                 }
 
                 public void playbackFinished(PlaybackEvent evt) {
@@ -127,9 +125,9 @@ public class Speak extends Thread {
 
     public static InputStream synthesize(PollyClient polly, String text, Voice voice, OutputFormat format) throws IOException {
 
-        System.out.println("============ " + voice.id());
+        // System.out.println("============ " + voice.id());
         Engine ENGINE = Engine.NEURAL;
-        if(voice.idAsString().equals("Russell")) {
+        if (voice.idAsString().equals("Russell")) {
             ENGINE = Engine.STANDARD;
         }
 
@@ -151,14 +149,14 @@ public class Speak extends Thread {
 
     public static void setVoice(int voiceId) {
         voice = describeVoicesResponse.voices().get(voiceId);
-        System.out.println("voice: " + voice.name());
+        // System.out.println("voice: " + voice.name());
         // 43=Joanna 40=Maintenance Lady
     }
 
     public static void listVoices() {
         List<Voice> voices = describeVoicesResponse.voices();
-        for(int i=0;i<voices.size();i++) {
-            System.out.println("" + i + " " + voices.get(i).name() + " " + voices.get(i).id());
+        for (int i = 0; i < voices.size(); i++) {
+            // System.out.println("" + i + " " + voices.get(i).name() + " " + voices.get(i).id());
         }
     }
 
